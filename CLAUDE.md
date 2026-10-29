@@ -7,7 +7,7 @@ You are building and maintaining the website for GRANT the band, an indie rock b
 A stranger should think "these guys are great live" within 3 seconds. Originals ride on that credibility.
 
 Conversions, in priority order:
-1. Show-alert email signup (primary, on every page)
+1. Show-alert email signup (primary, on every page except /book, which stays buyer-only)
 2. Booking inquiry (/book)
 3. Stream Meroke Lane
 4. Follow on Instagram (footer only, never a hero CTA)
@@ -68,7 +68,19 @@ Conversions, in priority order:
 - Brand rule: no green anywhere. No gradients, no emoji, no stock imagery, no AI-generated visuals, no template look.
 - Mobile first. Most traffic comes from Instagram on phones.
 
-Wordmark: "GRANT" in wide Archivo 800 + "the band" in Caveat, accent color.
+Wordmark: "GRANT" in wide Archivo 800 + "the band" in Caveat, accent color. Lives only in `src/components/Wordmark.astro` so it can be swapped for the real logo SVG (set `wordmarkSvg` in `src/data/site.ts`).
+
+## Type scale (mobile first, nothing on the site below 15px)
+
+- Body: 18px mobile / 20px desktop, line-height 1.55, max-width 65ch
+- Hero sub and lead paragraphs: 21px mobile / 24px desktop
+- H1: clamp(60px, 13vw, 144px)
+- H2: clamp(44px, 8vw, 88px)
+- Caveat asides: 30px mobile / 36px desktop
+- Nav links: 17px. Buttons: 18px label, 56px min height
+- Venue strip: 15px uppercase, letter-spacing 0.08em
+- List rows (EP tracks, shows): 22px
+- Captions, figcaptions, footer: 16px minimum
 
 ## Home sections and copy
 
@@ -78,26 +90,31 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
 2. Hero: full-bleed muted autoplay video loop (self-hosted MP4, 6 to 10 sec, under 3 MB, poster image, `playsinline`, respects prefers-reduced-motion by showing the poster).
    - Aside: "Long Island, NY"
    - H1: "Better in the room."
-   - Sub: "Indie rock with a horn section. Originals, plus a few covers we have no business playing. The set doesn’t sit still."
+   - Sub: "Indie rock with a horn section. Our originals, the covers you came for, and a set that doesn’t sit still."
    - Buttons: "Get show dates" (scrolls to signup), "Listen to Meroke Lane"
-3. Venue strip: "Played" · The Stephen Talkhouse · Cooper Bluff, summer residency · 89 North · Piquet Lane
-4. Shows: H2 "Shows", aside "come say hi". Rows: date, venue, town · time, "Details".
+3. Venue strip: "Rooms we’ve played" · The Stephen Talkhouse · Cooper Bluff, summer residency · 89 North · Piquet Lane
+4. Shows: H2 "Shows", aside "see it live". Rows: date, venue, town · time, "Details".
    - Empty state: "Nothing on the calendar this week." / "That changes fast. Get the dates before they hit Instagram." + "Get show dates" button.
-5. Music: cover art, aside "the EP", H2 "Meroke Lane", "Songs about trains, the long way home, and getting it wrong before getting it right. Start with these." List: Man on a Train, Waking Up, Horizon, Peace of Mind. Buttons: Spotify, Apple Music, YouTube.
+5. Music: cover art, aside "the EP", H2 "Meroke Lane", "Songs about the roads we travel, the people who shape us, and finding our way home. Start with these." Unnumbered list (these are singles, not the tracklist): Man on a Train, Waking Up, Horizon, Peace of Mind. Buttons: Spotify, Apple Music, YouTube.
    - Quote: “Everyone is executing their instrument… top shelf.” Torvik, reviewing “Man on a Train”
-6. Live: H2 "Live", "Real shows. No lip-sync, no studio fixes." Three clips: Man on a Train (Live at The Stephen Talkhouse), Horizon (Live at The Stephen Talkhouse), Peace of Mind (Unplugged at Cooper Bluff). Link "More on YouTube".
-7. Signup (accent background, dark text): H2 "Show dates, first." "One email when there’s a show. That’s it. We’re not organized enough to spam you." Email field + "Send me dates".
+6. Live: H2 "Live", "Filmed at real shows. Turn it up." Three clips: Man on a Train (Live at The Stephen Talkhouse), Horizon (Live at The Stephen Talkhouse), Peace of Mind (Unplugged at Cooper Bluff). Link "More on YouTube".
+7. Signup (accent background, dark text): H2 "Show dates, first." "One email when there’s a show. Nothing else." Email field + "Send me dates".
 8. Book teaser: aside "for venues and private events", H2 "Book us", "Full band with horns, or a stripped-down duo or trio. Originals, covers, or both. Clips, set lengths, tech needs and past rooms are all on one page." Buttons "See the EPK", booking email.
-9. Footer: wordmark, Instagram, Spotify, YouTube, TikTok, "© 2026 GRANT the band · Long Island, NY"
+9. Footer (every page): wordmark, booking email, Instagram, Spotify, YouTube, TikTok, "© 2026 GRANT the band · Long Island, NY"
 
 ## /book copy
 
 - H1: "Book GRANT the band."
 - "Long Island indie rock with a horn section. Originals off Meroke Lane plus covers people actually sing. We held a summer Wednesday residency at Cooper Bluff and have played The Stephen Talkhouse, 89 North and Piquet Lane."
-- Formats: Full band with horns / Trio / Duo. [SET LENGTHS]. [PA AND STAGE NEEDS].
+- Formats, each with one line under it:
+  - Full band with horns: "[NUMBER]-piece. Built for clubs, residencies and outdoor nights."
+  - Trio: "[WHAT THE TRIO IS BEST FOR]"
+  - Duo: "[WHAT THE DUO IS BEST FOR]"
+  - Then [SET LENGTHS]. [PA AND STAGE NEEDS].
 - "Watch first": three clips, full band first.
 - Downloads: stage plot and tech rider PDF (phase 2).
-- Contact: "Email [BOOKING EMAIL] with the date, the room and your budget. We answer within a day." Plus a Netlify form: name, email, date, venue or event type, budget, message.
+- Contact: "Email [BOOKING EMAIL] with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type, budget, message. Honeypot field is visually hidden and aria-hidden.
+- No fan signup block on /book. The page is for buyers only.
 - Do not add a band member photo grid. The lineup rotates.
 
 ## /now
@@ -127,6 +144,7 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 ## SEO
 
 - Home title: "GRANT the band | Indie Rock from Long Island, NY"
+- Home meta + OG description: "Indie rock with a horn section from Long Island, NY. Originals off Meroke Lane, the covers you came for, and a set that’s better in the room."
 - /book title: "Book GRANT the band | Live Band for Venues and Private Events, Long Island"
 - Meta descriptions in the band voice, no em dashes, no "unforgettable"
 - og:site_name "GRANT the band", OG image per page (1200x630)
@@ -139,7 +157,8 @@ Hero video loop (Man on a Train outro, Talkhouse), Meroke Lane cover art, three 
 
 ## Brand rules (non-negotiable)
 
-- Band-first "we" voice. Deadpan and self-aware. Earnest only when a song earns it.
+- Band-first "we" voice. Confident and dry. Earnest only when a song earns it.
+- Never self-deprecating, never apologetic, never defensive. No jokes at the band's expense.
 - No em dashes. No try-hard or corporate copy. No begging CTAs.
 - Never promote Encore or any app. No family, day job or personal details.
 - Never fake live footage. No AI-generated visuals on the site.
