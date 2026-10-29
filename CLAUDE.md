@@ -78,17 +78,20 @@ No browns, no other surfaces. Hairline dividers are cream at low opacity. Text c
 - Handwritten accent: Reenie Beanie (replaces Caveat everywhere). Max one handwritten line per screen.
 - Max two text levels per section: title + one small gold line.
 - Section titles get a 64px x 2px amber rule above them (matches the "NEXT STOP." master).
-- Sizes: H1 clamp(60px, 13vw, 144px). H2 clamp(44px, 8vw, 88px). Gold label lines 15px+, uppercase. Nav 17px. Buttons 18px label, 56px min height, pill. Captions and footer 16px min. Nothing below 15px.
+- Sizes: H1 clamp(60px, 13vw, 144px). Section titles (H2): 40px phone, max 56px desktop, regular weight, tracked caps, amber rule above. Gold label lines 15px+, uppercase. Nav 17px. Buttons 18px label, 56px min height, pill. Captions and footer 16px min. Nothing below 15px.
 
 ### Layout
 
 - Photo-first. Real photos full bleed with a night gradient scrim behind any text: night at 0% to 70%. That is the one gradient allowed.
 - No empty colored boxes as the main visual. Until photos land, use a single neutral night block, not dashed boxes. Sections without their photo yet (the photo band) stay hidden.
-- Buttons: primary = gold fill, night text. Secondary = 1px cream outline.
+- Buttons: exactly two styles. Primary = gold fill, night text. Secondary = 1px cream outline. No gold-outline variant (placeholder buttons use the primary style).
+- Section spacing: 96px desktop / 64px phone between sections, nothing taller.
 - No green anywhere. No emoji, no stock imagery, no AI-generated visuals, no template look. The scrim is the only gradient.
 - Mobile first. Most traffic comes from Instagram on phones.
 
 ### Shows = the ticket
+
+Deploy previews only (`CONTEXT === "deploy-preview"`): when there are no real upcoming shows, two sample tickets render so the design can be reviewed: Cooper Bluff, Oyster Bay, NY, [DATE], 6 - 9 PM; The Stephen Talkhouse, Amagansett, NY, [DATE], 8 PM. Never on production or local builds, and no MusicEvent JSON-LD for them.
 
 Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded corners, perforated stub, labels in copper caps (GRANT THE BAND / LIVE / DATE / SET / LINE / ADMIT ONE / KEEP THIS STUB), venue large in ink `#1E1E1E`, town under it, "LINE: MEROKE LANE" on every ticket, date on the stub (MM/DD), handwritten "see you there" in Reenie Beanie (first ticket only, to keep one handwritten line per screen), -2deg rotation on desktop, 0 on phone. Section title "NEXT STOP.". Hidden when there are no dates.
 
@@ -111,7 +114,7 @@ Confident and dry. No self-deprecation, no hype words, no horn jokes, no em dash
 
 ### Wordmark
 
-Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/site.ts` to swap in the real logo. Hero lockup: "GRANT" in the display face, large and centered, with "the band" in Reenie Beanie (gold) under the right edge; it is the H1, min 90px tall on phones, 140px on desktop. Small header/footer wordmark: "GRANT THE BAND" in display caps, no handwriting.
+Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/site.ts` to swap in the real logo. Hero lockup: "GRANT" in the display face, large and centered, with "the band" in Reenie Beanie (gold) under the right edge; it is the H1, min 90px tall on phones, 140px on desktop. Small header/footer wordmark: "GRANT THE BAND" in display caps, no handwriting. On desktop the hero logo is at most 40% of the viewport width.
 
 ## Navigation (all pages)
 
@@ -121,16 +124,18 @@ Shows (`/shows`), Music (`/#music`), Video (`/#video`), Newsletter (the signup o
 
 Use this copy as written. Typographic apostrophes and quotes. Never use em dashes anywhere on the site.
 
-1. Hero: full-bleed [HERO VIDEO LOOP or PHOTO: full band, golden hour], graded warm, night gradient scrim. Video rules: self-hosted MP4, 6 to 10 sec, under 3 MB, poster image, `playsinline`, prefers-reduced-motion shows the poster.
+1. Hero: 100svh. The media is a full-bleed background layer behind the logo and buttons ([HERO VIDEO LOOP or PHOTO: full band, golden hour]; until it lands, a neutral night block in that same layer), graded warm, night gradient scrim. Video rules: self-hosted MP4, 6 to 10 sec, under 3 MB, poster image, `playsinline`, prefers-reduced-motion shows the poster.
    - Centered logo, large. It is the H1.
    - Below: gold label "MEROKE LANE", then "OUT EVERYWHERE".
-   - Buttons: "Listen" (to [HYPERFOLLOW URL]) and "Shows" (to `/shows`).
+   - Buttons: "Listen" (to [HYPERFOLLOW URL]) and "Shows" (to `/shows`), in the lower third.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
-3. Music (`#music`): cover art, title "Music", gold line "Off our EP, Meroke Lane. Out everywhere." Buttons: "Listen" (HyperFollow), Spotify, Apple Music, YouTube.
-4. Video (`#video`): title "Video". Three clip cards, song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Horizon” / Live at The Stephen Talkhouse; “Peace of Mind” / Unplugged at Cooper Bluff. Link "More on YouTube".
+3. Music (`#music`): cover art, title "MEROKE LANE", gold line "Off our EP, Meroke Lane. Out everywhere.", the four songs as a quiet list in quotes (“Man on a Train”, “Waking Up”, “Horizon”, “Peace of Mind”), one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify · Apple Music · YouTube. Text block vertically centered against the cover art.
+4. Video (`#video`): title "LIVE". Three clip cards, song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Horizon” / Live at The Stephen Talkhouse; “Peace of Mind” / Unplugged at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
-6. Newsletter (`#newsletter`): title "Newsletter", gold line "New music and show dates, first." Email field + "Sign up". Same copy everywhere the signup appears.
+6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
+
+Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Newsletter, Booking.
 7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok, "Booking: booking@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
@@ -225,7 +230,7 @@ Hero video loop or photo (full band, golden hour), band photo for the photo band
 
 ## Ongoing maintenance
 
-- After every change on a PR branch: `npm run build && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/` and `/book` at 390px and 1440px to `screenshots/` (`home-390.png`, `home-1440.png`, `book-390.png`, `book-1440.png`). Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
+- After every change on a PR branch: `npm run build && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/` and `/book` at 390x844, 1312x634 (laptop) and 1440x900 to `screenshots/` (`home-390.png`, `home-1312.png`, `home-1440.png`, `book-390.png`, `book-1312.png`, `book-1440.png`). Build with `CONTEXT=deploy-preview` so the sample tickets show, as on the preview. Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
 
 - New show: Noah says "add 12/5 Talkhouse 8pm". Edit shows.json on a branch, open a PR, merge after Noah approves the preview.
 - Weekly: update now.json to the latest post.
