@@ -1,0 +1,46 @@
+---
+import Ticket from './Ticket.astro';
+import type { Show } from '../lib/shows';
+
+interface Props {
+  shows: Show[];
+  utm?: string;
+}
+const { shows, utm } = Astro.props;
+---
+
+<ul class="tickets">
+  {shows.map((show, i) => <Ticket show={show} handwritten={i === 0} utm={utm} />)}
+</ul>
+
+<style>
+  .tickets {
+    display: grid;
+    gap: 40px;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 720px) {
+    .tickets {
+      gap: 56px;
+      padding-block: 8px;
+    }
+  }
+  /* Desktop: two columns, each ticket up to 540px, tilts alternating like a stack of stubs. */
+  @media (min-width: 900px) {
+    .tickets {
+      grid-template-columns: repeat(2, minmax(0, 540px));
+      gap: 48px;
+    }
+    .tickets :global(.ticket) {
+      max-width: 540px;
+    }
+    .tickets :global(.venue) {
+      font-size: 34px;
+    }
+    /* The li comes from Ticket.astro, so the whole selector after .tickets is global. */
+    .tickets > :global(:nth-child(even) .ticket) {
+      transform: rotate(1.5deg);
+    }
+  }
+</style>

@@ -1,0 +1,236 @@
+---
+// One show as the "Next stop." ticket, matched to the approved Canva master.
+import { formatDateParts, formatSet, type Show } from '../lib/shows';
+
+interface Props {
+  show: Show;
+  // Max one handwritten line per screen: only the first ticket in a list says it.
+  handwritten?: boolean;
+  utm?: string;
+}
+const { show, handwritten = false, utm } = Astro.props;
+// Preview samples have no date yet: show [DATE] placeholders instead.
+const d = show.sample ? null : formatDateParts(show.date);
+const [, mm, dd] = show.sample ? ['', '', ''] : show.date.split('-');
+const dateText = d ? `${d.weekday} ${d.month} ${d.day}` : '[Date]';
+const dateLong = d ? d.long : 'date to be announced';
+const time = formatSet(show);
+const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}${utm}` : show.url;
+---
+
+<li class="ticket-item">
+  <article class="ticket" aria-label={`GRANT the band live at ${show.venue}, ${show.town}, ${dateLong}${time ? `, ${time}` : ''}`}>
+    <div class="main">
+      <div class="top" aria-hidden="true">
+        <span>GRANT the band</span>
+        <span>Live</span>
+      </div>
+      <h3 class="venue">{show.venue}</h3>
+      <p class="town">{show.town}</p>
+      <dl class="fields">
+        <div>
+          <dt>Date</dt>
+          <dd>{d ? <time datetime={show.date}>{dateText}</time> : dateText}</dd>
+        </div>
+        {time && (
+          <div>
+            <dt>Set</dt>
+            <dd>{time}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Line</dt>
+          <dd>Meroke Lane</dd>
+        </div>
+      </dl>
+      {handwritten && <p class="see script" aria-hidden="true">see you there</p>}
+    </div>
+    <div class="stub" aria-hidden="true">
+      <span class="cap">Admit one</span>
+      <span class:list={['stub-date', { 'is-ph': !d }]}>{d ? `${mm}/${dd}` : '[MM/DD]'}</span>
+      <span class="no">No. {d ? `${mm}${dd}` : '[MMDD]'}</span>
+      <span class="cap keep">Keep this stub</span>
+    </div>
+  </article>
+  {href && (
+    <a class="details" href={href} rel="noopener">Details<span class="visually-hidden">: {show.venue}, {dateLong}</span></a>
+  )}
+</li>
+
+<style>
+  .ticket-item {
+    list-style: none;
+  }
+  .ticket {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto auto;
+    max-width: 760px;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 14px;
+  }
+  .main {
+    position: relative;
+    padding: 22px 22px 26px;
+  }
+  /* Copper caps labels. */
+  .top,
+  dt,
+  .cap {
+    color: var(--copper);
+    font-size: var(--fs-min);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgb(174 95 42 / 0.4);
+  }
+  .venue {
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: clamp(28px, 7vw, 44px);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+  .town {
+    margin: 6px 0 20px;
+    color: var(--ink);
+    font-size: var(--fs-small);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
+    margin: 0;
+  }
+  dd {
+    margin: 2px 0 0;
+    color: var(--ink);
+    font-size: var(--fs-small);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .see {
+    margin: 18px 0 0;
+    color: var(--ink);
+    font-size: 34px;
+    line-height: 1;
+    text-align: right;
+  }
+
+  /* Stub: under the main body on phones, on the right from 640px. */
+  .stub {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 4px 16px;
+    padding: 18px 22px 22px;
+    border-top: 2px dashed rgb(30 30 30 / 0.28);
+  }
+  .stub-date {
+    grid-row: span 2;
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .stub-date.is-ph {
+    font-size: 26px;
+  }
+  .no {
+    font-size: var(--fs-min);
+    letter-spacing: 0.04em;
+  }
+  .keep {
+    grid-column: 2;
+  }
+  /* Perforation notches. */
+  .stub::before,
+  .stub::after {
+    content: '';
+    position: absolute;
+    top: -13px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--night);
+  }
+  .stub::before {
+    left: -12px;
+  }
+  .stub::after {
+    right: -12px;
+  }
+
+  .details {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 10px;
+    color: var(--gold);
+    font-weight: 500;
+    text-underline-offset: 4px;
+  }
+
+  @media (min-width: 640px) {
+    .ticket {
+      grid-template-columns: 1fr 190px;
+      grid-template-rows: none;
+    }
+    .main {
+      padding: 26px 30px 28px;
+    }
+    .stub {
+      grid-template-columns: 1fr;
+      align-content: space-between;
+      justify-items: start;
+      gap: 6px;
+      padding: 26px 24px;
+      border-top: 0;
+      border-left: 2px dashed rgb(30 30 30 / 0.28);
+    }
+    .stub-date {
+      grid-row: auto;
+      margin-top: 18px;
+      font-size: 44px;
+    }
+    .stub-date.is-ph {
+      font-size: 26px;
+    }
+    .keep {
+      grid-column: auto;
+      margin-top: 28px;
+    }
+    .stub::before,
+    .stub::after {
+      top: auto;
+      left: -13px;
+      right: auto;
+    }
+    .stub::before {
+      top: -12px;
+    }
+    .stub::after {
+      bottom: -12px;
+    }
+  }
+  /* Slight tilt on desktop, like the master. Flat on phones. */
+  @media (min-width: 720px) {
+    .ticket {
+      transform: rotate(-2deg);
+    }
+  }
+</style>

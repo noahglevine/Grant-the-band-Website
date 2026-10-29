@@ -1,0 +1,121 @@
+---
+// Newsletter signup, posted to Kit with our own markup and styles (no Kit script).
+// With JS: fetch, stay on the page, show the result. Without JS: a plain POST to Kit.
+import { kit } from '../data/site';
+interface Props {
+  id?: string;
+  // band: full section with title (home, /shows). compact: same, sized for /now's column.
+  // inline: just the line and the form, no title (/shows empty state).
+  variant?: 'band' | 'compact' | 'inline';
+  line?: string;
+}
+const { id = 'newsletter', variant = 'band', line = 'New music and show dates, before anyone else.' } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+{variant === 'inline' ? (
+  <div id={id} class="signup signup--inline">
+    <p class="sub line">{line}</p>
+    <form class="form" action={kit.action} method="post" data-kit data-uid={kit.uid}>
+      <label class="visually-hidden" for={`${id}-email`}>Email address</label>
+      <input id={`${id}-email`} class="input" type="email" name="email_address" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
+      <button class="btn btn--primary" type="submit">Sign up</button>
+      <p class="status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+) : (
+  <section id={id} class:list={['signup', 'section', { compact: variant === 'compact' }]} aria-labelledby={titleId}>
+    <div class="wrap inner">
+      <div class="copy">
+        <h2 id={titleId} class="display h2 title">First to know.</h2>
+        <p class="sub">{line}</p>
+      </div>
+      <form class="form" action={kit.action} method="post" data-kit data-uid={kit.uid}>
+        <label class="visually-hidden" for={`${id}-email`}>Email address</label>
+        <input id={`${id}-email`} class="input" type="email" name="email_address" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
+        <button class="btn btn--primary" type="submit">Sign up</button>
+        <p class="status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-kit]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.status')!;
+    const button = form.querySelector<HTMLButtonElement>('button')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      button.disabled = true;
+      status.textContent = '';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.status !== 'success') throw new Error(String(data.status || res.status));
+        form.reset();
+        status.textContent = 'Check your inbox to confirm.';
+      } catch {
+        status.textContent = 'That didn’t go through. Try again.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>
+
+<style>
+  .form {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+  .status {
+    margin: 0;
+    color: var(--cream);
+  }
+  .status:empty {
+    display: none;
+  }
+  @media (min-width: 480px) {
+    .form {
+      grid-template-columns: 1fr auto;
+    }
+    .status {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .inner {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 900px) {
+    .signup:not(.compact) .inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: end;
+    }
+  }
+
+  /* /now: sits inside a 480px column. */
+  .compact {
+    padding-block: 40px;
+  }
+  .compact .wrap {
+    padding-inline: 0;
+  }
+  .compact .form {
+    grid-template-columns: 1fr;
+  }
+
+  .signup--inline {
+    max-width: 640px;
+  }
+  .signup--inline .line {
+    margin: 0 0 16px;
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+import Wordmark from './Wordmark.astro';
+import BookingEmail from './BookingEmail.astro';
+import { links, monogram, creditsInUse, bookingEmail } from '../data/site';
+
+const social = [
+  { label: 'Instagram', href: links.instagram },
+  { label: 'Spotify', href: links.spotify },
+  { label: 'YouTube', href: links.youtube },
+  { label: 'TikTok', href: links.tiktok },
+];
+const credits = creditsInUse();
+---
+
+<footer class="site-footer">
+  <div class="wrap inner">
+    <Wordmark size="lg" />
+    <ul class="social">
+      {social.map((s) => (
+        <li><a href={s.href} rel="noopener">{s.label}</a></li>
+      ))}
+    </ul>
+    {bookingEmail && <p class="booking">Contact: <BookingEmail /></p>}
+    {credits.length > 0 && (
+      <p class="credits">
+        Photos:{' '}
+        {credits.map((c, i) => (
+          <>{i > 0 && ', '}<a href={c.url} rel="noopener">{c.handle}</a></>
+        ))}
+      </p>
+    )}
+    <div class="base">
+      <p class="legal">© 2026 GRANT the band</p>
+      <img class="monogram" src={monogram.svg} alt="GTB" width="56" height="56" />
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--hairline);
+    padding-block: 56px 40px;
+  }
+  .inner {
+    display: grid;
+    justify-items: start;
+    gap: 20px;
+  }
+  /* Phones: 2x2 grid so no link wraps onto a line by itself. */
+  .social {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: start;
+    gap: 0 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .social a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-right: 12px;
+    color: var(--cream);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .social a:hover {
+    color: var(--gold);
+  }
+  @media (min-width: 560px) {
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 8px;
+    }
+  }
+  .booking,
+  .credits {
+    margin: 0;
+    color: var(--cream);
+    font-size: var(--fs-small);
+  }
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    width: 100%;
+  }
+  .base > * {
+    white-space: nowrap;
+  }
+  .legal {
+    margin: 0;
+    color: var(--gold);
+    font-size: var(--fs-small);
+  }
+  .monogram {
+    width: 56px;
+    height: 56px;
+  }
+</style>

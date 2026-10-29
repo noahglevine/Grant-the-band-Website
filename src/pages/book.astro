@@ -1,0 +1,355 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import ClipFacade from '../components/ClipFacade.astro';
+import BookingEmail from '../components/BookingEmail.astro';
+import BookingForm from '../components/BookingForm.astro';
+import Footer from '../components/Footer.astro';
+import { clips, book, venuesPlayed, press, downloads, photos, srcset } from '../data/site';
+import { showPlaceholders, publicFileExists } from '../lib/env';
+
+// A null value shows a labeled placeholder on previews and drops out on production.
+const owed = (value: string | null, label: string) =>
+  value ? { text: value, ph: false } : showPlaceholders ? { text: `[${label}]`, ph: true } : null;
+
+const formats = [
+  { name: 'Full band with horns', line: owed(book.fullBand, 'Full band line') },
+  { name: 'Trio', line: owed(book.trio, 'What the trio is best for') },
+  { name: 'Duo', line: owed(book.duo, 'What the duo is best for') },
+];
+const setLengths = owed(book.setLengths, 'Set lengths');
+const stagePlot = publicFileExists(downloads.stagePlot) ? downloads.stagePlot : null;
+const pressKit = publicFileExists(downloads.kit) ? downloads.kit : null;
+const top = photos.northFullBand;
+---
+
+<Base
+  title="Book GRANT the band | Live Band for Venues and Private Events, Long Island"
+  description="Book GRANT the band for your venue or private event. Full band with horns, a trio or a duo. Originals off Meroke Lane plus the covers people came for."
+  ogImage="/og/book.png"
+>
+  <Header newsletterHref="/#newsletter" />
+  <main>
+    <div class="top-photo">
+      <img
+        src={top.src}
+        srcset={srcset(top)}
+        sizes="100vw"
+        width={top.width}
+        height={top.height}
+        alt={top.alt}
+        fetchpriority="high"
+      />
+    </div>
+
+    <section class="section intro">
+      <div class="wrap">
+        <h1 class="display h1 title">Booking.</h1>
+        <p class="lede">
+          Indie rock with a horn section from Long Island. Originals plus the covers people came for. Two summers as the residency band at Cooper Bluff.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#contact">Contact</a>
+          <a class="btn btn--secondary" href="#watch">Watch first</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="formats-title">
+      <div class="wrap">
+        <h2 id="formats-title" class="display h2 title head">Formats</h2>
+        <ul class="formats">
+          {formats.map((f) => (
+            <li>
+              <h3>{f.name}</h3>
+              {f.line && <p class:list={{ 'ph-inline': f.line.ph }}>{f.line.text}</p>}
+            </li>
+          ))}
+        </ul>
+        {setLengths && (
+          <dl class="specs">
+            <dt>Set lengths</dt>
+            <dd class:list={{ 'ph-inline': setLengths.ph }}>{setLengths.text}</dd>
+          </dl>
+        )}
+        <div class="tech">
+          <h3>Tech at a glance</h3>
+          <ul>
+            {book.tech.map((line) => <li>{line}</li>)}
+          </ul>
+          {stagePlot && <a class="plot" href={stagePlot} download>Download stage plot (PDF)</a>}
+        </div>
+      </div>
+    </section>
+
+    <section id="watch" class="section" aria-labelledby="watch-title">
+      <div class="wrap">
+        <h2 id="watch-title" class="display h2 title head">Watch first</h2>
+        <div class="clips">
+          {clips.map((clip) => <ClipFacade clip={clip} />)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Played and press">
+      <div class="wrap record">
+        <div>
+          <h2 class="display h2 title head">Played</h2>
+          <ul class="played">
+            {venuesPlayed.map((v) => (
+              <li>
+                {v.name}
+                {v.note && <span class="note">{v.note}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h2 class="display h2 title head">Press</h2>
+          <div class="quotes">
+            {press.map((q) => (
+              <figure class="quote">
+                <blockquote>
+                  <p>“{q.quote}”</p>
+                </blockquote>
+                <figcaption>
+                  {q.source}{' '}
+                  {q.linkText && (q.url ? (
+                    <a href={q.url} target="_blank" rel="noopener">{q.linkText}</a>
+                  ) : (
+                    q.linkText
+                  ))}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          {pressKit && (
+            <div class="kit">
+              <h3>Press kit</h3>
+              <p>Photos and logo for your flyers and socials.</p>
+              <a class="btn btn--primary" href={pressKit} download>Download press kit</a>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section" aria-labelledby="contact-title">
+      <div class="wrap contact">
+        <div>
+          <h2 id="contact-title" class="display h2 title head">Contact</h2>
+          <p class="lede">
+            Email <BookingEmail /> with the date, the room and your budget. We answer within a day.
+          </p>
+        </div>
+        <BookingForm />
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  /* Full-bleed photo straight under the header. */
+  .top-photo img {
+    width: 100%;
+    height: 50vh;
+    object-fit: cover;
+  }
+  @media (min-width: 720px) {
+    .top-photo img {
+      height: 60vh;
+    }
+  }
+  .intro {
+    padding-top: 56px;
+  }
+  h1 {
+    max-width: 12ch;
+    margin-bottom: 24px;
+  }
+  .intro .lede {
+    margin-bottom: 28px;
+  }
+  .head {
+    margin-bottom: 32px;
+  }
+  .formats {
+    display: grid;
+    margin: 0 0 40px;
+    padding: 0;
+    list-style: none;
+  }
+  .formats li {
+    padding-block: 20px;
+    border-top: 1px solid var(--hairline);
+  }
+  .formats li:last-child {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .formats h3 {
+    font-family: var(--display);
+    font-size: var(--fs-row);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .formats p {
+    margin: 8px 0 0;
+    color: var(--gold);
+    font-size: var(--fs-small);
+  }
+  .specs {
+    margin: 0;
+  }
+  /* Tech at a glance: same look as a Formats entry. */
+  .tech {
+    margin-top: 32px;
+    padding-block: 20px;
+    border-block: 1px solid var(--hairline);
+  }
+  .tech h3 {
+    font-family: var(--display);
+    font-size: var(--fs-row);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .tech ul {
+    display: grid;
+    gap: 4px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--gold);
+    font-size: var(--fs-small);
+  }
+  .tech .plot {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 12px;
+    color: var(--gold);
+    font-weight: 500;
+    text-underline-offset: 4px;
+  }
+  dt {
+    color: var(--gold);
+    font-size: var(--fs-min);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  dd {
+    margin: 4px 0 0;
+    color: var(--cream);
+  }
+  .clips {
+    display: grid;
+    gap: 32px;
+  }
+  .record {
+    display: grid;
+    gap: 56px;
+  }
+  .played {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .played li {
+    padding-block: 14px;
+    border-top: 1px solid var(--hairline);
+    color: var(--cream);
+    font-size: var(--fs-row);
+    line-height: 1.25;
+  }
+  .played .note {
+    display: block;
+    margin-top: 6px;
+    color: var(--gold);
+    font-size: var(--fs-small);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .played li:last-child {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .quote {
+    margin: 0;
+    padding-left: 20px;
+    border-left: 2px solid var(--amber);
+  }
+  blockquote {
+    margin: 0;
+  }
+  blockquote p {
+    margin: 0 0 10px;
+    color: var(--cream);
+    font-size: clamp(24px, 4vw, 34px);
+    line-height: 1.3;
+  }
+  .quotes {
+    display: grid;
+    gap: 40px;
+  }
+  figcaption {
+    color: var(--gold);
+    font-size: var(--fs-small);
+  }
+  figcaption a {
+    color: var(--gold);
+    text-underline-offset: 4px;
+    white-space: nowrap;
+  }
+  .kit {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+  }
+  .kit h3 {
+    font-family: var(--display);
+    font-size: var(--fs-row);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .kit p {
+    margin: 8px 0 20px;
+    color: var(--gold);
+    font-size: var(--fs-small);
+  }
+  .contact {
+    display: grid;
+    gap: 40px;
+  }
+  @media (min-width: 720px) {
+    .formats {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .formats li,
+    .formats li:last-child {
+      border-bottom: 1px solid var(--hairline);
+    }
+    .clips {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .clips > :global(:first-child) {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 900px) {
+    .record {
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+    }
+  }
+  @media (min-width: 960px) {
+    .contact {
+      grid-template-columns: 5fr 6fr;
+      gap: 72px;
+    }
+  }
+</style>

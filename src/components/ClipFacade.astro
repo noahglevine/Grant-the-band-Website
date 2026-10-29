@@ -1,0 +1,121 @@
+---
+import { srcset, type Clip } from '../data/site';
+import { showPlaceholders } from '../lib/env';
+
+interface Props {
+  clip: Clip;
+}
+const { clip } = Astro.props;
+const label = `Play ${clip.title}, ${clip.where}`;
+const shown = clip.isSong ? `“${clip.title}”` : clip.title;
+---
+
+<figure class="clip">
+  {clip.youtubeId ? (
+    <yt-facade class="frame" data-id={clip.youtubeId} data-title={`${clip.title} (${clip.where})`}>
+      {clip.thumb ? (
+        <img
+          src={clip.thumb.src}
+          srcset={srcset(clip.thumb)}
+          sizes="(min-width: 1100px) 60vw, (min-width: 720px) 50vw, 100vw"
+          width={clip.thumb.width}
+          height={clip.thumb.height}
+          alt={clip.thumb.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <img
+          src={`https://i.ytimg.com/vi/${clip.youtubeId}/hqdefault.jpg`}
+          alt=""
+          width="480"
+          height="360"
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+      <button type="button" class="play" aria-label={label}>
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+      </button>
+    </yt-facade>
+  ) : (
+    showPlaceholders && <div class="frame ph">[YouTube clip + thumbnail]</div>
+  )}
+  <figcaption>
+    <span class="song">{shown}</span>
+    <span class="where">{clip.where}</span>
+  </figcaption>
+</figure>
+
+<script>
+  // Click-to-load YouTube. Nothing from YouTube loads until someone presses play.
+  class YtFacade extends HTMLElement {
+    connectedCallback() {
+      this.querySelector('button')?.addEventListener('click', () => this.load(), { once: true });
+    }
+    load() {
+      const id = this.dataset.id;
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`;
+      iframe.title = this.dataset.title || 'YouTube video';
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      this.replaceChildren(iframe);
+      iframe.focus();
+    }
+  }
+  if (!customElements.get('yt-facade')) customElements.define('yt-facade', YtFacade);
+</script>
+
+<style>
+  .clip {
+    margin: 0;
+  }
+  .frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--lift);
+  }
+  .frame :global(img),
+  .frame :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+  }
+  .play {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--night);
+    cursor: pointer;
+  }
+  .frame:hover .play {
+    background: var(--cream);
+  }
+  figcaption {
+    display: grid;
+    gap: 2px;
+    padding-top: 14px;
+  }
+  .song {
+    color: var(--cream);
+    font-size: 20px;
+  }
+  .where {
+    color: var(--gold);
+    font-size: var(--fs-small);
+  }
+</style>

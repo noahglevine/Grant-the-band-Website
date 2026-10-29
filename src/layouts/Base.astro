@@ -1,0 +1,57 @@
+---
+import '@fontsource-variable/montserrat/wght.css';
+import '@fontsource/reenie-beanie/400.css';
+import '../styles/global.css';
+import montserratLatin from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
+import { SITE_URL, searchConsoleToken, cloudflareAnalyticsToken } from '../data/site';
+import { isProduction } from '../lib/env';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage: string;
+  jsonLd?: object[];
+  noindex?: boolean;
+}
+
+const { title, description, ogImage, jsonLd = [], noindex = false } = Astro.props;
+// Cloudflare Web Analytics: production only, once Noah supplies the token.
+const cfBeacon = isProduction && cloudflareAnalyticsToken ? JSON.stringify({ token: cloudflareAnalyticsToken }) : null;
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/').replace(/(.)\/$/, '$1');
+const canonical = new URL(path, SITE_URL).href;
+const ogUrl = new URL(ogImage, SITE_URL).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="preload" href={montserratLatin} as="font" type="font/woff2" crossorigin />
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <meta name="theme-color" content="#10151C" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content="GRANT the band" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {searchConsoleToken && <meta name="google-site-verification" content={searchConsoleToken} />}
+
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    {cfBeacon && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={cfBeacon} />}
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

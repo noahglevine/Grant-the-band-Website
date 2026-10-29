@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import TicketList from '../components/TicketList.astro';
+import Music from '../components/Music.astro';
+import Video from '../components/Video.astro';
+import PhotoBand from '../components/PhotoBand.astro';
+import Signup from '../components/Signup.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_URL, links, ep } from '../data/site';
+import { upcomingShows, showsJsonLd } from '../lib/shows';
+
+const shows = upcomingShows();
+
+const musicGroup = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicGroup',
+  name: 'GRANT the band',
+  url: SITE_URL,
+  genre: ['Indie rock'],
+  foundingLocation: { '@type': 'Place', name: 'Long Island, NY' },
+  sameAs: [links.spotify, links.youtube, links.instagram, links.tiktok],
+  album: {
+    '@type': 'MusicAlbum',
+    name: ep.title,
+    albumReleaseType: 'https://schema.org/EPRelease',
+  },
+};
+
+const jsonLd = [musicGroup, ...showsJsonLd(shows, SITE_URL)];
+---
+
+<Base
+  title="GRANT the band | Indie Rock from Long Island, NY"
+  description="GRANT the band. Meroke Lane out everywhere. Listen, watch, and get show dates."
+  ogImage="/og/home.png"
+  jsonLd={jsonLd}
+>
+  <Header home />
+  <main>
+    <Hero />
+
+    {shows.length > 0 && (
+      <section id="shows" class="section" aria-labelledby="shows-title">
+        <div class="wrap">
+          <h2 id="shows-title" class="display h2 title section-head">Next stop.</h2>
+          <TicketList shows={shows} />
+          <p class="all"><a href="/shows">All dates</a></p>
+        </div>
+      </section>
+    )}
+
+    <Music />
+    <Video />
+    <PhotoBand />
+    <Signup />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .all {
+    margin: 32px 0 0;
+  }
+  .all a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--gold);
+    font-weight: 500;
+    text-underline-offset: 4px;
+  }
+</style>

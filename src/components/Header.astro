@@ -1,0 +1,146 @@
+---
+import Wordmark from './Wordmark.astro';
+
+interface Props {
+  // Home: no wordmark (the hero logo is the headline), header sits over the hero.
+  home?: boolean;
+  // Where "Newsletter" goes. Pages without a signup (like /book) point at home's.
+  newsletterHref?: string;
+}
+const { home = false, newsletterHref = '#newsletter' } = Astro.props;
+const base = home ? '' : '/';
+
+const items = [
+  { label: 'Shows', href: '/shows' },
+  { label: 'Music', href: `${base}#music` },
+  { label: 'Video', href: `${base}#video` },
+  { label: 'Newsletter', href: newsletterHref },
+  { label: 'Booking', href: '/book' },
+];
+---
+
+<header class:list={['site-header', { 'site-header--home': home }]} data-header>
+  <div class="wrap bar">
+    {home ? <span /> : <Wordmark />}
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+      Menu
+    </button>
+    <nav id="site-nav" aria-label="Main">
+      <ul>
+        {items.map((i) => (
+          <li><a href={i.href}>{i.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Phones get a Menu button. Without JS the links simply stay visible.
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+  if (header && toggle) {
+    header.classList.add('is-collapsible');
+    toggle.hidden = false;
+    const set = (open: boolean) => {
+      header.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.textContent = open ? 'Close' : 'Menu';
+    };
+    toggle.addEventListener('click', () => set(!header.classList.contains('is-open')));
+    header.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', () => set(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header.classList.contains('is-open')) {
+        set(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--night);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .site-header--home {
+    position: absolute;
+    inset: 0 0 auto;
+    background: transparent;
+    border-bottom: 0;
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    min-height: 76px;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 12px;
+    color: var(--cream);
+    font-size: var(--fs-nav);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--gold);
+  }
+  .menu-toggle {
+    min-height: 48px;
+    padding: 0 20px;
+    border: 1px solid var(--cream);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--cream);
+    font: inherit;
+    font-size: var(--fs-nav);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  @media (max-width: 799px) {
+    .is-collapsible nav {
+      display: none;
+      flex-basis: 100%;
+      padding-bottom: 16px;
+    }
+    .is-collapsible.is-open nav {
+      display: block;
+    }
+    .is-collapsible.is-open {
+      background: var(--night);
+    }
+    .is-collapsible ul {
+      display: grid;
+    }
+    .is-collapsible nav a {
+      width: 100%;
+      min-height: 56px;
+      padding: 0;
+      font-size: var(--fs-row);
+      border-top: 1px solid var(--hairline);
+    }
+  }
+  @media (min-width: 800px) {
+    .menu-toggle {
+      display: none;
+    }
+  }
+</style>

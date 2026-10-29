@@ -1,0 +1,110 @@
+import showsData from '../data/shows.json';
+
+export type Show = {
+  date: string; // YYYY-MM-DD, local to Long Island
+  time: string; // HH:MM, 24h
+  venue: string;
+  town: string; // "Amagansett, NY"
+  url: string;
+  endTime?: string; // HH:MM, 24h, optional
+  sample?: boolean; // deploy-preview sample: date unknown, never on production
+};
+
+const TZ = 'America/New_York';
+
+// Today's date on Long Island, as YYYY-MM-DD. Shows are compared as plain dates
+// so a show stays listed through its own day.
+function todayLocal(now = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(now);
+}
+
+// Netlify deploy previews only: two sample tickets so the design can be reviewed while
+// shows.json is empty. CONTEXT is set by Netlify at build time; it is "production" on main
+// and unset locally, so these never reach the live site.
+const PREVIEW_SAMPLES: Show[] = [
+  { date: '', time: '18:00', endTime: '21:00', venue: 'Cooper Bluff', town: 'Oyster Bay, NY', url: '', sample: true },
+  { date: '', time: '20:00', venue: 'The Stephen Talkhouse', town: 'Amagansett, NY', url: '', sample: true },
+];
+
+export function upcomingShows(now = new Date()): Show[] {
+  const today = todayLocal(now);
+  const real = (showsData as Show[])
+    .filter((s) => s.date >= today)
+    .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  if (real.length === 0 && process.env.CONTEXT === 'deploy-preview') return PREVIEW_SAMPLES;
+  return real;
+}
+
+function asUtcNoon(date: string): Date {
+  return new Date(`${date}T12:00:00Z`);
+}
+
+export function formatDateParts(date: string) {
+  const d = asUtcNoon(date);
+  const f = (opts: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', ...opts }).format(d);
+  return {
+    weekday: f({ weekday: 'short' }),
+    month: f({ month: 'short' }),
+    day: f({ day: 'numeric' }),
+    long: f({ weekday: 'long', month: 'long', day: 'numeric' }),
+  };
+}
+
+// "20:00" -> "8pm", "19:30" -> "7:30pm"
+export function formatTime(time: string): string {
+  if (!time) return '';
+  const [h, m] = time.split(':').map(Number);
+  const suffix = h >= 12 ? 'pm' : 'am';
+  const h12 = h % 12 || 12;
+  return m ? `${h12}:${String(m).padStart(2, '0')}${suffix}` : `${h12}${suffix}`;
+}
+
+// Offset like "-05:00" for New York on the given date and time.
+function nyOffset(date: string, time: string): string {
+  const probe = new Date(`${date}T${time || '20:00'}:00Z`);
+  const name = new Intl.DateTimeFormat('en-US', { timeZone: TZ, timeZoneName: 'longOffset' })
+    .formatToParts(probe)
+    .find((p) => p.type === 'timeZoneName')?.value; // "GMT-05:00"
+  return name && name !== 'GMT' ? name.replace('GMT', '') : '+00:00';
+}
+
+// Ticket SET value: "8 PM", or "6 - 9 PM" for a range (matches the Canva ticket master).
+export function formatSet(show: Show): string {
+  const fmt = (t: string) => formatTime(t).toUpperCase().replace(/(AM|PM)$/, ' $1');
+  if (!show.time) return '';
+  if (!show.endTime) return fmt(show.time);
+  const start = fmt(show.time);
+  const end = fmt(show.endTime);
+  const sameHalf = start.slice(-2) === end.slice(-2);
+  return `${sameHalf ? start.slice(0, -3) : start} - ${end}`;
+}
+
+// Real shows only: samples have no date and must never reach search engines.
+export function showsJsonLd(shows: Show[], siteUrl: string) {
+  return shows.filter((s) => !s.sample).map((s) => musicEventJsonLd(s, siteUrl));
+}
+
+export function musicEventJsonLd(show: Show, siteUrl: string) {
+  const [locality, region] = show.town.split(',').map((s) => s.trim());
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'MusicEvent',
+    name: `GRANT the band at ${show.venue}`,
+    startDate: show.time ? `${show.date}T${show.time}:00${nyOffset(show.date, show.time)}` : show.date,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: show.venue,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: locality,
+        ...(region ? { addressRegion: region } : {}),
+        addressCountry: 'US',
+      },
+    },
+    performer: { '@type': 'MusicGroup', name: 'GRANT the band', url: siteUrl },
+    url: show.url || `${siteUrl}/shows`,
+  };
+}

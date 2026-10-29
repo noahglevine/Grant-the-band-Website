@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import TicketList from '../components/TicketList.astro';
+import Signup from '../components/Signup.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_URL } from '../data/site';
+import { upcomingShows, showsJsonLd } from '../lib/shows';
+
+const shows = upcomingShows();
+const jsonLd = showsJsonLd(shows, SITE_URL);
+---
+
+<Base
+  title="Shows | GRANT the band"
+  description="Upcoming GRANT the band shows. Get the dates first."
+  ogImage="/og/shows.png"
+  jsonLd={jsonLd}
+>
+  <Header />
+  <main>
+    <section class="section intro" aria-labelledby="shows-title">
+      <div class="wrap">
+        <h1 id="shows-title" class="display h1 title head">Shows</h1>
+        {shows.length > 0 ? (
+          <TicketList shows={shows} />
+        ) : (
+          <div class="empty">
+            <p class="empty-title">No dates announced.</p>
+            <Signup variant="inline" line="Get them first." />
+          </div>
+        )}
+      </div>
+    </section>
+
+    {shows.length > 0 && <Signup />}
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .intro {
+    padding-top: 56px;
+  }
+  .head {
+    margin-bottom: 40px;
+  }
+  .empty {
+    padding-top: 28px;
+    border-top: 1px solid var(--hairline);
+  }
+  .empty-title {
+    margin-bottom: 28px;
+    color: var(--cream);
+    font-size: var(--fs-row);
+  }
+</style>

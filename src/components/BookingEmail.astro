@@ -1,0 +1,22 @@
+---
+import { bookingEmail } from '../data/site';
+import { showPlaceholders } from '../lib/env';
+
+interface Props {
+  as?: 'button' | 'text';
+}
+const { as = 'text' } = Astro.props;
+---
+
+{bookingEmail ? (
+  as === 'button' ? (
+    <a class="btn btn--secondary" href={`mailto:${bookingEmail}`}>{bookingEmail}</a>
+  ) : (
+    <a href={`mailto:${bookingEmail}`}>{bookingEmail}</a>
+  )
+) : !showPlaceholders ? null : as === 'button' ? (
+  <span class="btn btn--secondary ph-btn" aria-disabled="true"><span class="ph-inline">[Booking email]</span></span>
+) : (
+  <span class="ph-inline">[Booking email]</span>
+)}
+

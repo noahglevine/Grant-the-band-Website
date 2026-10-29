@@ -1,0 +1,145 @@
+---
+import Base from '../layouts/Base.astro';
+import Wordmark from '../components/Wordmark.astro';
+import TicketList from '../components/TicketList.astro';
+import BookingEmail from '../components/BookingEmail.astro';
+import Signup from '../components/Signup.astro';
+import now from '../data/now.json';
+import { links, bookingEmail } from '../data/site';
+import { upcomingShows } from '../lib/shows';
+import { withUtm, BIO_UTM } from '../lib/utm';
+import { showPlaceholders } from '../lib/env';
+
+const next = upcomingShows()[0];
+const hasCard = Boolean(now.title && now.url);
+// Production omits the card until now.json is filled; previews show what's owed.
+const showCard = hasCard || showPlaceholders;
+const poster = now.poster || null;
+---
+
+<Base
+  title="GRANT the band | Now"
+  description="GRANT the band. The latest clip, the next show, and where to listen."
+  ogImage="/og/now.png"
+>
+  <main class="now">
+    <header class="top">
+      <Wordmark size="lg" />
+      <p class="tag label">Meroke Lane · Out everywhere</p>
+    </header>
+
+    {showCard && (
+      <section class="card" aria-label="The one you just watched">
+        <span class="label">The one you just watched</span>
+        {hasCard ? (
+          <a class="card-link" href={withUtm(now.url)} rel="noopener">
+            {poster ? (
+              <img src={poster} alt="" width="1080" height="1350" decoding="async" />
+            ) : (
+              showPlaceholders && <div class="ph poster">[Poster image]</div>
+            )}
+            <span class="card-title">{now.title}</span>
+          </a>
+        ) : (
+          <div class="ph poster">[now.json: title, url, poster from the latest Instagram post]</div>
+        )}
+      </section>
+    )}
+
+    {next && (
+      <section class="next" aria-label="Next show">
+        <span class="label">Next stop</span>
+        <TicketList shows={[next]} utm={BIO_UTM} />
+      </section>
+    )}
+
+    <nav class="links" aria-label="Links">
+      <a class="btn btn--primary" href="#newsletter">Get show dates</a>
+      <a class="btn btn--secondary" href={withUtm(links.merokeLaneSpotify)} rel="noopener">Listen to Meroke Lane</a>
+      <a class="btn btn--secondary" href="/#video">Watch us live</a>
+      <a class="btn btn--secondary" href="/book">Book us</a>
+    </nav>
+
+    <Signup variant="compact" />
+
+    <footer class="foot">
+      {bookingEmail && <p class="booking">Contact: <BookingEmail /></p>}
+      <a href="/">granttheband.com</a>
+    </footer>
+  </main>
+</Base>
+
+<style>
+  .now {
+    max-width: 480px;
+    margin-inline: auto;
+    padding: 40px var(--gutter) 32px;
+    display: grid;
+    gap: 28px;
+  }
+  .top {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .tag {
+    margin: 0;
+  }
+  .card {
+    display: grid;
+    gap: 10px;
+  }
+  .card-link {
+    display: grid;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .card-link img,
+  .poster {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  .card-title {
+    color: var(--cream);
+    font-size: var(--fs-row);
+  }
+  .label {
+    margin-bottom: 4px;
+  }
+  .links {
+    display: grid;
+    gap: 12px;
+  }
+  .links .btn {
+    width: 100%;
+  }
+  .now :global(.signup.compact) {
+    scroll-margin-top: 16px;
+  }
+  .foot {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    padding-top: 8px;
+    font-size: var(--fs-small);
+  }
+  .booking {
+    margin: 0;
+    color: var(--cream);
+  }
+  .booking :global(a) {
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--gold);
+    font-weight: 500;
+    text-decoration: none;
+  }
+</style>

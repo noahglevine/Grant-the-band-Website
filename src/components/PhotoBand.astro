@@ -1,0 +1,36 @@
+---
+// Full-bleed band photo. Renders nothing while photoBand is null: no empty boxes as the main visual.
+import { photoBand, srcset } from '../data/site';
+---
+
+{photoBand && (
+  <section class="photo-band" aria-label="Band photo">
+    <img
+      src={photoBand.src}
+      srcset={srcset(photoBand)}
+      sizes="100vw"
+      width={photoBand.width}
+      height={photoBand.height}
+      alt={photoBand.alt}
+      loading="lazy"
+      decoding="async"
+    />
+  </section>
+)}
+
+<style>
+  .photo-band {
+    margin-top: var(--section-gap);
+  }
+  .photo-band img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+  @media (min-width: 720px) {
+    .photo-band img {
+      aspect-ratio: 21 / 9;
+    }
+  }
+</style>
