@@ -50,10 +50,12 @@ const credits = creditsInUse();
     justify-items: start;
     gap: 20px;
   }
+  /* Phones: 2x2 grid so no link wraps onto a line by itself. */
   .social {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 8px;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: start;
+    gap: 0 32px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -69,6 +71,13 @@ const credits = creditsInUse();
   }
   .social a:hover {
     color: var(--gold);
+  }
+  @media (min-width: 560px) {
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 8px;
+    }
   }
   .booking,
   .credits {

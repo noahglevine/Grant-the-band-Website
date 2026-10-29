@@ -26,4 +26,21 @@ const { shows, utm } = Astro.props;
       padding-block: 8px;
     }
   }
+  /* Desktop: two columns, each ticket up to 540px, tilts alternating like a stack of stubs. */
+  @media (min-width: 900px) {
+    .tickets {
+      grid-template-columns: repeat(2, minmax(0, 540px));
+      gap: 48px;
+    }
+    .tickets :global(.ticket) {
+      max-width: 540px;
+    }
+    .tickets :global(.venue) {
+      font-size: 34px;
+    }
+    /* The li comes from Ticket.astro, so the whole selector after .tickets is global. */
+    .tickets > :global(:nth-child(even) .ticket) {
+      transform: rotate(1.5deg);
+    }
+  }
 </style>

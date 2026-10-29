@@ -4,7 +4,8 @@
 export const SITE_URL = 'https://granttheband.com';
 
 export const links = {
-  spotify: 'https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe',
+  spotify: 'https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe', // artist page: footer, socials
+  merokeLaneSpotify: 'https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2', // the EP: Music section
   youtube: 'https://www.youtube.com/@GRANTtheband',
   instagram: 'https://www.instagram.com/grant_theband',
   tiktok: 'https://www.tiktok.com/@granttheband',

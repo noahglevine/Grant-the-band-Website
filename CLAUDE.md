@@ -93,6 +93,8 @@ No browns, no other surfaces. Hairline dividers are cream at low opacity. Text c
 
 Deploy previews only (`CONTEXT === "deploy-preview"`): when there are no real upcoming shows, two sample tickets render so the design can be reviewed: Cooper Bluff, Oyster Bay, NY, [DATE], 6 - 9 PM; The Stephen Talkhouse, Amagansett, NY, [DATE], 8 PM. Never on production or local builds, and no MusicEvent JSON-LD for them.
 
+Desktop (900px+): tickets in a 2-column grid, each max 540px wide, 48px gap, rotation alternating -2deg / +1.5deg. Phones keep one column with the stub underneath.
+
 Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded corners, perforated stub, labels in copper caps (GRANT THE BAND / LIVE / DATE / SET / LINE / ADMIT ONE / KEEP THIS STUB), venue large in ink `#1E1E1E`, town under it, "LINE: MEROKE LANE" on every ticket, date on the stub (MM/DD), handwritten "see you there" in Reenie Beanie (first ticket only, to keep one handwritten line per screen), -2deg rotation on desktop, 0 on phone. Section title "NEXT STOP.". Hidden when there are no dates.
 
 ### Signature and credits
@@ -130,13 +132,13 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - Buttons: "Listen" (to [HYPERFOLLOW URL]) and "Shows" (to `/shows`), in the lower third.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
-3. Music (`#music`): cover art, title "MEROKE LANE", gold line "Off our EP, Meroke Lane. Out everywhere.", the four songs as a quiet list in quotes (“Man on a Train”, “Waking Up”, “Horizon”, “Peace of Mind”), one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify · Apple Music · YouTube. Text block vertically centered against the cover art.
+3. Music (`#music`): cover art, title "MEROKE LANE", gold line "Off our EP, Meroke Lane. Out everywhere.", the four songs as a quiet list in quotes (“Man on a Train”, “Waking Up”, “Horizon”, “Peace of Mind”), one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify (the EP: https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2) · Apple Music · YouTube. Text block vertically centered against the cover art.
 4. Video (`#video`): title "LIVE". Three clip cards, song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Horizon” / Live at The Stephen Talkhouse; “Peace of Mind” / Unplugged at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
 
 Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Newsletter, Booking.
-7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok, "Booking: booking@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
+7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Booking: booking@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
@@ -168,7 +170,8 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 
 ## Links
 
-- Spotify: https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe
+- Spotify (artist, footer and socials): https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe
+- Spotify, Meroke Lane EP (Music section): https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2
 - YouTube: https://www.youtube.com/@GRANTtheband
 - Instagram: https://www.instagram.com/grant_theband
 - TikTok: https://www.tiktok.com/@granttheband
