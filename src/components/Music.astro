@@ -1,4 +1,5 @@
 ---
+import ListenButton from './ListenButton.astro';
 import { ep, links } from '../data/site';
 ---
 
@@ -13,20 +14,15 @@ import { ep, links } from '../data/site';
     </div>
 
     <div class="copy">
-      <div class="section-head">
-        <span class="aside">the EP</span>
-        <h2 id="music-title" class="display h2">Meroke Lane</h2>
-      </div>
-      <p class="lede">
-        Songs about the roads we travel, the people who shape us, and finding our way home. Start with these.
-      </p>
+      <h2 id="music-title" class="display h2 title">Meroke Lane</h2>
 
       <ul class="tracks" aria-label="Singles">
         {ep.singles.map((t) => <li>{t}</li>)}
       </ul>
 
       <div class="btn-row">
-        <a class="btn btn--primary" href={links.spotify} rel="noopener">Spotify</a>
+        <ListenButton />
+        <a class="btn btn--secondary" href={links.spotify} rel="noopener">Spotify</a>
         {links.appleMusic ? (
           <a class="btn btn--secondary" href={links.appleMusic} rel="noopener">Apple Music</a>
         ) : (
@@ -34,13 +30,6 @@ import { ep, links } from '../data/site';
         )}
         <a class="btn btn--secondary" href={links.merokeLaneYoutube ?? links.youtube} rel="noopener">YouTube</a>
       </div>
-
-      <figure class="quote">
-        <blockquote>
-          <p>“Everyone is executing their instrument… top shelf.”</p>
-        </blockquote>
-        <figcaption>Torvik, reviewing “Man on a Train”</figcaption>
-      </figure>
     </div>
   </div>
 </section>
@@ -55,6 +44,9 @@ import { ep, links } from '../data/site';
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
+  }
+  .title {
+    margin-bottom: 24px;
   }
   .tracks {
     margin: 8px 0 32px;
@@ -72,34 +64,11 @@ import { ep, links } from '../data/site';
   .tracks li:first-child {
     border-top: 1px solid var(--line);
   }
-  .quote {
-    margin: 48px 0 0;
-    padding-left: 20px;
-    border-left: 3px solid var(--accent);
-  }
-  blockquote {
-    margin: 0;
-  }
-  blockquote p {
-    margin: 0 0 10px;
-    color: var(--text);
-    font-size: clamp(1.375rem, 5vw, 1.875rem);
-    font-weight: 700;
-    line-height: 1.25;
-  }
-  figcaption {
-    color: var(--muted);
-    font-size: var(--fs-small);
-  }
   @media (min-width: 900px) {
     .grid {
       grid-template-columns: 5fr 6fr;
       gap: 72px;
-      align-items: start;
-    }
-    .cover {
-      position: sticky;
-      top: 96px;
+      align-items: center;
     }
   }
 </style>

@@ -9,7 +9,7 @@
   --accent: #e8a64b;
 
   --font: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
-  --script: 'Caveat', 'Bradley Hand', cursive;
+  --script: 'Caveat', 'Bradley Hand', cursive; /* logo only */
 
   --gutter: 16px;
   --max: 1180px;
@@ -21,7 +21,6 @@
   --fs-body: 18px;
   --fs-lead: 21px;
   --fs-row: 22px; /* EP tracks, show rows */
-  --fs-aside: 30px;
   --fs-nav: 17px;
   --fs-button: 18px;
   --button-h: 56px;
@@ -105,7 +104,6 @@ h3 {
   :root {
     --fs-body: 20px;
     --fs-lead: 24px;
-    --fs-aside: 36px;
   }
 }
 
@@ -127,16 +125,6 @@ h3 {
 
 .h2 {
   font-size: clamp(44px, 8vw, 88px);
-}
-
-.aside {
-  font-family: var(--script);
-  font-weight: 600;
-  font-size: var(--fs-aside);
-  line-height: 1;
-  color: var(--accent);
-  text-transform: none;
-  letter-spacing: 0;
 }
 
 .lede {
@@ -169,9 +157,14 @@ h3 {
   margin-bottom: 32px;
 }
 
-.section-head .aside {
+/* Small caps label above a heading or row. */
+.label {
   display: block;
-  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: var(--fs-min);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 /* Buttons */

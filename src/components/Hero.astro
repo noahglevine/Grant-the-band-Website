@@ -1,4 +1,6 @@
 ---
+import Wordmark from './Wordmark.astro';
+import ListenButton from './ListenButton.astro';
 import { hero } from '../data/site';
 ---
 
@@ -19,21 +21,21 @@ import { hero } from '../data/site';
       <img class="video" src={hero.poster} alt="" />
     ) : (
       <div class="ph media-ph" aria-hidden="true">
-        <span>[Hero video loop: Man on a Train outro, Talkhouse. 6 to 10 sec MP4 + poster]</span>
+        <span>[Hero video loop or photo: full band, golden hour]</span>
       </div>
     )}
     <div class="scrim" />
   </div>
 
   <div class="wrap content">
-    <p class="aside">Long Island, NY</p>
-    <h1 id="hero-title" class="display h1">Better in the room.</h1>
-    <p class="lede sub">
-      Indie rock with a horn section. Our originals, the covers you came for, and a set that doesn’t sit still.
+    <h1 id="hero-title" class="logo"><Wordmark size="hero" href={null} /></h1>
+    <p class="release">
+      <span class="kicker">Meroke Lane</span>
+      <span class="out display">Out now</span>
     </p>
     <div class="btn-row">
-      <a class="btn btn--primary" href="#signup">Get show dates</a>
-      <a class="btn btn--secondary" href="#music">Listen to Meroke Lane</a>
+      <ListenButton />
+      <a class="btn btn--secondary" href="/shows">Shows</a>
     </div>
   </div>
 </section>
@@ -53,11 +55,12 @@ import { hero } from '../data/site';
   .hero {
     position: relative;
     display: flex;
-    align-items: flex-end;
-    min-height: min(88svh, 820px);
-    padding-block: 120px 48px;
+    align-items: center;
+    min-height: 100svh;
+    padding-block: 112px 64px;
     overflow: hidden;
     isolation: isolate;
+    text-align: center;
   }
   .media {
     position: absolute;
@@ -72,34 +75,46 @@ import { hero } from '../data/site';
   }
   .media-ph {
     position: absolute;
-    inset: 0;
-    align-items: flex-start;
-    justify-content: flex-end;
-    padding: 20px var(--gutter);
+    inset: auto 0 0;
+    padding: 16px var(--gutter);
     border: 0;
-    border-bottom: 1px dashed var(--muted);
-  }
-  .media-ph span {
-    max-width: 22em;
-    text-align: right;
+    border-top: 1px dashed var(--muted);
+    background: transparent;
   }
   /* Flat scrim for legibility over footage. No gradients. */
   .scrim {
     position: absolute;
     inset: 0;
-    background: rgb(22 18 14 / 0.45);
+    background: rgb(22 18 14 / 0.4);
   }
   .content {
-    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 28px;
   }
-  .aside {
-    margin-bottom: 10px;
+  .logo {
+    margin: 0;
+    line-height: 1;
   }
-  h1 {
-    max-width: 10ch;
+  .release {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    margin: 0;
+    max-width: none;
   }
-  .sub {
-    margin: 22px 0 28px;
+  .kicker {
     color: var(--text);
+    font-size: var(--fs-small);
+    font-weight: 700;
+    font-stretch: 115%;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .out {
+    font-size: clamp(44px, 8vw, 88px);
+  }
+  .btn-row {
+    justify-content: center;
   }
 </style>

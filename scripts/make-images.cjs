@@ -17,19 +17,20 @@ body { background: #16120E; color: #F1E4CF; font-family: A; }
 .d { font-stretch: 125%; font-weight: 900; text-transform: uppercase; line-height: .95; }
 `;
 
-const og = (aside, headline, foot) => `
+// Caveat appears only in the wordmark. The kicker is small caps Archivo.
+const og = (kicker, headline, foot) => `
 <style>${css}
 .card { width: 1200px; height: 630px; padding: 64px 72px; display: flex; flex-direction: column; justify-content: space-between; border-bottom: 14px solid #E8A64B; }
 .wm { font-size: 34px; display: flex; align-items: baseline; gap: 10px; }
 .wm b { font-stretch: 125%; font-weight: 800; }
 .wm .aside { font-size: 40px; }
-.aside.big { font-size: 46px; margin-bottom: 14px; }
+.kicker { font-size: 28px; font-weight: 700; font-stretch: 115%; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 18px; }
 .d { font-size: 112px; }
 .foot { font-size: 26px; font-weight: 600; color: #B9A88F; }
 </style>
 <div class="card">
   <div class="wm"><b>GRANT</b><span class="aside">the band</span></div>
-  <div><div class="aside big">${aside}</div><div class="d">${headline}</div></div>
+  <div><div class="kicker">${kicker}</div><div class="d">${headline}</div></div>
   <div class="foot">${foot}</div>
 </div>`;
 
@@ -48,9 +49,10 @@ const icon = (size) => `
     await p.screenshot({ path: path.join(root, 'public', out) });
     await p.close();
   };
-  await shoot(og('Long Island, NY', 'Better in<br>the room.', 'Indie rock with a horn section · granttheband.com'), 1200, 630, 'og/home.png');
-  await shoot(og('for venues and private events', 'Book GRANT<br>the band.', 'Full band with horns, trio or duo · granttheband.com/book'), 1200, 630, 'og/book.png');
-  await shoot(og('Long Island, NY', 'Better in<br>the room.', 'granttheband.com'), 1200, 630, 'og/now.png');
+  await shoot(og('Meroke Lane', 'Out now', 'granttheband.com'), 1200, 630, 'og/home.png');
+  await shoot(og('Meroke Lane', 'Out now', 'granttheband.com'), 1200, 630, 'og/now.png');
+  await shoot(og('GRANT the band', 'Shows', 'granttheband.com/shows'), 1200, 630, 'og/shows.png');
+  await shoot(og('For venues and private events', 'Book GRANT<br>the band.', 'Full band with horns, trio or duo · granttheband.com/book'), 1200, 630, 'og/book.png');
   await shoot(icon(32), 32, 32, 'favicon-32.png');
   await shoot(icon(180), 180, 180, 'apple-touch-icon.png');
   await b.close();

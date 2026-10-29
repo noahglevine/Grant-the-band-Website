@@ -5,7 +5,7 @@ import ClipFacade from '../components/ClipFacade.astro';
 import BookingEmail from '../components/BookingEmail.astro';
 import BookingForm from '../components/BookingForm.astro';
 import Footer from '../components/Footer.astro';
-import { clips, book } from '../data/site';
+import { clips, book, venuesPlayed } from '../data/site';
 
 const ph = (label: string) => `<span class="ph-inline">[${label}]</span>`;
 const formats = [
@@ -23,11 +23,10 @@ const formats = [
   description="Book GRANT the band for your venue or private event. Full band with horns, a trio or a duo. Originals off Meroke Lane plus covers people actually sing."
   ogImage="/og/book.png"
 >
-  <Header />
+  <Header newsletterHref="/#newsletter" />
   <main>
     <section class="section intro">
       <div class="wrap">
-        <span class="aside">for venues and private events</span>
         <h1 class="display h1">Book GRANT the band.</h1>
         <p class="lede">
           Long Island indie rock with a horn section. Originals off Meroke Lane plus covers people actually sing. We held a summer Wednesday residency at Cooper Bluff and have played The Stephen Talkhouse, 89 North and Piquet Lane.
@@ -82,7 +81,27 @@ const formats = [
       </div>
     </section>
 
-    <section id="contact" class="section section--surface" aria-labelledby="contact-title">
+    <section class="section section--surface" aria-label="Played and press">
+      <div class="wrap record">
+        <div>
+          <h2 class="display h2 head">Played</h2>
+          <ul class="played">
+            {venuesPlayed.map((v) => <li>{v}</li>)}
+          </ul>
+        </div>
+        <div>
+          <h2 class="display h2 head">Press</h2>
+          <figure class="quote">
+            <blockquote>
+              <p>“Everyone is executing their instrument… top shelf.”</p>
+            </blockquote>
+            <figcaption>Torvik, reviewing “Man on a Train”</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section" aria-labelledby="contact-title">
       <div class="wrap contact">
         <div>
           <h2 id="contact-title" class="display h2 head">Contact</h2>
@@ -101,10 +120,6 @@ const formats = [
 <style>
   .intro {
     padding-top: 56px;
-  }
-  .intro .aside {
-    display: block;
-    margin-bottom: 10px;
   }
   h1 {
     max-width: 12ch;
@@ -161,6 +176,51 @@ const formats = [
     display: grid;
     gap: 32px;
   }
+  .record {
+    display: grid;
+    gap: 56px;
+  }
+  .played {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .played li {
+    padding-block: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--text);
+    font-size: var(--fs-row);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .played li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .quote {
+    margin: 0;
+    padding-left: 20px;
+    border-left: 3px solid var(--accent);
+  }
+  blockquote {
+    margin: 0;
+  }
+  blockquote p {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  figcaption {
+    color: var(--muted);
+    font-size: var(--fs-small);
+  }
+  @media (min-width: 900px) {
+    .record {
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+    }
+  }
   .contact {
     display: grid;
     gap: 40px;
@@ -185,7 +245,52 @@ const formats = [
     }
   }
   @media (min-width: 960px) {
-    .contact {
+    .record {
+    display: grid;
+    gap: 56px;
+  }
+  .played {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .played li {
+    padding-block: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--text);
+    font-size: var(--fs-row);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .played li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .quote {
+    margin: 0;
+    padding-left: 20px;
+    border-left: 3px solid var(--accent);
+  }
+  blockquote {
+    margin: 0;
+  }
+  blockquote p {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  figcaption {
+    color: var(--muted);
+    font-size: var(--fs-small);
+  }
+  @media (min-width: 900px) {
+    .record {
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+    }
+  }
+  .contact {
       grid-template-columns: 5fr 6fr;
       gap: 72px;
     }

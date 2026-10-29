@@ -1,0 +1,27 @@
+---
+import { photoBand } from '../data/site';
+---
+
+<section class="photo-band" aria-label="Band photo">
+  {photoBand.src ? (
+    <img src={photoBand.src} alt={photoBand.alt} loading="lazy" decoding="async" />
+  ) : (
+    <div class="ph">[Band photo, full bleed]</div>
+  )}
+</section>
+
+<style>
+  .photo-band img,
+  .photo-band .ph {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border: 0;
+  }
+  @media (min-width: 720px) {
+    .photo-band img,
+    .photo-band .ph {
+      aspect-ratio: 21 / 9;
+    }
+  }
+</style>

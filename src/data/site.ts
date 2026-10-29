@@ -9,11 +9,13 @@ export const links = {
   instagram: 'https://www.instagram.com/grant_theband',
   tiktok: 'https://www.tiktok.com/@granttheband',
   appleMusic: null as string | null, // [APPLE MUSIC URL]
+  // Meroke Lane HyperFollow (DistroKid smart link). Hero and Music "Listen" buttons.
+  hyperfollow: null as string | null, // [HYPERFOLLOW URL]
   // Meroke Lane on YouTube. Falls back to the channel until there's a playlist URL.
   merokeLaneYoutube: null as string | null,
 };
 
-export const bookingEmail = null as string | null; // [BOOKING EMAIL]
+export const bookingEmail = 'booking@granttheband.com' as string | null;
 
 // Real logo, when Noah sends it: drop the SVG in public/ and set the path here.
 // Until then Wordmark.astro renders the type version.
@@ -22,9 +24,16 @@ export const wordmarkSvg = null as string | null; // e.g. '/logo.svg'
 // Google Search Console verification token (content attribute only).
 export const searchConsoleToken = null as string | null;
 
+// Full band, golden hour. Video loop (with poster) or a still photo in `poster`.
 export const hero = {
-  video: null as string | null, // e.g. '/media/hero-loop.mp4' (Man on a Train outro, Talkhouse)
-  poster: null as string | null, // e.g. '/media/hero-poster.jpg'
+  video: null as string | null, // e.g. '/media/hero-loop.mp4'
+  poster: null as string | null, // e.g. '/media/hero.jpg'
+};
+
+// Full-bleed photo between Video and Newsletter on home.
+export const photoBand = {
+  src: null as string | null, // e.g. '/media/band.jpg'
+  alt: 'GRANT the band',
 };
 
 export const ep = {

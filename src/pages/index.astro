@@ -2,12 +2,11 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import VenueStrip from '../components/VenueStrip.astro';
-import Shows from '../components/Shows.astro';
+import ShowList from '../components/ShowList.astro';
 import Music from '../components/Music.astro';
-import Live from '../components/Live.astro';
+import Video from '../components/Video.astro';
+import PhotoBand from '../components/PhotoBand.astro';
 import Signup from '../components/Signup.astro';
-import BookTeaser from '../components/BookTeaser.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_URL, links, ep } from '../data/site';
 import { upcomingShows, musicEventJsonLd } from '../lib/shows';
@@ -34,19 +33,42 @@ const jsonLd = [musicGroup, ...shows.map((s) => musicEventJsonLd(s, SITE_URL))];
 
 <Base
   title="GRANT the band | Indie Rock from Long Island, NY"
-  description="Indie rock with a horn section from Long Island, NY. Originals off Meroke Lane, the covers you came for, and a set that’s better in the room."
+  description="GRANT the band. Meroke Lane out now. Listen, watch, and get show dates."
   ogImage="/og/home.png"
   jsonLd={jsonLd}
 >
   <Header home />
   <main>
     <Hero />
-    <VenueStrip />
-    <Shows shows={shows} />
+
+    {shows.length > 0 && (
+      <section id="shows" class="section" aria-labelledby="shows-title">
+        <div class="wrap">
+          <h2 id="shows-title" class="display h2 section-head">Shows</h2>
+          <ShowList shows={shows} />
+          <p class="all"><a href="/shows">All dates</a></p>
+        </div>
+      </section>
+    )}
+
     <Music />
-    <Live />
+    <Video />
+    <PhotoBand />
     <Signup />
-    <BookTeaser />
   </main>
   <Footer />
 </Base>
+
+<style>
+  .all {
+    margin: 24px 0 0;
+  }
+  .all a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--accent);
+    font-weight: 700;
+    text-underline-offset: 4px;
+  }
+</style>

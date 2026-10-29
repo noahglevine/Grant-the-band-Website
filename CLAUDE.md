@@ -122,7 +122,7 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
   - Duo: "[WHAT THE DUO IS BEST FOR]"
   - Then [SET LENGTHS]. [PA AND STAGE NEEDS].
 - "Watch first": three clips, full band first.
-- "Played": The Stephen Talkhouse, Cooper Bluff (summer residency), 89 North, Piquet Lane.
+- "Played": The Stephen Talkhouse, Cooper Bluff, summer residency, 89 North, Piquet Lane.
 - "Press": “Everyone is executing their instrument… top shelf.” Torvik, reviewing “Man on a Train"
 - Downloads: stage plot and tech rider PDF (phase 2).
 - Contact: "Email booking@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type, budget, message. Honeypot field is visually hidden and aria-hidden.

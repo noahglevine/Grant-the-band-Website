@@ -25,7 +25,7 @@ const hasCard = Boolean(now.title && now.url);
     </header>
 
     <section class="card" aria-label="The one you just watched">
-      <span class="aside">The one you just watched</span>
+      <span class="label">The one you just watched</span>
       {hasCard ? (
         <a class="card-link" href={withUtm(now.url)} rel="noopener">
           {now.poster ? (
@@ -50,13 +50,13 @@ const hasCard = Boolean(now.title && now.url);
     )}
 
     <nav class="links" aria-label="Links">
-      <a class="btn btn--primary" href="#signup">Get show dates</a>
+      <a class="btn btn--primary" href="#newsletter">Get show dates</a>
       <a class="btn btn--secondary" href={withUtm(links.spotify)} rel="noopener">Listen to Meroke Lane</a>
-      <a class="btn btn--secondary" href="/#live">Watch us live</a>
+      <a class="btn btn--secondary" href="/#video">Watch us live</a>
       <a class="btn btn--secondary" href="/book">Book us</a>
     </nav>
 
-    <Signup compact />
+    <Signup variant="compact" />
 
     <footer class="foot">
       <p class="booking">Booking: <BookingEmail /></p>

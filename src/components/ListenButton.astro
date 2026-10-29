@@ -1,0 +1,10 @@
+---
+// "Listen" goes to the Meroke Lane HyperFollow link. Placeholder until the URL is in site.ts.
+import { links } from '../data/site';
+---
+
+{links.hyperfollow ? (
+  <a class="btn btn--primary" href={links.hyperfollow} rel="noopener">Listen</a>
+) : (
+  <span class="btn ph-btn" aria-disabled="true">Listen <span class="ph-inline">[HyperFollow URL]</span></span>
+)}

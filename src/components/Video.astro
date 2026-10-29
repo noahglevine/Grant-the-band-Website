@@ -3,12 +3,9 @@ import ClipFacade from './ClipFacade.astro';
 import { clips, links } from '../data/site';
 ---
 
-<section id="live" class="section" aria-labelledby="live-title">
+<section id="video" class="section" aria-labelledby="video-title">
   <div class="wrap">
-    <div class="section-head">
-      <h2 id="live-title" class="display h2">Live</h2>
-      <p class="lede sub">Filmed at real shows. Turn it up.</p>
-    </div>
+    <h2 id="video-title" class="display h2 section-head">Video</h2>
     <div class="clips">
       {clips.map((clip) => <ClipFacade clip={clip} />)}
     </div>
@@ -17,9 +14,6 @@ import { clips, links } from '../data/site';
 </section>
 
 <style>
-  .sub {
-    margin: 16px 0 0;
-  }
   .clips {
     display: grid;
     gap: 32px;

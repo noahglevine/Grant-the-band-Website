@@ -1,23 +1,29 @@
 ---
-// The only place the wordmark is drawn. Header, footer and /now all use this.
+// The only place the wordmark is drawn. Header, footer, /now and the home hero all use this.
 import { wordmarkSvg } from '../data/site';
 
 interface Props {
-  size?: 'sm' | 'md' | 'lg';
-  href?: string;
+  size?: 'md' | 'lg' | 'hero';
+  // Pass null to render without a link (the home hero, where it's the H1).
+  href?: string | null;
 }
 const { size = 'md', href = '/' } = Astro.props;
+const Tag = href ? 'a' : 'span';
 ---
 
-<a class:list={['wordmark', `wordmark--${size}`]} href={href} aria-label="GRANT the band, home">
+<Tag
+  class:list={['wordmark', `wordmark--${size}`]}
+  href={href ?? undefined}
+  aria-label={href ? 'GRANT the band, home' : undefined}
+>
   {wordmarkSvg ? (
     <img class="wm-logo" src={wordmarkSvg} alt="GRANT the band" />
   ) : (
     <>
-      <span class="wm-grant">GRANT</span><span class="wm-band">the band</span>
+      <span class="wm-grant">GRANT</span>{' '}<span class="wm-band">the band</span>
     </>
   )}
-</a>
+</Tag>
 
 <style>
   .wordmark {
@@ -45,13 +51,32 @@ const { size = 'md', href = '/' } = Astro.props;
     height: 1.3em;
     width: auto;
   }
-  .wordmark--sm {
-    font-size: 1.125rem;
-  }
   .wordmark--md {
     font-size: 1.375rem;
   }
   .wordmark--lg {
     font-size: 2rem;
+  }
+
+  /* Hero lockup: GRANT full width, "the band" tucked under the right edge.
+     At least 90px tall on phones, 140px on desktop. */
+  .wordmark--hero {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+    font-size: clamp(76px, 19vw, 184px);
+  }
+  .wordmark--hero .wm-grant {
+    font-weight: 900;
+    line-height: 0.82;
+    letter-spacing: 0;
+  }
+  .wordmark--hero .wm-band {
+    font-size: 0.4em;
+    margin-top: 0.06em;
+    margin-right: 0.04em;
+  }
+  .wordmark--hero .wm-logo {
+    height: clamp(90px, 22vw, 184px);
   }
 </style>
