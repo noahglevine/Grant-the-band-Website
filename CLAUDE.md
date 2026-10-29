@@ -100,7 +100,7 @@ Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded cor
 ### Signature and credits
 
 - GTB handwritten monogram (white): `public/images/gtb-monogram.svg` small in the footer; the favicons render it on night (`scripts/make-images.cjs`).
-- Credit photographers in alt text and the footer. Cooper Bluff photos: @scottk_ny. Talkhouse and 89 North photos and the hero video ship without a credit (Noah's call); if a credit turns up later, add it to `photographers` in `site.ts`. Every photo is in `photos` in `site.ts` with its credit, and the footer shows credits for photos actually rendered.
+- No photographer credits on the site right now (Noah's call), including the Cooper Bluff photos. If credits come back, add them to `photographers` in `site.ts`; they then show in alt text and the footer. Every photo is in `photos` in `site.ts` with its credit, and the footer shows credits for photos actually rendered.
 
 ### Photo and video handling
 
@@ -148,7 +148,7 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
 
 Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Newsletter, Booking.
-7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Booking: booking@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
+7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Booking: contact@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
@@ -172,7 +172,7 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
   1. “Everyone is executing their instrument… top shelf.” Phillip Torvik, producer, reviewing “Man on a Train” on TikTok ("on TikTok" is plain text, no link, by Noah's call).
   2. “High-energy live performances with emotionally charged songwriting.” Rolling Hype, February 2025 · Read the feature (links to https://rollinghype.com/grant-the-band-the-energy-the-originals-and-the-covers-you-cant-miss/, new tab, rel="noopener").
 - Downloads: stage plot and tech rider PDF (phase 2).
-- Contact: "Email booking@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
+- Contact: "Email contact@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
 - No fan signup block on /book. The page is for buyers only.
 - Do not add a band member photo grid. The lineup rotates.
 

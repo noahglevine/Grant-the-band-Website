@@ -16,7 +16,7 @@ export const links = {
   merokeLaneYoutube: null as string | null,
 };
 
-export const bookingEmail = 'booking@granttheband.com' as string | null;
+export const bookingEmail = 'contact@granttheband.com' as string | null;
 
 // Real logo, when Noah sends it: drop the SVG in public/ and set the path here.
 // Until then Wordmark.astro renders the type version.
@@ -30,10 +30,9 @@ export const searchConsoleToken = null as string | null;
 
 // Photographer credits. Every photo names one of these (or null while the credit is
 // missing), and the footer lists the credits for photos actually rendered on the site.
-export const photographers = {
-  scottk: { handle: '@scottk_ny', url: 'https://www.instagram.com/scottk_ny' },
-} as const;
-export type PhotographerId = keyof typeof photographers;
+// None shown at the moment (Noah's call); add { id: { handle, url } } to credit someone.
+export const photographers: Record<string, { handle: string; url: string }> = {};
+export type PhotographerId = string;
 
 export type Photo = {
   src: string;
@@ -90,8 +89,8 @@ export const photos = {
     src: '/images/cooper-horns.jpg',
     width: 1086,
     height: 724,
-    alt: 'GRANT the band’s horn section playing at Cooper Bluff, black and white. Photo by @scottk_ny',
-    credit: 'scottk',
+    alt: 'GRANT the band’s horn section playing at Cooper Bluff, black and white',
+    credit: null,
   },
   cover: {
     // Original only: keeps the cover's Content Credentials intact (see ASSETS.md).
