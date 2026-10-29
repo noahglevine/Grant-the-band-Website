@@ -82,7 +82,7 @@ No browns, no other surfaces. Hairline dividers are cream at low opacity. Text c
 
 ### Layout
 
-- Photo-first. Real photos full bleed with a night gradient scrim behind any text: night at 0% to 70% (front-loaded: 65% by 28% of the height, so the hero logo and label clear 3:1 and 4.5:1 at their worst spots). That is the one gradient allowed.
+- Photo-first. Real photos full bleed with a night gradient scrim behind any text: night at 0% to 70% (front-loaded: 70% from 30% of the height down, so over the video the hero logo stays above 3:1 and the gold label above 4.5:1 at their brightest spots). That is the one gradient allowed.
 - No empty colored boxes as the main visual. Until photos land, use a single neutral night block, not dashed boxes. Sections without their photo yet (the photo band) stay hidden.
 - Buttons: exactly two styles. Primary = gold fill, night text. Secondary = 1px cream outline. No gold-outline variant (placeholder buttons use the primary style).
 - Section spacing: 96px desktop / 64px phone between sections, nothing taller.
@@ -114,7 +114,7 @@ colorbalance=rs=0.10:gs=0.02:bs=-0.12:rm=0.08:bm=-0.10:rh=0.04:bh=-0.06,eq=satur
 
 `public/images/ASSETS.md` is the asset manifest (sources, sizes, alt text, credits, what's missing). Read it before touching images.
 
-- Hero: `hero-desktop-poster.jpg` (landscape screens) / `hero-phone-poster.jpg` (portrait) via `<picture>`. The graded loops go in `public/video/hero-desktop.mp4` and `hero-phone.mp4`; `Hero.astro` uses them only if the files exist, so the posters carry the hero until then. They are already graded: never re-grade.
+- Hero: `public/video/hero-desktop.mp4` (landscape screens) / `hero-phone.mp4` (portrait), over `hero-desktop-poster.jpg` / `hero-phone-poster.jpg` in a `<picture>`. The video fades in once it plays; reduced-motion visitors get the poster and download no video. `Hero.astro` only includes a loop if its file exists. The loops are already graded: never re-grade.
 - Clip thumbnails: Talkhouse stage, 89 North (Noah + trombone), Cooper horns. Photo band: 89 North full band.
 - Cooper photos are small originals (540px and 1086px). Card/thumbnail sizes only, never upscaled or full bleed.
 - `scripts/make-image-sizes.sh` writes 1200px copies of the 2400px photos to `public/images/sized/` for srcset. Never resize the Meroke Lane cover: it would strip its Content Credentials.
@@ -212,7 +212,7 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 
 ## Placeholders Noah still owes
 
-Hero video files (`public/video/hero-desktop.mp4`, `hero-phone.mp4`; described in ASSETS.md but not committed), photographer credits for the Talkhouse and 89 North photos and the hero video, logo SVG (the wordmark is still the type version), confirmation of track 1's title ("Meroke"), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
+Photographer credits for the Talkhouse and 89 North photos and the hero video, logo SVG (the wordmark is still the type version), confirmation of track 1's title ("Meroke"), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
 
 ## Brand rules (non-negotiable)
 
