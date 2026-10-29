@@ -5,7 +5,7 @@ import ClipFacade from '../components/ClipFacade.astro';
 import BookingEmail from '../components/BookingEmail.astro';
 import BookingForm from '../components/BookingForm.astro';
 import Footer from '../components/Footer.astro';
-import { clips, book, venuesPlayed } from '../data/site';
+import { clips, book, venuesPlayed, press } from '../data/site';
 
 const ph = (label: string) => `<span class="ph-inline">[${label}]</span>`;
 const formats = [
@@ -91,12 +91,23 @@ const formats = [
         </div>
         <div>
           <h2 class="display h2 title head">Press</h2>
-          <figure class="quote">
-            <blockquote>
-              <p>“Everyone is executing their instrument… top shelf.”</p>
-            </blockquote>
-            <figcaption>Torvik, reviewing “Man on a Train”</figcaption>
-          </figure>
+          <div class="quotes">
+            {press.map((q) => (
+              <figure class="quote">
+                <blockquote>
+                  <p>“{q.quote}”</p>
+                </blockquote>
+                <figcaption>
+                  {q.source}{' '}
+                  {q.linkText && (q.url ? (
+                    <a href={q.url} target="_blank" rel="noopener">{q.linkText}</a>
+                  ) : (
+                    q.linkText
+                  ))}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -209,9 +220,18 @@ const formats = [
     font-size: clamp(24px, 4vw, 34px);
     line-height: 1.3;
   }
+  .quotes {
+    display: grid;
+    gap: 40px;
+  }
   figcaption {
     color: var(--gold);
     font-size: var(--fs-small);
+  }
+  figcaption a {
+    color: var(--gold);
+    text-underline-offset: 4px;
+    white-space: nowrap;
   }
   .contact {
     display: grid;

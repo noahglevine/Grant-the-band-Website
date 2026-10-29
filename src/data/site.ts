@@ -151,6 +151,28 @@ export function creditsInUse(): { handle: string; url: string }[] {
   return [...new Set(used)].map((id) => photographers[id]);
 }
 
+// /book "Press", in this order. Quotes exactly as supplied by Noah; never invent or trim.
+export type PressQuote = {
+  quote: string;
+  source: string; // attribution before the link, no em dashes
+  linkText: string | null; // the linked part of the attribution
+  url: string | null; // null renders linkText as plain text
+};
+export const press: PressQuote[] = [
+  {
+    quote: 'Everyone is executing their instrument… top shelf.',
+    source: 'Phillip Torvik, producer, reviewing “Man on a Train”',
+    linkText: 'on TikTok',
+    url: null, // [TIKTOK URL for the Torvik review]
+  },
+  {
+    quote: 'High-energy live performances with emotionally charged songwriting.',
+    source: 'Rolling Hype, February 2025 ·',
+    linkText: 'Read the feature',
+    url: 'https://rollinghype.com/grant-the-band-the-energy-the-originals-and-the-covers-you-cant-miss/',
+  },
+];
+
 // /book "Played", in this order. Only the residency carries dates.
 export const venuesPlayed = [
   'The Stephen Talkhouse',

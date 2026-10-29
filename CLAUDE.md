@@ -168,7 +168,9 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
   - Then [SET LENGTHS]. [PA AND STAGE NEEDS].
 - "Watch first": three clips, full band first.
 - "Played", in this order: The Stephen Talkhouse / Cooper Bluff · Summer Residency, 2025 and 2026 / 89 North / Piquet Lane / The Villager / Nag’s Head Ale House. No dates on any other venue. "Summer Residency" is capitalized.
-- "Press": “Everyone is executing their instrument… top shelf.” Torvik, reviewing “Man on a Train"
+- "Press" (on /book only, never home; `press` in `site.ts`), in this order, each with an amber left rule, cream quote, small gold attribution:
+  1. “Everyone is executing their instrument… top shelf.” Phillip Torvik, producer, reviewing “Man on a Train” on TikTok ("on TikTok" links to the review once Noah supplies the URL).
+  2. “High-energy live performances with emotionally charged songwriting.” Rolling Hype, February 2025 · Read the feature (links to https://rollinghype.com/grant-the-band-the-energy-the-originals-and-the-covers-you-cant-miss/, new tab, rel="noopener").
 - Downloads: stage plot and tech rider PDF (phase 2).
 - Contact: "Email booking@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
 - No fan signup block on /book. The page is for buyers only.
@@ -212,7 +214,7 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 
 ## Placeholders Noah still owes
 
-Photographer credits for the Talkhouse and 89 North photos and the hero video, logo SVG (the wordmark is still the type version), confirmation of track 1's title ("Meroke"), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
+Photographer credits for the Talkhouse and 89 North photos and the hero video, the TikTok URL for the Torvik review, logo SVG (the wordmark is still the type version), confirmation of track 1's title ("Meroke"), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
 
 ## Brand rules (non-negotiable)
 
