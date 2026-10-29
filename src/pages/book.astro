@@ -1,0 +1,183 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import ClipFacade from '../components/ClipFacade.astro';
+import BookingEmail from '../components/BookingEmail.astro';
+import BookingForm from '../components/BookingForm.astro';
+import Signup from '../components/Signup.astro';
+import Footer from '../components/Footer.astro';
+import { clips, book } from '../data/site';
+
+const formats = ['Full band with horns', 'Trio', 'Duo'];
+---
+
+<Base
+  title="Book GRANT the band | Live Band for Venues and Private Events, Long Island"
+  description="Book GRANT the band for your venue or private event. Full band with horns, a trio or a duo. Originals off Meroke Lane plus covers people actually sing."
+  ogImage="/og/book.png"
+>
+  <Header />
+  <main>
+    <section class="section intro">
+      <div class="wrap">
+        <span class="aside">for venues and private events</span>
+        <h1 class="display">Book GRANT the band.</h1>
+        <p class="lede">
+          Long Island indie rock with a horn section. Originals off Meroke Lane plus covers people actually sing. We held a summer Wednesday residency at Cooper Bluff and have played The Stephen Talkhouse, 89 North and Piquet Lane.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#contact">Contact</a>
+          <a class="btn btn--secondary" href="#watch">Watch first</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--surface" aria-labelledby="formats-title">
+      <div class="wrap">
+        <h2 id="formats-title" class="display h2 head">Formats</h2>
+        <ul class="formats">
+          {formats.map((f) => (
+            <li>
+              <h3>{f}</h3>
+            </li>
+          ))}
+        </ul>
+        <dl class="specs">
+          <div>
+            <dt>Set lengths</dt>
+            <dd>{book.setLengths ?? <span class="ph-inline">[Set lengths]</span>}</dd>
+          </div>
+          <div>
+            <dt>PA and stage</dt>
+            <dd>{book.stageNeeds ?? <span class="ph-inline">[PA and stage needs]</span>}</dd>
+          </div>
+          <div>
+            <dt>Stage plot and tech rider</dt>
+            <dd>
+              {book.stagePlotPdf ? (
+                <a href={book.stagePlotPdf}>Download the PDF</a>
+              ) : (
+                <span class="ph-inline">[Stage plot + tech rider PDF, phase 2]</span>
+              )}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="watch" class="section" aria-labelledby="watch-title">
+      <div class="wrap">
+        <h2 id="watch-title" class="display h2 head">Watch first</h2>
+        <div class="clips">
+          {clips.map((clip) => <ClipFacade clip={clip} />)}
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section section--surface" aria-labelledby="contact-title">
+      <div class="wrap contact">
+        <div>
+          <h2 id="contact-title" class="display h2 head">Contact</h2>
+          <p class="lede">
+            Email <BookingEmail /> with the date, the room and your budget. We answer within a day.
+          </p>
+        </div>
+        <BookingForm />
+      </div>
+    </section>
+
+    <Signup />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .intro {
+    padding-top: 56px;
+  }
+  .intro .aside {
+    display: block;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: clamp(2.75rem, 11vw, 7rem);
+    max-width: 12ch;
+    margin-bottom: 24px;
+  }
+  .intro .lede {
+    margin-bottom: 28px;
+  }
+  .head {
+    margin-bottom: 32px;
+  }
+  .formats {
+    display: grid;
+    gap: 0;
+    margin: 0 0 40px;
+    padding: 0;
+    list-style: none;
+  }
+  .formats li {
+    padding-block: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .formats li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .formats h3 {
+    font-size: 1.375rem;
+    font-weight: 800;
+    font-stretch: 115%;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .specs {
+    display: grid;
+    gap: 20px;
+    margin: 0;
+  }
+  dt {
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  dd {
+    margin: 4px 0 0;
+    color: var(--text);
+  }
+  .clips {
+    display: grid;
+    gap: 32px;
+  }
+  .contact {
+    display: grid;
+    gap: 40px;
+  }
+  @media (min-width: 720px) {
+    .formats {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .formats li,
+    .formats li:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+    .specs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .clips {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .clips > :global(:first-child) {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 960px) {
+    .contact {
+      grid-template-columns: 5fr 6fr;
+      gap: 72px;
+    }
+  }
+</style>

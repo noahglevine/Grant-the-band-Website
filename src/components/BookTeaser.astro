@@ -1,0 +1,25 @@
+---
+import BookingEmail from './BookingEmail.astro';
+---
+
+<section id="book" class="section section--surface" aria-labelledby="book-title">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="aside">for venues and private events</span>
+      <h2 id="book-title" class="display h2">Book us</h2>
+    </div>
+    <p class="lede">
+      Full band with horns, or a stripped-down duo or trio. Originals, covers, or both. Clips, set lengths, tech needs and past rooms are all on one page.
+    </p>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="/book">See the EPK</a>
+      <BookingEmail as="button" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .lede {
+    margin-bottom: 28px;
+  }
+</style>

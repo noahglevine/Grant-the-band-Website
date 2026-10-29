@@ -1,0 +1,54 @@
+---
+import ShowRow from './ShowRow.astro';
+import type { Show } from '../lib/shows';
+
+interface Props {
+  shows: Show[];
+}
+const { shows } = Astro.props;
+---
+
+<section id="shows" class="section" aria-labelledby="shows-title">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="aside">come say hi</span>
+      <h2 id="shows-title" class="display h2">Shows</h2>
+    </div>
+
+    {shows.length > 0 ? (
+      <ul class="list">
+        {shows.map((show) => <ShowRow show={show} />)}
+      </ul>
+    ) : (
+      <div class="empty">
+        <p class="empty-title">Nothing on the calendar this week.</p>
+        <p class="muted">That changes fast. Get the dates before they hit Instagram.</p>
+        <a class="btn btn--primary" href="#signup">Get show dates</a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .empty {
+    padding: 28px 0 0;
+    border-top: 1px solid var(--line);
+    max-width: 36em;
+  }
+  .empty-title {
+    margin-bottom: 6px;
+    color: var(--text);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .empty .muted {
+    margin-bottom: 24px;
+  }
+</style>

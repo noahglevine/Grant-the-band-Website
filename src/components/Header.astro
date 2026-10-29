@@ -1,0 +1,71 @@
+---
+import Wordmark from './Wordmark.astro';
+
+interface Props {
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+// On /book the section links point back at the home page.
+const base = home ? '' : '/';
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <Wordmark />
+    <nav aria-label="Main">
+      <ul>
+        <li class="nav-link"><a href={`${base}#shows`}>Shows</a></li>
+        <li class="nav-link"><a href={`${base}#music`}>Music</a></li>
+        <li class="nav-link"><a href={`${base}#live`}>Live</a></li>
+        <li><a class="btn btn--secondary btn--sm" href="/book">Book us</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 64px;
+  }
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .nav-link a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 10px;
+    color: var(--body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .nav-link a:hover {
+    color: var(--accent);
+  }
+  .btn--sm {
+    margin-left: 6px;
+  }
+  /* Tight phones: keep the wordmark and Book us; section links come back at 480px. */
+  @media (max-width: 479px) {
+    .nav-link {
+      display: none;
+    }
+  }
+</style>

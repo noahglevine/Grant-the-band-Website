@@ -1,0 +1,138 @@
+---
+// Placeholder until Noah picks Kit or MailerLite. When that lands, swap the <form>
+// action/fields for the provider's embed and delete the submit handler below.
+interface Props {
+  id?: string;
+  compact?: boolean;
+}
+const { id = 'signup', compact = false } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<section id={id} class:list={['signup', { compact }]} aria-labelledby={titleId}>
+  <div class="wrap inner">
+    <div class="copy">
+      <h2 id={titleId} class="display">Show dates, first.</h2>
+      <p>One email when there’s a show. That’s it. We’re not organized enough to spam you.</p>
+    </div>
+    <form class="form" data-signup-placeholder novalidate>
+      <label class="visually-hidden" for={`${id}-email`}>Email address</label>
+      <input
+        id={`${id}-email`}
+        class="input"
+        type="email"
+        name="email"
+        autocomplete="email"
+        inputmode="email"
+        placeholder="you@example.com"
+        required
+      />
+      <button class="btn submit" type="submit">Send me dates</button>
+      <p class="status" role="status" aria-live="polite"></p>
+      <p class="ph-tag">[Email provider: Kit or MailerLite, not connected yet]</p>
+    </form>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-signup-placeholder]').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const status = form.querySelector('.status');
+      if (status) status.textContent = 'Not wired up yet. This form connects once the email provider is set.';
+    });
+  });
+</script>
+
+<style>
+  .signup {
+    background: var(--accent);
+    color: var(--bg);
+    padding-block: 72px;
+  }
+  .inner {
+    display: grid;
+    gap: 28px;
+  }
+  h2 {
+    color: var(--bg);
+    font-size: clamp(2.5rem, 10vw, 5rem);
+  }
+  .copy p {
+    margin: 16px 0 0;
+    max-width: 30em;
+    font-size: 1.1875rem;
+    font-weight: 500;
+  }
+  .form {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+  .input {
+    border-color: var(--bg);
+  }
+  .input:focus {
+    outline-color: var(--bg);
+    border-color: var(--bg);
+  }
+  .submit {
+    background: var(--bg);
+    color: var(--text);
+  }
+  .submit:hover {
+    background: var(--surface);
+  }
+  .status {
+    margin: 0;
+    font-weight: 600;
+  }
+  .status:empty {
+    display: none;
+  }
+  .ph-tag {
+    margin: 0;
+    justify-self: start;
+    padding: 4px 8px;
+    border: 1px dashed var(--bg);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  @media (min-width: 480px) {
+    .form {
+      grid-template-columns: 1fr auto;
+    }
+    .status,
+    .ph-tag {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 900px) {
+    .signup:not(.compact) {
+      padding-block: 112px;
+    }
+    .signup:not(.compact) .inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: end;
+    }
+  }
+  .compact {
+    padding-block: 40px;
+    border-radius: 16px;
+  }
+  .compact .inner {
+    padding-inline: 20px;
+  }
+  .compact h2 {
+    font-size: 2.25rem;
+  }
+  .compact .copy p {
+    font-size: 1rem;
+  }
+  .compact .form {
+    grid-template-columns: 1fr;
+  }
+</style>

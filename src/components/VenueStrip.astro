@@ -1,0 +1,50 @@
+---
+import { venuesPlayed } from '../data/site';
+---
+
+<section class="strip" aria-label="Rooms we’ve played">
+  <div class="wrap row">
+    <span class="aside">Played</span>
+    <ul>
+      {venuesPlayed.map((v) => <li>{v}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .strip {
+    border-block: 1px solid var(--line);
+    background: var(--surface);
+    padding-block: 18px;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 16px;
+  }
+  .aside {
+    font-size: 1.5rem;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 700;
+    font-stretch: 115%;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  li:not(:last-child)::after {
+    content: '·';
+    margin-inline: 0.7em;
+    color: var(--accent);
+  }
+</style>

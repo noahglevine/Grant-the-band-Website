@@ -1,0 +1,117 @@
+---
+import { ep, links } from '../data/site';
+---
+
+<section id="music" class="section section--surface" aria-labelledby="music-title">
+  <div class="wrap grid">
+    <div class="cover">
+      {ep.cover ? (
+        <img src={ep.cover} alt="Meroke Lane cover art" width="800" height="800" loading="lazy" decoding="async" />
+      ) : (
+        <div class="ph cover-ph">[Meroke Lane cover art]</div>
+      )}
+    </div>
+
+    <div class="copy">
+      <div class="section-head">
+        <span class="aside">the EP</span>
+        <h2 id="music-title" class="display h2">Meroke Lane</h2>
+      </div>
+      <p class="lede">
+        Songs about trains, the long way home, and getting it wrong before getting it right. Start with these.
+      </p>
+
+      <ol class="tracks">
+        {ep.tracks.map((t) => <li>{t}</li>)}
+      </ol>
+
+      <div class="btn-row">
+        <a class="btn btn--primary" href={links.spotify} rel="noopener">Spotify</a>
+        {links.appleMusic ? (
+          <a class="btn btn--secondary" href={links.appleMusic} rel="noopener">Apple Music</a>
+        ) : (
+          <span class="btn btn--secondary ph-btn" aria-disabled="true">Apple Music <span class="ph-inline">[URL]</span></span>
+        )}
+        <a class="btn btn--secondary" href={links.merokeLaneYoutube ?? links.youtube} rel="noopener">YouTube</a>
+      </div>
+
+      <figure class="quote">
+        <blockquote>
+          <p>“Everyone is executing their instrument… top shelf.”</p>
+        </blockquote>
+        <figcaption>Torvik, reviewing “Man on a Train”</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 40px;
+  }
+  .cover img,
+  .cover-ph {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .tracks {
+    margin: 8px 0 32px;
+    padding: 0;
+    list-style: none;
+    counter-reset: t;
+  }
+  .tracks li {
+    counter-increment: t;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+  .tracks li:first-child {
+    border-top: 1px solid var(--line);
+  }
+  .tracks li::before {
+    content: counter(t, decimal-leading-zero);
+    min-width: 1.6em;
+    color: var(--accent);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .quote {
+    margin: 48px 0 0;
+    padding-left: 20px;
+    border-left: 3px solid var(--accent);
+  }
+  blockquote {
+    margin: 0;
+  }
+  blockquote p {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-size: clamp(1.375rem, 5vw, 1.875rem);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  figcaption {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: 5fr 6fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .cover {
+      position: sticky;
+      top: 96px;
+    }
+  }
+</style>

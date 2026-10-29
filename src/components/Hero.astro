@@ -1,0 +1,107 @@
+---
+import { hero } from '../data/site';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="media">
+    {hero.video ? (
+      <video
+        class="video"
+        data-src={hero.video}
+        poster={hero.poster ?? undefined}
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-hidden="true"
+      />
+    ) : hero.poster ? (
+      <img class="video" src={hero.poster} alt="" />
+    ) : (
+      <div class="ph media-ph" aria-hidden="true">
+        <span>[Hero video loop: Man on a Train outro, Talkhouse. 6 to 10 sec MP4 + poster]</span>
+      </div>
+    )}
+    <div class="scrim" />
+  </div>
+
+  <div class="wrap content">
+    <p class="aside">Long Island, NY</p>
+    <h1 id="hero-title" class="display">Better in the room.</h1>
+    <p class="lede sub">
+      Indie rock with a horn section. Originals, plus a few covers we have no business playing. The set doesn’t sit still.
+    </p>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="#signup">Get show dates</a>
+      <a class="btn btn--secondary" href="#music">Listen to Meroke Lane</a>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  // Autoplay the loop only when motion is welcome. Reduced-motion visitors keep the poster
+  // and never download the video.
+  (function () {
+    var v = document.querySelector('.hero video[data-src]');
+    if (!v || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    v.src = v.dataset.src;
+    v.play().catch(function () {});
+  })();
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: min(88svh, 820px);
+    padding-block: 120px 48px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--placeholder);
+  }
+  .video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .media-ph {
+    position: absolute;
+    inset: 0;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 20px var(--gutter);
+    border: 0;
+    border-bottom: 1px dashed var(--muted);
+  }
+  .media-ph span {
+    max-width: 22em;
+    text-align: right;
+  }
+  /* Flat scrim for legibility over footage. No gradients. */
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: rgb(22 18 14 / 0.45);
+  }
+  .content {
+    position: relative;
+  }
+  .aside {
+    margin-bottom: 10px;
+    font-size: 1.75rem;
+  }
+  h1 {
+    font-size: clamp(3rem, 12.5vw, 9rem);
+    max-width: 10ch;
+  }
+  .sub {
+    margin: 22px 0 28px;
+    color: var(--text);
+  }
+</style>

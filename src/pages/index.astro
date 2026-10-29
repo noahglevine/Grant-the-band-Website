@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import VenueStrip from '../components/VenueStrip.astro';
+import Shows from '../components/Shows.astro';
+import Music from '../components/Music.astro';
+import Live from '../components/Live.astro';
+import Signup from '../components/Signup.astro';
+import BookTeaser from '../components/BookTeaser.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_URL, links, ep } from '../data/site';
+import { upcomingShows, musicEventJsonLd } from '../lib/shows';
+
+const shows = upcomingShows();
+
+const musicGroup = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicGroup',
+  name: 'GRANT the band',
+  url: SITE_URL,
+  genre: ['Indie rock'],
+  foundingLocation: { '@type': 'Place', name: 'Long Island, NY' },
+  sameAs: [links.spotify, links.youtube, links.instagram, links.tiktok, links.appleMusic].filter(Boolean),
+  album: {
+    '@type': 'MusicAlbum',
+    name: ep.title,
+    albumReleaseType: 'https://schema.org/EPRelease',
+    track: ep.tracks.map((name, i) => ({ '@type': 'MusicRecording', name, position: i + 1 })),
+  },
+};
+
+const jsonLd = [musicGroup, ...shows.map((s) => musicEventJsonLd(s, SITE_URL))];
+---
+
+<Base
+  title="GRANT the band | Indie Rock from Long Island, NY"
+  description="Indie rock with a horn section from Long Island, NY. Originals off Meroke Lane, a few covers we have no business playing, and a set that’s better in the room."
+  ogImage="/og/home.png"
+  jsonLd={jsonLd}
+>
+  <Header home />
+  <main>
+    <Hero />
+    <VenueStrip />
+    <Shows shows={shows} />
+    <Music />
+    <Live />
+    <Signup />
+    <BookTeaser />
+  </main>
+  <Footer />
+</Base>

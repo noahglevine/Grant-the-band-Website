@@ -1,0 +1,111 @@
+---
+import type { Clip } from '../data/site';
+
+interface Props {
+  clip: Clip;
+}
+const { clip } = Astro.props;
+const label = `Play ${clip.song}, ${clip.where}`;
+---
+
+<figure class="clip">
+  {clip.youtubeId ? (
+    <yt-facade class="frame" data-id={clip.youtubeId} data-title={`${clip.song} (${clip.where})`}>
+      {clip.thumb ? (
+        <img src={clip.thumb} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+      ) : (
+        <img
+          src={`https://i.ytimg.com/vi/${clip.youtubeId}/hqdefault.jpg`}
+          alt=""
+          width="480"
+          height="360"
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+      <button type="button" class="play" aria-label={label}>
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+      </button>
+    </yt-facade>
+  ) : (
+    <div class="frame ph">[YouTube URL + thumbnail]</div>
+  )}
+  <figcaption>
+    <span class="song">{clip.song}</span>
+    <span class="where">{clip.where}</span>
+  </figcaption>
+</figure>
+
+<script>
+  // Click-to-load YouTube. Nothing from YouTube loads until someone presses play.
+  class YtFacade extends HTMLElement {
+    connectedCallback() {
+      this.querySelector('button')?.addEventListener('click', () => this.load(), { once: true });
+    }
+    load() {
+      const id = this.dataset.id;
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`;
+      iframe.title = this.dataset.title || 'YouTube video';
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      this.replaceChildren(iframe);
+      iframe.focus();
+    }
+  }
+  if (!customElements.get('yt-facade')) customElements.define('yt-facade', YtFacade);
+</script>
+
+<style>
+  .clip {
+    margin: 0;
+  }
+  .frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--placeholder);
+  }
+  .frame :global(img),
+  .frame :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+  }
+  .play {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    cursor: pointer;
+  }
+  .frame:hover .play {
+    background: var(--text);
+  }
+  figcaption {
+    display: grid;
+    gap: 2px;
+    padding-top: 14px;
+  }
+  .song {
+    color: var(--text);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+  .where {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+</style>

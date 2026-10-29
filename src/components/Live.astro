@@ -1,0 +1,56 @@
+---
+import ClipFacade from './ClipFacade.astro';
+import { clips, links } from '../data/site';
+---
+
+<section id="live" class="section" aria-labelledby="live-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="live-title" class="display h2">Live</h2>
+      <p class="lede sub">Real shows. No lip-sync, no studio fixes.</p>
+    </div>
+    <div class="clips">
+      {clips.map((clip) => <ClipFacade clip={clip} />)}
+    </div>
+    <p class="more"><a href={links.youtube} rel="noopener">More on YouTube</a></p>
+  </div>
+</section>
+
+<style>
+  .sub {
+    margin: 16px 0 0;
+  }
+  .clips {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 720px) {
+    .clips {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .clips > :global(:first-child) {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 1100px) {
+    .clips {
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    .clips > :global(:first-child) {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+  }
+  .more {
+    margin: 32px 0 0;
+  }
+  .more a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--accent);
+    font-weight: 700;
+    text-underline-offset: 4px;
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+}
+const { size = 'md', href = '/' } = Astro.props;
+---
+
+<a class:list={['wordmark', `wordmark--${size}`]} href={href} aria-label="GRANT the band, home">
+  <span class="wm-grant">GRANT</span><span class="wm-band">the band</span>
+</a>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.28em;
+    text-decoration: none;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .wm-grant {
+    font-stretch: 125%;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: var(--text);
+  }
+  .wm-band {
+    font-family: var(--script);
+    font-weight: 600;
+    font-size: 1.12em;
+    color: var(--accent);
+  }
+  .wordmark--sm {
+    font-size: 1.125rem;
+  }
+  .wordmark--md {
+    font-size: 1.375rem;
+  }
+  .wordmark--lg {
+    font-size: 2rem;
+  }
+</style>
