@@ -209,7 +209,14 @@ export const book = {
   trio: 'Acoustic. Built for private events and acoustic shows.' as string | null,
   duo: 'Acoustic and stripped down. Built for private events and smaller rooms.' as string | null,
   setLengths: '2 to 3 hours.' as string | null,
-  stageNeeds: 'We bring our own PA.' as string | null,
+  // "Tech at a glance", from the stage plot. Lines as supplied by Noah.
+  tech: [
+    '6 players · 19 inputs',
+    '2 mono DIs on lead (acoustic + trigger pad)',
+    'Vocal FX on lead mic (XLR in and out)',
+    '3 vocal mics',
+    'We bring our own PA',
+  ],
 };
 
 // Downloads in public/press/. Each renders only once its file exists.

@@ -167,13 +167,14 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
   - Full band with horns: "6-piece with horns. Built for clubs, residencies and outdoor nights."
   - Trio: "Acoustic. Built for private events and acoustic shows."
   - Duo: "Acoustic and stripped down. Built for private events and smaller rooms."
-  - Then Set lengths "2 to 3 hours." and PA and stage "We bring our own PA." (all in `book` in `site.ts`).
+  - Then Set lengths "2 to 3 hours." (all in `book` in `site.ts`).
+- "Tech at a glance" under Formats, styled like a Formats entry (title + gold lines), from `book.tech`: 6 players · 19 inputs / 2 mono DIs on lead (acoustic + trigger pad) / Vocal FX on lead mic (XLR in and out) / 3 vocal mics / We bring our own PA. Then the "Download stage plot (PDF)" link. Never render the plot image on the page.
 - "Watch first": three clips, full band first.
 - "Played", in this order: The Stephen Talkhouse / Cooper Bluff (with "Summer Residency, 2025 and 2026" as a small gold second line) / 89 North / Piquet Lane / The Villager / Nag’s Head Ale House. No dates on any other venue. "Summer Residency" is capitalized.
 - "Press" (on /book only, never home; `press` in `site.ts`), in this order, each with an amber left rule, cream quote, small gold attribution:
   1. “Everyone is executing their instrument… top shelf.” Phillip Torvik, producer, reviewing “Man on a Train” on TikTok ("on TikTok" is plain text, no link, by Noah's call).
   2. “High-energy live performances with emotionally charged songwriting.” Rolling Hype, February 2025 · Read the feature (links to https://rollinghype.com/grant-the-band-the-energy-the-originals-and-the-covers-you-cant-miss/, new tab, rel="noopener").
-- Stage plot: "Download stage plot (PDF)" in the specs, linking `/press/grant-the-band-stage-plot.pdf`. Renders only once that file exists.
+- Stage plot: "Download stage plot (PDF)" under Tech at a glance, linking `/press/grant-the-band-stage-plot.pdf`. Renders only if that file exists.
 - "Press kit" block under Press: "Photos and logo for your flyers and socials." + primary button "Download press kit" (`/press/grant-the-band-press-kit.zip`). The zip holds full-res 89north-full-band, 89north-noah-trombone, talkhouse-stage, talkhouse-noah, meroke-lane-cover (original), gtb-monogram.png, `press/bio.txt` (about 100 words: intro, formats, tracklist) and the stage plot once it exists. Rebuild it with `scripts/make-press-kit.sh` whenever any of those change.
 - Contact: "Email contact@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
 - No fan signup block on /book. The page is for buyers only.
