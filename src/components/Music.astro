@@ -1,12 +1,13 @@
 ---
 import ListenButton from './ListenButton.astro';
 import { ep, links, srcset } from '../data/site';
+import { showPlaceholders } from '../lib/env';
 
+// "Listen" is Spotify; these are the other places to hear it.
 const platforms = [
-  { label: 'Spotify', href: links.merokeLaneSpotify },
   { label: 'Apple Music', href: links.appleMusic },
   { label: 'YouTube', href: links.merokeLaneYoutube ?? links.youtube },
-];
+].filter((p) => p.href || showPlaceholders);
 ---
 
 <section id="music" class="section" aria-labelledby="music-title">
@@ -24,7 +25,7 @@ const platforms = [
           decoding="async"
         />
       ) : (
-        <div class="ph cover-ph">[Meroke Lane cover art]</div>
+        showPlaceholders && <div class="ph cover-ph">[Meroke Lane cover art]</div>
       )}
     </div>
 

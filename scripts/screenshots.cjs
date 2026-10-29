@@ -1,4 +1,4 @@
-// Full-page screenshots of / and /book at 390x844, 1312x634 (laptop) and 1440x900,
+// Full-page screenshots of /, /book, /now, /shows and /404 at 390x844, 1312x634 (laptop) and 1440x900,
 // saved to screenshots/. Serves the built dist/ itself, so build first; use
 // `npm run build:preview` so the deploy-preview sample tickets show.
 // Run: node scripts/screenshots.cjs   (needs Playwright; not a project dependency)
@@ -14,6 +14,9 @@ const out = path.join(root, 'screenshots');
 const pages = [
   { name: 'home', path: '/' },
   { name: 'book', path: '/book' },
+  { name: 'now', path: '/now' },
+  { name: 'shows', path: '/shows' },
+  { name: '404', path: '/404' },
 ];
 const widths = [
   { width: 390, height: 844 },
@@ -31,6 +34,8 @@ const types = {
   '.jpg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.mp4': 'video/mp4',
+  '.zip': 'application/zip',
+  '.pdf': 'application/pdf',
 };
 
 // Mirrors Netlify: /book serves book.html, / serves index.html.

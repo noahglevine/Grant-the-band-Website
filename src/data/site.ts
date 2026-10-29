@@ -1,17 +1,18 @@
+import { publicFileExists } from '../lib/env';
+
 // Single source for links, contact info and assets.
-// Anything set to null renders as a labeled placeholder until Noah supplies it.
+// Anything set to null renders as a labeled placeholder on previews and is omitted on
+// production (see src/lib/env.ts).
 
 export const SITE_URL = 'https://granttheband.com';
 
 export const links = {
   spotify: 'https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe', // artist page: footer, socials
-  merokeLaneSpotify: 'https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2', // the EP: Music section
+  merokeLaneSpotify: 'https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2', // the EP: every "Listen" button
   youtube: 'https://www.youtube.com/@GRANTtheband',
   instagram: 'https://www.instagram.com/grant_theband',
   tiktok: 'https://www.tiktok.com/@granttheband',
   appleMusic: 'https://music.apple.com/us/album/meroke-lane-ep/6793211371' as string | null, // the EP
-  // Meroke Lane HyperFollow (DistroKid smart link, all platforms). Hero and Music "Listen" buttons.
-  hyperfollow: 'https://distrokid.com/hyperfollow/granttheband/meroke-lane' as string | null,
   // Meroke Lane on YouTube. Falls back to the channel until there's a playlist URL.
   merokeLaneYoutube: null as string | null,
 };
@@ -27,6 +28,15 @@ export const monogram = { svg: '/images/gtb-monogram.svg', png: '/images/gtb-mon
 
 // Google Search Console verification token (content attribute only).
 export const searchConsoleToken = null as string | null;
+
+// Cloudflare Web Analytics beacon token. The script loads on production only, once set.
+export const cloudflareAnalyticsToken = null as string | null;
+
+// Kit newsletter form. Plain POST from our own styled form; no Kit script or styling.
+export const kit = {
+  action: 'https://app.kit.com/forms/10116057/subscriptions',
+  uid: '2dc4489060',
+};
 
 // Photographer credits. Every photo names one of these (or null while the credit is
 // missing), and the footer lists the credits for photos actually rendered on the site.
@@ -85,6 +95,15 @@ export const photos = {
     alt: 'GRANT the band singer Noah singing with the trombone player beside him at 89 North',
     credit: null,
   },
+  // Color frame from the June 7 2026 Cooper Bluff full-show video. Used for the "Full show"
+  // card once the file is in public/images/; cooperHorns stands in until then.
+  cooperFrame: {
+    src: '/images/cooper-bluff-frame.jpg',
+    width: 1920,
+    height: 1080,
+    alt: 'GRANT the band playing the full show at Cooper Bluff',
+    credit: null,
+  },
   cooperHorns: {
     src: '/images/cooper-horns.jpg',
     width: 1086,
@@ -137,10 +156,12 @@ export type Clip = {
 };
 
 // From ASSETS.md "YouTube embeds". Full band first. /book uses this order as-is.
+const cooperThumb = publicFileExists(photos.cooperFrame.src) ? photos.cooperFrame : photos.cooperHorns;
+
 export const clips: Clip[] = [
   { title: 'Man on a Train', isSong: true, where: 'Live at The Stephen Talkhouse', youtubeId: 'Fz9s33Rsvh8', thumb: photos.talkhouseStage },
   { title: 'Around the Moon', isSong: true, where: 'Live at 89 North', youtubeId: 'a1R_eGE8rbk', thumb: photos.northNoahTrombone },
-  { title: 'Full show', isSong: false, where: 'Live at Cooper Bluff', youtubeId: 'cTb2dEve5B8', thumb: photos.cooperHorns },
+  { title: 'Full show', isSong: false, where: 'Live at Cooper Bluff', youtubeId: 'cTb2dEve5B8', thumb: cooperThumb },
 ];
 
 export function creditsInUse(): { handle: string; url: string }[] {
@@ -172,21 +193,27 @@ export const press: PressQuote[] = [
   },
 ];
 
-// /book "Played", in this order. Only the residency carries dates.
-export const venuesPlayed = [
-  'The Stephen Talkhouse',
-  'Cooper Bluff · Summer Residency, 2025 and 2026',
-  '89 North',
-  'Piquet Lane',
-  'The Villager',
-  'Nag’s Head Ale House',
+// /book "Played", in this order. Only the residency carries dates, as a small gold second line.
+export const venuesPlayed: { name: string; note?: string }[] = [
+  { name: 'The Stephen Talkhouse' },
+  { name: 'Cooper Bluff', note: 'Summer Residency, 2025 and 2026' },
+  { name: '89 North' },
+  { name: 'Piquet Lane' },
+  { name: 'The Villager' },
+  { name: 'Nag’s Head Ale House' },
 ];
 
+// /book "Formats". Values as supplied by Noah. null hides the line on production.
 export const book = {
-  fullBandPieces: null as number | null, // [NUMBER]
-  trioBestFor: null as string | null, // [WHAT THE TRIO IS BEST FOR]
-  duoBestFor: null as string | null, // [WHAT THE DUO IS BEST FOR]
-  setLengths: null as string | null, // [SET LENGTHS]
-  stageNeeds: null as string | null, // [PA AND STAGE NEEDS]
-  stagePlotPdf: null as string | null, // phase 2
+  fullBand: '6-piece with horns. Built for clubs, residencies and outdoor nights.' as string | null,
+  trio: 'Acoustic. Built for private events and acoustic shows.' as string | null,
+  duo: 'Acoustic and stripped down. Built for private events and smaller rooms.' as string | null,
+  setLengths: '2 to 3 hours.' as string | null,
+  stageNeeds: 'We bring our own PA.' as string | null,
+};
+
+// Downloads in public/press/. Each renders only once its file exists.
+export const downloads = {
+  stagePlot: '/press/grant-the-band-stage-plot.pdf',
+  kit: '/press/grant-the-band-press-kit.zip',
 };

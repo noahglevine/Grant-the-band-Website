@@ -1,5 +1,6 @@
-// Renders OG cards (1200x630) and favicons from the site's own fonts and colors,
-// matched to the approved Canva masters (night ground, amber rule, cream caps, gold label).
+// Renders OG cards (1200x630) and favicons from the site's own fonts and colors.
+// OG cards: the 89 North full-band photo under the night scrim, the hero wordmark lockup
+// and one gold label line.
 // Run: node scripts/make-images.cjs   (needs Playwright; outputs to public/)
 const fs = require('fs');
 const path = require('path');
@@ -11,6 +12,7 @@ const font = (p) =>
   'data:font/woff2;base64,' + fs.readFileSync(path.join(root, 'node_modules', p)).toString('base64');
 // The real GTB monogram (white SVG from public/images, per ASSETS.md).
 const monogram = 'data:image/svg+xml;base64,' + fs.readFileSync(path.join(root, 'public/images/gtb-monogram.svg')).toString('base64');
+const bandPhoto = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(root, 'public/images/89north-full-band.jpg')).toString('base64');
 const css = `
 @font-face { font-family: M; src: url(${font('@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2')}); font-weight: 100 900; }
 @font-face { font-family: R; src: url(${font('@fontsource/reenie-beanie/files/reenie-beanie-latin-400-normal.woff2')}); }
@@ -18,20 +20,19 @@ const css = `
 body { background: #10151C; color: #F4EBDD; font-family: M; }
 `;
 
-const og = (label, headline, foot) => `
+// Same scrim as the site (--scrim in global.css): night 0% to 70%, front-loaded.
+const og = (label) => `
 <style>${css}
-.card { width: 1200px; height: 630px; padding: 72px 80px; display: flex; flex-direction: column; justify-content: space-between; }
-.wm { font-size: 24px; letter-spacing: .14em; text-transform: uppercase; }
-.rule { width: 64px; height: 2px; background: #E3A35C; margin-bottom: 28px; }
-.d { font-size: 96px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; line-height: 1.02; }
-.label { color: #F6CB8A; font-size: 26px; letter-spacing: .12em; text-transform: uppercase; margin-top: 22px; }
-.foot { display: flex; justify-content: space-between; align-items: flex-end; color: #F6CB8A; font-size: 22px; letter-spacing: .06em; }
-.mono { width: 72px; height: 72px; }
+.card { position: relative; width: 1200px; height: 630px; display: grid; place-content: center; justify-items: center; gap: 28px;
+  background: linear-gradient(to bottom, rgb(16 21 28 / 0) 0%, rgb(16 21 28 / 0.7) 30%, rgb(16 21 28 / 0.7) 100%), url(${bandPhoto}) center 40% / cover; }
+.wm { display: flex; flex-direction: column; align-items: flex-end; line-height: 1; }
+.grant { font-size: 168px; letter-spacing: .06em; margin-right: -.06em; line-height: .9; }
+.band { font-family: R; font-size: 71px; color: #F6CB8A; }
+.label { color: #F6CB8A; font-size: 30px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
 </style>
 <div class="card">
-  <div class="wm">GRANT the band</div>
-  <div><div class="rule"></div><div class="d">${headline}</div><div class="label">${label}</div></div>
-  <div class="foot"><span>${foot}</span><img class="mono" src="${monogram}" alt=""></div>
+  <div class="wm"><span class="grant">GRANT</span><span class="band">the band</span></div>
+  <div class="label">${label}</div>
 </div>`;
 
 // Favicon: the white GTB monogram on night, so it reads on light and dark browser tabs.
@@ -50,10 +51,10 @@ const icon = (size) => `
     await p.screenshot({ path: path.join(root, 'public', out) });
     await p.close();
   };
-  await shoot(og('Meroke Lane', 'Out<br>everywhere', 'granttheband.com'), 1200, 630, 'og/home.png');
-  await shoot(og('Meroke Lane', 'Out<br>everywhere', 'granttheband.com'), 1200, 630, 'og/now.png');
-  await shoot(og('Next stop', 'Shows', 'granttheband.com/shows'), 1200, 630, 'og/shows.png');
-  await shoot(og('Venues and private events', 'Booking.', 'granttheband.com/book'), 1200, 630, 'og/book.png');
+  await shoot(og('Meroke Lane · Out everywhere'), 1200, 630, 'og/home.png');
+  await shoot(og('Meroke Lane · Out everywhere'), 1200, 630, 'og/now.png');
+  await shoot(og('Shows'), 1200, 630, 'og/shows.png');
+  await shoot(og('Booking'), 1200, 630, 'og/book.png');
   await shoot(icon(32), 32, 32, 'favicon-32.png');
   await shoot(icon(180), 180, 180, 'apple-touch-icon.png');
   await b.close();

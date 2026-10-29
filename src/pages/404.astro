@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Signup from '../components/Signup.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base title="Wrong stop | GRANT the band" description="This page isn’t on the line." ogImage="/og/home.png" noindex>
+  <Header newsletterHref="#newsletter" />
+  <main>
+    <section class="section lost" aria-labelledby="lost-title">
+      <div class="wrap">
+        <h1 id="lost-title" class="display h1 title">Wrong stop.</h1>
+        <p class="sub">This page isn’t on the line.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/">Home</a>
+          <a class="btn btn--secondary" href="/shows">Shows</a>
+        </div>
+      </div>
+    </section>
+    <Signup />
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .lost h1 {
+    max-width: 12ch;
+  }
+  .lost .sub {
+    margin-bottom: 32px;
+  }
+</style>

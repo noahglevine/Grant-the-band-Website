@@ -1,5 +1,6 @@
 ---
 import { srcset, type Clip } from '../data/site';
+import { showPlaceholders } from '../lib/env';
 
 interface Props {
   clip: Clip;
@@ -38,7 +39,7 @@ const shown = clip.isSong ? `“${clip.title}”` : clip.title;
       </button>
     </yt-facade>
   ) : (
-    <div class="frame ph">[YouTube clip + thumbnail]</div>
+    showPlaceholders && <div class="frame ph">[YouTube clip + thumbnail]</div>
   )}
   <figcaption>
     <span class="song">{shown}</span>

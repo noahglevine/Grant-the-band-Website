@@ -21,17 +21,18 @@ Conversions, in priority order:
 - Fonts self-hosted via Fontsource: Montserrat (variable; confirmed as the Meroke Lane cover font, Regular 400 caps) and Reenie Beanie
 - `@astrojs/sitemap`
 - Netlify Forms for the booking form (no backend)
-- Email signup: embed form from the provider Noah picks (Kit or MailerLite free tier). Placeholder component until then.
+- Email signup: Kit. Our own styled form (`Signup.astro`, every variant) POSTs via fetch to `https://app.kit.com/forms/10116057/subscriptions` (field `email_address`, form uid 2dc4489060). No Kit script, no Kit styling. Success: "Check your inbox to confirm." Error: "That didn’t go through. Try again." Without JS it falls back to a plain POST to Kit.
 - YouTube clips as click-to-load facades (lite-youtube or equivalent, pinned version). No iframes on first load.
-- No Instagram feed embed. No trackers beyond one privacy-light analytics script Noah approves.
+- No Instagram feed embed. No trackers beyond Cloudflare Web Analytics: `cloudflareAnalyticsToken` in `site.ts`, beacon script on production only, nothing until the token is set.
 - Keep dependencies minimal. Pin versions.
 
-## Pages (4 total)
+## Pages (4, plus a 404)
 
 - `/` home
 - `/shows` upcoming dates
 - `/book` EPK for talent buyers and private events
 - `/now` link-in-bio page for the Instagram bio
+- `/404`: title "WRONG STOP.", gold line "This page isn’t on the line.", buttons "Home" (primary) and "Shows", then the newsletter signup. noindex.
 
 ## Data
 
@@ -115,7 +116,7 @@ colorbalance=rs=0.10:gs=0.02:bs=-0.12:rm=0.08:bm=-0.10:rh=0.04:bh=-0.06,eq=satur
 `public/images/ASSETS.md` is the asset manifest (sources, sizes, alt text, credits, what's missing). Read it before touching images.
 
 - Hero: `public/video/hero-desktop.mp4` (landscape screens) / `hero-phone.mp4` (portrait), over `hero-desktop-poster.jpg` / `hero-phone-poster.jpg` in a `<picture>`. The video fades in once it plays; reduced-motion visitors get the poster and download no video. `Hero.astro` only includes a loop if its file exists. The loops are already graded: never re-grade.
-- Clip thumbnails: Talkhouse stage, 89 North (Noah + trombone), Cooper horns. Photo band: 89 North full band.
+- Clip thumbnails: Talkhouse stage, 89 North (Noah + trombone), and for the Cooper Bluff full show a color frame from the June 7 2026 video at `public/images/cooper-bluff-frame.jpg` (1920x1080; `cooper-horns.jpg` stands in until that file exists). Photo band: 89 North full band.
 - Cooper photos are small originals (540px and 1086px). Card/thumbnail sizes only, never upscaled or full bleed.
 - `scripts/make-image-sizes.sh` writes 1200px copies of the 2400px photos to `public/images/sized/` for srcset. Never resize the Meroke Lane cover: it would strip its Content Credentials.
 - Alt text follows ASSETS.md, with "GRANT the band" in full instead of "GRANT".
@@ -139,16 +140,16 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
 1. Hero: 100svh. The media is a full-bleed background layer behind the logo and buttons ([HERO VIDEO LOOP or PHOTO: full band, golden hour]; until it lands, a neutral night block in that same layer), graded warm, night gradient scrim. Video rules: self-hosted MP4, 6 to 10 sec, under 3 MB, poster image, `playsinline`, prefers-reduced-motion shows the poster.
    - Centered logo, large. It is the H1.
    - Below: gold label "MEROKE LANE", then "OUT EVERYWHERE".
-   - Buttons: "Listen" (to [HYPERFOLLOW URL]) and "Shows" (to `/shows`), in the lower third.
+   - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), in the lower third.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
-3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (confirmed) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify (the EP: https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2) · Apple Music · YouTube. Text block vertically centered against the cover art.
+3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (confirmed) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (the Spotify EP), then one row of small text links: Apple Music · YouTube. Text block vertically centered against the cover art.
 4. Video (`#video`): title "LIVE". Three clip cards (YouTube IDs in `site.ts`, from ASSETS.md), song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Around the Moon” / Live at 89 North; Full show (no quotes, not a song) / Live at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
 
 Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Newsletter, Booking.
-7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Booking: contact@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
+7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Contact: contact@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
@@ -160,35 +161,36 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 ## /book copy
 
 - H1: "BOOKING."
-- "Indie rock with a horn section from Long Island. Originals off Meroke Lane plus the covers people came for. Two summers as the residency band at Cooper Bluff, plus The Stephen Talkhouse, 89 North, Piquet Lane, The Villager and Nag’s Head Ale House."
+- Full-bleed photo directly under the header: `89north-full-band.jpg`, 50vh phone / 60vh desktop, object-fit cover.
+- "Indie rock with a horn section from Long Island. Originals plus the covers people came for. Two summers as the residency band at Cooper Bluff." (The full venue list lives in Played.)
 - Formats, each with one line under it:
-  - Full band with horns: "[NUMBER]-piece. Built for clubs, residencies and outdoor nights."
-  - Trio: "[WHAT THE TRIO IS BEST FOR]"
-  - Duo: "[WHAT THE DUO IS BEST FOR]"
-  - Then [SET LENGTHS]. [PA AND STAGE NEEDS].
+  - Full band with horns: "6-piece with horns. Built for clubs, residencies and outdoor nights."
+  - Trio: "Acoustic. Built for private events and acoustic shows."
+  - Duo: "Acoustic and stripped down. Built for private events and smaller rooms."
+  - Then Set lengths "2 to 3 hours." and PA and stage "We bring our own PA." (all in `book` in `site.ts`).
 - "Watch first": three clips, full band first.
-- "Played", in this order: The Stephen Talkhouse / Cooper Bluff · Summer Residency, 2025 and 2026 / 89 North / Piquet Lane / The Villager / Nag’s Head Ale House. No dates on any other venue. "Summer Residency" is capitalized.
+- "Played", in this order: The Stephen Talkhouse / Cooper Bluff (with "Summer Residency, 2025 and 2026" as a small gold second line) / 89 North / Piquet Lane / The Villager / Nag’s Head Ale House. No dates on any other venue. "Summer Residency" is capitalized.
 - "Press" (on /book only, never home; `press` in `site.ts`), in this order, each with an amber left rule, cream quote, small gold attribution:
   1. “Everyone is executing their instrument… top shelf.” Phillip Torvik, producer, reviewing “Man on a Train” on TikTok ("on TikTok" is plain text, no link, by Noah's call).
   2. “High-energy live performances with emotionally charged songwriting.” Rolling Hype, February 2025 · Read the feature (links to https://rollinghype.com/grant-the-band-the-energy-the-originals-and-the-covers-you-cant-miss/, new tab, rel="noopener").
-- Downloads: stage plot and tech rider PDF (phase 2).
+- Stage plot: "Download stage plot (PDF)" in the specs, linking `/press/grant-the-band-stage-plot.pdf`. Renders only once that file exists.
+- "Press kit" block under Press: "Photos and logo for your flyers and socials." + primary button "Download press kit" (`/press/grant-the-band-press-kit.zip`). The zip holds full-res 89north-full-band, 89north-noah-trombone, talkhouse-stage, talkhouse-noah, meroke-lane-cover (original), gtb-monogram.png, `press/bio.txt` (about 100 words: intro, formats, tracklist) and the stage plot once it exists. Rebuild it with `scripts/make-press-kit.sh` whenever any of those change.
 - Contact: "Email contact@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
 - No fan signup block on /book. The page is for buyers only.
 - Do not add a band member photo grid. The lineup rotates.
 
 ## /now
 
-Single phone-width column: wordmark, "Indie rock from Long Island. Better in the room.", top card from now.json ("The one you just watched"), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane", "Watch us live", "Book us". Footer "granttheband.com". Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
+Single phone-width column: wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
 
 ## Links
 
 - Spotify (artist, footer and socials): https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe
-- Spotify, Meroke Lane EP (Music section): https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2
+- Spotify, Meroke Lane EP (every "Listen" button, /now with UTM): https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2. No HyperFollow anywhere.
 - YouTube: https://www.youtube.com/@GRANTtheband
 - Instagram: https://www.instagram.com/grant_theband
 - TikTok: https://www.tiktok.com/@granttheband
 - Apple Music, Meroke Lane EP: https://music.apple.com/us/album/meroke-lane-ep/6793211371
-- HyperFollow (all platforms, "Listen" buttons): https://distrokid.com/hyperfollow/granttheband/meroke-lane
 
 ## Redirects (netlify.toml, 301)
 
@@ -208,13 +210,17 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 - Home meta + OG description: "GRANT the band. Meroke Lane out everywhere. Listen, watch, and get show dates."
 - /book title: "Book GRANT the band | Live Band for Venues and Private Events, Long Island"
 - Meta descriptions in the band voice, no em dashes, no "unforgettable"
-- og:site_name "GRANT the band", OG image per page (1200x630)
+- og:site_name "GRANT the band", OG image per page (1200x630) from `scripts/make-images.cjs`: `89north-full-band.jpg` under the night scrim, the hero wordmark lockup, one gold label ("MEROKE LANE · OUT EVERYWHERE" for home and /now, "BOOKING" for /book, "SHOWS" for /shows)
 - MusicGroup JSON-LD on home, MusicEvent per show
 - Google Search Console verification meta tag: Noah will supply
 
 ## Placeholders Noah still owes
 
-Logo SVG (the wordmark is still the type version), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
+Logo SVG (the wordmark is still the type version), stage plot PDF (to `public/press/grant-the-band-stage-plot.pdf`), Cooper Bluff video frame, `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
+
+## Production guard
+
+On `CONTEXT === "production"` nothing unfinished renders: no [BRACKETED] text, no `.ph`, `.ph-inline`, `.ph-tag` or `.ph-btn`. A null value omits its element (`showPlaceholders` in `src/lib/env.ts`). `npm run build` ends with `scripts/check-dist.mjs`, which fails a production build if bracketed placeholder text or placeholder classes reach `dist/` HTML (`npm run build:production` to try it locally); on previews it only lists them. Never invent facts, stats or quotes.
 
 ## Brand rules (non-negotiable)
 
@@ -228,25 +234,25 @@ Logo SVG (the wordmark is still the type version), full-band piece count, trio/d
 
 **Phase 1 (launch):** scaffold Astro, tokens, fonts, three pages with copy and placeholders, shows.json + empty state, Netlify Forms booking form, redirects, sitemap, JSON-LD. Open a PR. Noah reviews the deploy preview on his phone.
 
-**Phase 2:** real assets swapped in, email provider wired, stage plot/rider PDF, analytics, UTMs.
+**Phase 2:** real assets swapped in, Kit wired (done), stage plot/rider PDF, analytics token, UTMs.
 
 **Cutover (Noah does this with you, step by step):** export Wix contacts CSV and media, confirm registrar, lower DNS TTL a day ahead, point domain to Netlify, confirm HTTPS, re-verify Search Console, submit sitemap, swap IG bio to /now. Cancel Wix after two stable weeks, before auto-renew.
 
 ## Implementation decisions (Phase 1)
 
 - Astro 7.x needs Node >= 22.23.4. Netlify pins `NODE_VERSION` in `netlify.toml`; `.nvmrc` says 24.
-- `src/data/site.ts` holds every link, the booking email and asset paths. `null` renders a labeled placeholder.
+- `src/data/site.ts` holds every link, the booking email and asset paths. `null` renders a labeled placeholder on previews and is omitted on production.
 - Clean URLs without trailing slashes (`build.format: 'file'`, `trailingSlash: 'never'`).
 - "Upcoming" shows are computed at build time in America/New_York, so a show stays listed through its own day. Needs a rebuild after show dates pass (daily build hook planned for Phase 2).
 - "Details" on a show row renders only when `url` is set.
 - `/now` has its own compact signup at the bottom; "Get show dates" jumps to it. "Watch us live" goes to `/#video` (internal, no UTM).
 - YouTube facade is a small in-repo custom element (`ClipFacade.astro`), using youtube-nocookie on click.
 - `npm run build` runs `scripts/check-copy.mjs` first and fails on em dashes or "unforgettable".
-- OG images and favicons are typographic renders from `scripts/make-images.cjs`.
+- OG images (band photo + scrim + lockup) and favicons (monogram on night) render from `scripts/make-images.cjs`.
 
 ## Ongoing maintenance
 
-- After every change on a PR branch: `npm run build:preview && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/` and `/book` at 390x844, 1312x634 (laptop) and 1440x900 to `screenshots/` (`home-390.png`, `home-1312.png`, `home-1440.png`, `book-390.png`, `book-1312.png`, `book-1440.png`). Build with `CONTEXT=deploy-preview` so the sample tickets show, as on the preview. Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
+- After every change on a PR branch: `npm run build:preview && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/`, `/book`, `/now`, `/shows` and `/404` at 390x844, 1312x634 (laptop) and 1440x900 to `screenshots/` (`<page>-<width>.png`: home, book, now, shows, 404 × 390, 1312, 1440). Build with `CONTEXT=deploy-preview` so the sample tickets show, as on the preview. Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
 
 - New show: Noah says "add 12/5 Talkhouse 8pm". Edit shows.json on a branch, open a PR, merge after Noah approves the preview.
 - Weekly: update now.json to the latest post.

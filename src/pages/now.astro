@@ -5,40 +5,46 @@ import TicketList from '../components/TicketList.astro';
 import BookingEmail from '../components/BookingEmail.astro';
 import Signup from '../components/Signup.astro';
 import now from '../data/now.json';
-import { links } from '../data/site';
+import { links, bookingEmail } from '../data/site';
 import { upcomingShows } from '../lib/shows';
 import { withUtm, BIO_UTM } from '../lib/utm';
+import { showPlaceholders } from '../lib/env';
 
 const next = upcomingShows()[0];
 const hasCard = Boolean(now.title && now.url);
+// Production omits the card until now.json is filled; previews show what's owed.
+const showCard = hasCard || showPlaceholders;
+const poster = now.poster || null;
 ---
 
 <Base
   title="GRANT the band | Now"
-  description="Indie rock from Long Island. Better in the room. The latest clip, the next show, and where to listen."
+  description="GRANT the band. The latest clip, the next show, and where to listen."
   ogImage="/og/now.png"
 >
   <main class="now">
     <header class="top">
       <Wordmark size="lg" />
-      <p class="tag">Indie rock from Long Island. Better in the room.</p>
+      <p class="tag label">Meroke Lane · Out everywhere</p>
     </header>
 
-    <section class="card" aria-label="The one you just watched">
-      <span class="label">The one you just watched</span>
-      {hasCard ? (
-        <a class="card-link" href={withUtm(now.url)} rel="noopener">
-          {now.poster ? (
-            <img src={now.poster} alt="" width="1080" height="1350" decoding="async" />
-          ) : (
-            <div class="ph poster">[Poster image]</div>
-          )}
-          <span class="card-title">{now.title}</span>
-        </a>
-      ) : (
-        <div class="ph poster">[now.json: title, url, poster from the latest Instagram post]</div>
-      )}
-    </section>
+    {showCard && (
+      <section class="card" aria-label="The one you just watched">
+        <span class="label">The one you just watched</span>
+        {hasCard ? (
+          <a class="card-link" href={withUtm(now.url)} rel="noopener">
+            {poster ? (
+              <img src={poster} alt="" width="1080" height="1350" decoding="async" />
+            ) : (
+              showPlaceholders && <div class="ph poster">[Poster image]</div>
+            )}
+            <span class="card-title">{now.title}</span>
+          </a>
+        ) : (
+          <div class="ph poster">[now.json: title, url, poster from the latest Instagram post]</div>
+        )}
+      </section>
+    )}
 
     {next && (
       <section class="next" aria-label="Next show">
@@ -49,7 +55,7 @@ const hasCard = Boolean(now.title && now.url);
 
     <nav class="links" aria-label="Links">
       <a class="btn btn--primary" href="#newsletter">Get show dates</a>
-      <a class="btn btn--secondary" href={withUtm(links.hyperfollow ?? links.spotify)} rel="noopener">Listen to Meroke Lane</a>
+      <a class="btn btn--secondary" href={withUtm(links.merokeLaneSpotify)} rel="noopener">Listen to Meroke Lane</a>
       <a class="btn btn--secondary" href="/#video">Watch us live</a>
       <a class="btn btn--secondary" href="/book">Book us</a>
     </nav>
@@ -57,7 +63,7 @@ const hasCard = Boolean(now.title && now.url);
     <Signup variant="compact" />
 
     <footer class="foot">
-      <p class="booking">Booking: <BookingEmail /></p>
+      {bookingEmail && <p class="booking">Contact: <BookingEmail /></p>}
       <a href="/">granttheband.com</a>
     </footer>
   </main>
@@ -79,7 +85,6 @@ const hasCard = Boolean(now.title && now.url);
   }
   .tag {
     margin: 0;
-    color: var(--cream);
   }
   .card {
     display: grid;

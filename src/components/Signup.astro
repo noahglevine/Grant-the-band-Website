@@ -1,6 +1,7 @@
 ---
-// Placeholder until Noah picks Kit or MailerLite. When that lands, swap the <form>
-// action/fields for the provider's embed and delete the submit handler below.
+// Newsletter signup, posted to Kit with our own markup and styles (no Kit script).
+// With JS: fetch, stay on the page, show the result. Without JS: a plain POST to Kit.
+import { kit } from '../data/site';
 interface Props {
   id?: string;
   // band: full section with title (home, /shows). compact: same, sized for /now's column.
@@ -15,12 +16,11 @@ const titleId = `${id}-title`;
 {variant === 'inline' ? (
   <div id={id} class="signup signup--inline">
     <p class="sub line">{line}</p>
-    <form class="form" data-signup-placeholder novalidate>
+    <form class="form" action={kit.action} method="post" data-kit data-uid={kit.uid}>
       <label class="visually-hidden" for={`${id}-email`}>Email address</label>
-      <input id={`${id}-email`} class="input" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
+      <input id={`${id}-email`} class="input" type="email" name="email_address" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
       <button class="btn btn--primary" type="submit">Sign up</button>
       <p class="status" role="status" aria-live="polite"></p>
-      <p class="ph-tag">[Email provider: Kit or MailerLite, not connected yet]</p>
     </form>
   </div>
 ) : (
@@ -30,23 +30,39 @@ const titleId = `${id}-title`;
         <h2 id={titleId} class="display h2 title">First to know.</h2>
         <p class="sub">{line}</p>
       </div>
-      <form class="form" data-signup-placeholder novalidate>
+      <form class="form" action={kit.action} method="post" data-kit data-uid={kit.uid}>
         <label class="visually-hidden" for={`${id}-email`}>Email address</label>
-        <input id={`${id}-email`} class="input" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
+        <input id={`${id}-email`} class="input" type="email" name="email_address" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
         <button class="btn btn--primary" type="submit">Sign up</button>
         <p class="status" role="status" aria-live="polite"></p>
-        <p class="ph-tag">[Email provider: Kit or MailerLite, not connected yet]</p>
       </form>
     </div>
   </section>
 )}
 
 <script>
-  document.querySelectorAll<HTMLFormElement>('form[data-signup-placeholder]').forEach((form) => {
-    form.addEventListener('submit', (e) => {
+  document.querySelectorAll<HTMLFormElement>('form[data-kit]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.status')!;
+    const button = form.querySelector<HTMLButtonElement>('button')!;
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const status = form.querySelector('.status');
-      if (status) status.textContent = 'Signup isn’t connected yet. It goes live with the email provider.';
+      button.disabled = true;
+      status.textContent = '';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.status !== 'success') throw new Error(String(data.status || res.status));
+        form.reset();
+        status.textContent = 'Check your inbox to confirm.';
+      } catch {
+        status.textContent = 'That didn’t go through. Try again.';
+      } finally {
+        button.disabled = false;
+      }
     });
   });
 </script>
@@ -64,19 +80,11 @@ const titleId = `${id}-title`;
   .status:empty {
     display: none;
   }
-  .ph-tag {
-    margin: 0;
-    color: var(--gold);
-    font-size: var(--fs-min);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
   @media (min-width: 480px) {
     .form {
       grid-template-columns: 1fr auto;
     }
-    .status,
-    .ph-tag {
+    .status {
       grid-column: 1 / -1;
     }
   }

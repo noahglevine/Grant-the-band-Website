@@ -5,17 +5,25 @@ import ClipFacade from '../components/ClipFacade.astro';
 import BookingEmail from '../components/BookingEmail.astro';
 import BookingForm from '../components/BookingForm.astro';
 import Footer from '../components/Footer.astro';
-import { clips, book, venuesPlayed, press } from '../data/site';
+import { clips, book, venuesPlayed, press, downloads, photos, srcset } from '../data/site';
+import { showPlaceholders, publicFileExists } from '../lib/env';
 
-const ph = (label: string) => `<span class="ph-inline">[${label}]</span>`;
+// A null value shows a labeled placeholder on previews and drops out on production.
+const owed = (value: string | null, label: string) =>
+  value ? { text: value, ph: false } : showPlaceholders ? { text: `[${label}]`, ph: true } : null;
+
 const formats = [
-  {
-    name: 'Full band with horns',
-    line: `${book.fullBandPieces ?? ph('Number')}-piece. Built for clubs, residencies and outdoor nights.`,
-  },
-  { name: 'Trio', line: book.trioBestFor ?? ph('What the trio is best for') },
-  { name: 'Duo', line: book.duoBestFor ?? ph('What the duo is best for') },
+  { name: 'Full band with horns', line: owed(book.fullBand, 'Full band line') },
+  { name: 'Trio', line: owed(book.trio, 'What the trio is best for') },
+  { name: 'Duo', line: owed(book.duo, 'What the duo is best for') },
 ];
+const specs = [
+  { term: 'Set lengths', value: owed(book.setLengths, 'Set lengths') },
+  { term: 'PA and stage', value: owed(book.stageNeeds, 'PA and stage needs') },
+].filter((s) => s.value);
+const stagePlot = publicFileExists(downloads.stagePlot) ? downloads.stagePlot : null;
+const pressKit = publicFileExists(downloads.kit) ? downloads.kit : null;
+const top = photos.northFullBand;
 ---
 
 <Base
@@ -25,11 +33,23 @@ const formats = [
 >
   <Header newsletterHref="/#newsletter" />
   <main>
+    <div class="top-photo">
+      <img
+        src={top.src}
+        srcset={srcset(top)}
+        sizes="100vw"
+        width={top.width}
+        height={top.height}
+        alt={top.alt}
+        fetchpriority="high"
+      />
+    </div>
+
     <section class="section intro">
       <div class="wrap">
         <h1 class="display h1 title">Booking.</h1>
         <p class="lede">
-          Indie rock with a horn section from Long Island. Originals off Meroke Lane plus the covers people came for. Two summers as the residency band at Cooper Bluff, plus The Stephen Talkhouse, 89 North, Piquet Lane, The Villager and Nag’s Head Ale House.
+          Indie rock with a horn section from Long Island. Originals plus the covers people came for. Two summers as the residency band at Cooper Bluff.
         </p>
         <div class="btn-row">
           <a class="btn btn--primary" href="#contact">Contact</a>
@@ -45,29 +65,23 @@ const formats = [
           {formats.map((f) => (
             <li>
               <h3>{f.name}</h3>
-              <p set:html={f.line} />
+              {f.line && <p class:list={{ 'ph-inline': f.line.ph }}>{f.line.text}</p>}
             </li>
           ))}
         </ul>
         <dl class="specs">
-          <div>
-            <dt>Set lengths</dt>
-            <dd>{book.setLengths ?? <span class="ph-inline">[Set lengths]</span>}</dd>
-          </div>
-          <div>
-            <dt>PA and stage</dt>
-            <dd>{book.stageNeeds ?? <span class="ph-inline">[PA and stage needs]</span>}</dd>
-          </div>
-          <div>
-            <dt>Stage plot and tech rider</dt>
-            <dd>
-              {book.stagePlotPdf ? (
-                <a href={book.stagePlotPdf}>Download the PDF</a>
-              ) : (
-                <span class="ph-inline">[Stage plot + tech rider PDF, phase 2]</span>
-              )}
-            </dd>
-          </div>
+          {specs.map((s) => (
+            <div>
+              <dt>{s.term}</dt>
+              <dd class:list={{ 'ph-inline': s.value!.ph }}>{s.value!.text}</dd>
+            </div>
+          ))}
+          {stagePlot && (
+            <div>
+              <dt>Stage plot and tech rider</dt>
+              <dd><a href={stagePlot} download>Download stage plot (PDF)</a></dd>
+            </div>
+          )}
         </dl>
       </div>
     </section>
@@ -86,7 +100,12 @@ const formats = [
         <div>
           <h2 class="display h2 title head">Played</h2>
           <ul class="played">
-            {venuesPlayed.map((v) => <li>{v}</li>)}
+            {venuesPlayed.map((v) => (
+              <li>
+                {v.name}
+                {v.note && <span class="note">{v.note}</span>}
+              </li>
+            ))}
           </ul>
         </div>
         <div>
@@ -108,6 +127,13 @@ const formats = [
               </figure>
             ))}
           </div>
+          {pressKit && (
+            <div class="kit">
+              <h3>Press kit</h3>
+              <p>Photos and logo for your flyers and socials.</p>
+              <a class="btn btn--primary" href={pressKit} download>Download press kit</a>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -129,6 +155,17 @@ const formats = [
 </Base>
 
 <style>
+  /* Full-bleed photo straight under the header. */
+  .top-photo img {
+    width: 100%;
+    height: 50vh;
+    object-fit: cover;
+  }
+  @media (min-width: 720px) {
+    .top-photo img {
+      height: 60vh;
+    }
+  }
   .intro {
     padding-top: 56px;
   }
@@ -203,6 +240,14 @@ const formats = [
     font-size: var(--fs-row);
     line-height: 1.25;
   }
+  .played .note {
+    display: block;
+    margin-top: 6px;
+    color: var(--gold);
+    font-size: var(--fs-small);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
   .played li:last-child {
     border-bottom: 1px solid var(--hairline);
   }
@@ -232,6 +277,23 @@ const formats = [
     color: var(--gold);
     text-underline-offset: 4px;
     white-space: nowrap;
+  }
+  .kit {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--hairline);
+  }
+  .kit h3 {
+    font-family: var(--display);
+    font-size: var(--fs-row);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .kit p {
+    margin: 8px 0 20px;
+    color: var(--gold);
+    font-size: var(--fs-small);
   }
   .contact {
     display: grid;

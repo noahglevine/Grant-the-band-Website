@@ -1,10 +1,6 @@
 ---
-// "Listen" goes to the Meroke Lane HyperFollow link. Placeholder until the URL is in site.ts.
+// "Listen" goes to Meroke Lane on Spotify.
 import { links } from '../data/site';
 ---
 
-{links.hyperfollow ? (
-  <a class="btn btn--primary" href={links.hyperfollow} rel="noopener">Listen</a>
-) : (
-  <span class="btn btn--primary ph-btn" aria-disabled="true">Listen <span class="ph-inline">[HyperFollow URL]</span></span>
-)}
+<a class="btn btn--primary" href={links.merokeLaneSpotify} rel="noopener">Listen</a>

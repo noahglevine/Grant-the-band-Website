@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/check-copy.mjs && astro build",
+    "build": "node scripts/check-copy.mjs && astro build && node scripts/check-dist.mjs",
+    "build:production": "CONTEXT=production npm run build",
     "build:preview": "CONTEXT=deploy-preview npm run build",
     "preview": "astro preview",
     "check:copy": "node scripts/check-copy.mjs",
