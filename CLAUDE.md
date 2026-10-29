@@ -18,7 +18,7 @@ Conversions, in priority order:
 
 - Astro (current stable release, static output), deployed on Netlify from GitHub
 - `main` = production. All work on branches, opened as PRs so Netlify builds a deploy preview. Never merge to main or touch DNS without Noah's explicit OK.
-- Fonts self-hosted via Fontsource: Archivo (variable, use the width axis) and Caveat
+- Fonts self-hosted via Fontsource: Montserrat (variable, stand-in for the Meroke Lane cover font) and Reenie Beanie
 - `@astrojs/sitemap`
 - Netlify Forms for the booking form (no backend)
 - Email signup: embed form from the provider Noah picks (Kit or MailerLite free tier). Placeholder component until then.
@@ -51,39 +51,67 @@ Conversions, in priority order:
 
 `src/data/now.json` holds the /now top card: `{ "title": "", "url": "", "poster": "" }`. Updated weekly to match the latest Instagram post.
 
-## Design tokens
+## Brand source of truth
+
+Website must match the approved Canva masters in "GRANT the band - Social Templates". When in doubt, match Instagram.
+
+The masters (Canva folder "GRANT the band - Social Templates"): 4:5 and 9:16 Show announcement ticket ("NEXT STOP."), 9:16 Live clip, 4:5 Photo master, 4:5 Lyric card.
+
+### Colors (the only tokens)
 
 ```
---bg:          #16120E   page ground
---surface:     #1E1813   alternate section
---placeholder: #2A2119
---line:        #3A2F25
---text:        #F1E4CF
---body:        #E3D4BC
---muted:       #B9A88F
---accent:      #E8A64B   golden hour amber, buttons on dark use #16120E text
+--night:  #10151C   page background, scrims (cool blue-black, NOT brown)
+--cream:  #F4EBDD   headlines, primary text
+--gold:   #F6CB8A   ALL labels, subtext, links, primary buttons (dark text #10151C on gold buttons)
+--amber:  #E3A35C   thin rules only (1-2px)
+--copper: #AE5F2A   ticket/print accents only
 ```
 
-- Display: Archivo, width 125%, weight 900, uppercase, tight line-height (0.95)
-- Body: Archivo normal width, 400 to 700
-- Caveat 600 appears only inside the logo/wordmark ("the band"). No handwritten asides anywhere else on the site.
-- Buttons: pill shape, 44px+ tall. Primary = accent fill. Secondary = 1px cream outline.
-- Dark site, no light mode needed, but keep text contrast at 4.5:1 or better.
-- Brand rule: no green anywhere. No gradients, no emoji, no stock imagery, no AI-generated visuals, no template look.
+Ticket only: paper `#F3E9D6`, ink `#1E1E1E`.
+No browns, no other surfaces. Hairline dividers are cream at low opacity. Text contrast 4.5:1 or better.
+
+### Type
+
+- One display face: thin/regular-weight wide geometric sans, ALL CAPS, letter-spacing 0.06em. Montserrat 400 is the stand-in until Noah confirms the exact Meroke Lane cover font, then swap it (one place: `--display` in `global.css`).
+- Headlines are regular weight. Bold (700) only for show dates (the ticket: venue, date, set, line values). No 800/900 anywhere. UI text (buttons, nav) is 500.
+- Body: Montserrat 400, sentence case, 18px phone / 20px desktop, line-height 1.55, max-width 65ch.
+- Handwritten accent: Reenie Beanie (replaces Caveat everywhere). Max one handwritten line per screen.
+- Max two text levels per section: title + one small gold line.
+- Section titles get a 64px x 2px amber rule above them (matches the "NEXT STOP." master).
+- Sizes: H1 clamp(60px, 13vw, 144px). H2 clamp(44px, 8vw, 88px). Gold label lines 15px+, uppercase. Nav 17px. Buttons 18px label, 56px min height, pill. Captions and footer 16px min. Nothing below 15px.
+
+### Layout
+
+- Photo-first. Real photos full bleed with a night gradient scrim behind any text: night at 0% to 70%. That is the one gradient allowed.
+- No empty colored boxes as the main visual. Until photos land, use a single neutral night block, not dashed boxes. Sections without their photo yet (the photo band) stay hidden.
+- Buttons: primary = gold fill, night text. Secondary = 1px cream outline.
+- No green anywhere. No emoji, no stock imagery, no AI-generated visuals, no template look. The scrim is the only gradient.
 - Mobile first. Most traffic comes from Instagram on phones.
 
-Wordmark: "GRANT" in wide Archivo 800 + "the band" in Caveat, accent color. On the home hero it's the headline, centered and large (min 90px tall on phones, 140px on desktop). Lives only in `src/components/Wordmark.astro` so it can be swapped for the real logo SVG (set `wordmarkSvg` in `src/data/site.ts`).
+### Shows = the ticket
 
-## Type scale (mobile first, nothing on the site below 15px)
+Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded corners, perforated stub, labels in copper caps (GRANT THE BAND / LIVE / DATE / SET / LINE / ADMIT ONE / KEEP THIS STUB), venue large in ink `#1E1E1E`, town under it, "LINE: MEROKE LANE" on every ticket, date on the stub (MM/DD), handwritten "see you there" in Reenie Beanie (first ticket only, to keep one handwritten line per screen), -2deg rotation on desktop, 0 on phone. Section title "NEXT STOP.". Hidden when there are no dates.
 
-- Body: 18px mobile / 20px desktop, line-height 1.55, max-width 65ch
-- Lead paragraphs: 21px mobile / 24px desktop
-- H1: clamp(60px, 13vw, 144px)
-- H2: clamp(44px, 8vw, 88px)
-- Nav links: 17px. Buttons: 18px label, 56px min height
-- Small caps labels (e.g. "MEROKE LANE" over "OUT NOW"): uppercase, letter-spacing 0.12em, 15px+
-- List rows (EP tracks, shows): 22px
-- Captions, figcaptions, footer: 16px minimum
+### Signature and credits
+
+- GTB handwritten monogram (white): small in the footer and as the favicon. Placeholder until Noah supplies the PNG (`monogramPng` in `site.ts`).
+- Credit photographers in alt text and the footer. Cooper Bluff photos: @scottk_ny. Credits are listed per photo in `site.ts` and the footer shows credits for photos actually on the site.
+
+### Photo and video handling
+
+Warm grade for the hero video loop (and any band footage), via `scripts/grade-video.sh`:
+
+```
+colorbalance=rs=0.10:gs=0.02:bs=-0.12:rm=0.08:bm=-0.10:rh=0.04:bh=-0.06,eq=saturation=0.92:contrast=1.04
+```
+
+### Voice
+
+Confident and dry. No self-deprecation, no hype words, no horn jokes, no em dashes. Write "GRANT the band" in all body copy, never just "GRANT".
+
+### Wordmark
+
+Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/site.ts` to swap in the real logo. Hero lockup: "GRANT" in the display face, large and centered, with "the band" in Reenie Beanie (gold) under the right edge; it is the H1, min 90px tall on phones, 140px on desktop. Small header/footer wordmark: "GRANT THE BAND" in display caps, no handwriting.
 
 ## Navigation (all pages)
 
@@ -93,23 +121,23 @@ Shows (`/shows`), Music (`/#music`), Video (`/#video`), Newsletter (the signup o
 
 Use this copy as written. Typographic apostrophes and quotes. Never use em dashes anywhere on the site.
 
-1. Hero: full-bleed [HERO VIDEO LOOP or PHOTO: full band, golden hour]. Video rules: self-hosted MP4, 6 to 10 sec, under 3 MB, poster image, `playsinline`, prefers-reduced-motion shows the poster.
+1. Hero: full-bleed [HERO VIDEO LOOP or PHOTO: full band, golden hour], graded warm, night gradient scrim. Video rules: self-hosted MP4, 6 to 10 sec, under 3 MB, poster image, `playsinline`, prefers-reduced-motion shows the poster.
    - Centered logo, large. It is the H1.
-   - Below: small caps "MEROKE LANE", then large "OUT NOW".
+   - Below: gold label "MEROKE LANE", then "OUT EVERYWHERE".
    - Buttons: "Listen" (to [HYPERFOLLOW URL]) and "Shows" (to `/shows`).
    - No tagline, no location line, no sub paragraph.
-2. Shows (only when there are upcoming dates): H2 "Shows". Rows: date, venue, town · time, "Details". Link to `/shows`.
-3. Music (`#music`): cover art, H2 "Meroke Lane", unnumbered list of singles (Man on a Train, Waking Up, Horizon, Peace of Mind). Buttons: "Listen" (HyperFollow), Spotify, Apple Music, YouTube. No blurb.
-4. Video (`#video`): H2 "Video", no subhead. Three clips: Man on a Train (Live at The Stephen Talkhouse), Horizon (Live at The Stephen Talkhouse), Peace of Mind (Unplugged at Cooper Bluff). Link "More on YouTube".
-5. Photo band: full-bleed [BAND PHOTO], no text.
-6. Newsletter (`#newsletter`, accent background, dark text): H2 "Newsletter". "New music and show dates, first." Email field + "Sign up". Same copy everywhere the signup appears.
-7. Footer (every page): logo, Instagram, Spotify, YouTube, TikTok, "Booking: booking@granttheband.com", "© 2026 GRANT the band". No location line.
+2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
+3. Music (`#music`): cover art, title "Music", gold line "Off our EP, Meroke Lane. Out everywhere." Buttons: "Listen" (HyperFollow), Spotify, Apple Music, YouTube.
+4. Video (`#video`): title "Video". Three clip cards, song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Horizon” / Live at The Stephen Talkhouse; “Peace of Mind” / Unplugged at Cooper Bluff. Link "More on YouTube".
+5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
+6. Newsletter (`#newsletter`): title "Newsletter", gold line "New music and show dates, first." Email field + "Sign up". Same copy everywhere the signup appears.
+7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok, "Booking: booking@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 ## /shows
 
-- H1 "Shows". Upcoming rows from shows.json.
+- H1 "Shows". One ticket per upcoming show from shows.json.
 - Empty: "No dates announced." + inline signup "Get them first."
 
 ## /book copy
@@ -156,7 +184,7 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 ## SEO
 
 - Home title: "GRANT the band | Indie Rock from Long Island, NY"
-- Home meta + OG description: "GRANT the band. Meroke Lane out now. Listen, watch, and get show dates."
+- Home meta + OG description: "GRANT the band. Meroke Lane out everywhere. Listen, watch, and get show dates."
 - /book title: "Book GRANT the band | Live Band for Venues and Private Events, Long Island"
 - Meta descriptions in the band voice, no em dashes, no "unforgettable"
 - og:site_name "GRANT the band", OG image per page (1200x630)
@@ -165,7 +193,7 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 
 ## Placeholders Noah still owes
 
-Hero video loop or photo (full band, golden hour), band photo for the photo band, logo SVG, HyperFollow URL, Meroke Lane cover art, three clip YouTube URLs and thumbnails (thumbnails feature Noah), Apple Music URL, full-band piece count, trio/duo lines, set lengths, PA/stage needs, email provider choice. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
+Hero video loop or photo (full band, golden hour), band photo for the photo band, logo SVG, GTB monogram PNG (white), the exact Meroke Lane cover font, HyperFollow URL, Meroke Lane cover art, three clip YouTube URLs and thumbnails (thumbnails feature Noah), Apple Music URL, full-band piece count, trio/duo lines, set lengths, PA/stage needs, email provider choice. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
 
 ## Brand rules (non-negotiable)
 
