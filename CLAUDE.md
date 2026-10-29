@@ -230,7 +230,7 @@ Hero video loop or photo (full band, golden hour), band photo for the photo band
 
 ## Ongoing maintenance
 
-- After every change on a PR branch: `npm run build && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/` and `/book` at 390x844, 1312x634 (laptop) and 1440x900 to `screenshots/` (`home-390.png`, `home-1312.png`, `home-1440.png`, `book-390.png`, `book-1312.png`, `book-1440.png`). Build with `CONTEXT=deploy-preview` so the sample tickets show, as on the preview. Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
+- After every change on a PR branch: `npm run build:preview && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/` and `/book` at 390x844, 1312x634 (laptop) and 1440x900 to `screenshots/` (`home-390.png`, `home-1312.png`, `home-1440.png`, `book-390.png`, `book-1312.png`, `book-1440.png`). Build with `CONTEXT=deploy-preview` so the sample tickets show, as on the preview. Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
 
 - New show: Noah says "add 12/5 Talkhouse 8pm". Edit shows.json on a branch, open a PR, merge after Noah approves the preview.
 - Weekly: update now.json to the latest post.

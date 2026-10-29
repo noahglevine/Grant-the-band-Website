@@ -6,6 +6,8 @@ export type Show = {
   venue: string;
   town: string; // "Amagansett, NY"
   url: string;
+  endTime?: string; // HH:MM, 24h, optional
+  sample?: boolean; // deploy-preview sample: date unknown, never on production
 };
 
 const TZ = 'America/New_York';
@@ -16,11 +18,21 @@ function todayLocal(now = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(now);
 }
 
+// Netlify deploy previews only: two sample tickets so the design can be reviewed while
+// shows.json is empty. CONTEXT is set by Netlify at build time; it is "production" on main
+// and unset locally, so these never reach the live site.
+const PREVIEW_SAMPLES: Show[] = [
+  { date: '', time: '18:00', endTime: '21:00', venue: 'Cooper Bluff', town: 'Oyster Bay, NY', url: '', sample: true },
+  { date: '', time: '20:00', venue: 'The Stephen Talkhouse', town: 'Amagansett, NY', url: '', sample: true },
+];
+
 export function upcomingShows(now = new Date()): Show[] {
   const today = todayLocal(now);
-  return (showsData as Show[])
+  const real = (showsData as Show[])
     .filter((s) => s.date >= today)
     .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  if (real.length === 0 && process.env.CONTEXT === 'deploy-preview') return PREVIEW_SAMPLES;
+  return real;
 }
 
 function asUtcNoon(date: string): Date {
@@ -55,6 +67,22 @@ function nyOffset(date: string, time: string): string {
     .formatToParts(probe)
     .find((p) => p.type === 'timeZoneName')?.value; // "GMT-05:00"
   return name && name !== 'GMT' ? name.replace('GMT', '') : '+00:00';
+}
+
+// Ticket SET value: "8 PM", or "6 - 9 PM" for a range (matches the Canva ticket master).
+export function formatSet(show: Show): string {
+  const fmt = (t: string) => formatTime(t).toUpperCase().replace(/(AM|PM)$/, ' $1');
+  if (!show.time) return '';
+  if (!show.endTime) return fmt(show.time);
+  const start = fmt(show.time);
+  const end = fmt(show.endTime);
+  const sameHalf = start.slice(-2) === end.slice(-2);
+  return `${sameHalf ? start.slice(0, -3) : start} - ${end}`;
+}
+
+// Real shows only: samples have no date and must never reach search engines.
+export function showsJsonLd(shows: Show[], siteUrl: string) {
+  return shows.filter((s) => !s.sample).map((s) => musicEventJsonLd(s, siteUrl));
 }
 
 export function musicEventJsonLd(show: Show, siteUrl: string) {

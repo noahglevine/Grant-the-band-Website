@@ -39,7 +39,7 @@ export type PhotographerId = keyof typeof photographers;
 export const hero = {
   video: null as string | null, // e.g. '/media/hero-loop.mp4'
   poster: null as string | null, // e.g. '/media/hero.jpg'
-  alt: 'GRANT the band live',
+  alt: 'GRANT the band live', // add the photographer: 'GRANT the band live. Photo by @handle'
   credit: null as PhotographerId | null,
 };
 
@@ -61,6 +61,7 @@ export function creditsInUse(): { handle: string; url: string }[] {
 export const ep = {
   title: 'Meroke Lane',
   cover: null as string | null, // e.g. '/media/meroke-lane.jpg'
+  songs: ['Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
   // Singles to start with, not the tracklist.
 };
 

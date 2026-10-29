@@ -132,8 +132,9 @@ h3 {
   font-size: clamp(60px, 13vw, 144px);
 }
 
+/* Section titles: 40px phone, 56px max desktop. */
 .h2 {
-  font-size: clamp(44px, 8vw, 88px);
+  font-size: clamp(40px, 4.5vw, 56px);
 }
 
 /* Section title: 64 x 2 amber rule above, like the "NEXT STOP." master. */
@@ -178,20 +179,30 @@ h3 {
   letter-spacing: 0;
 }
 
-/* Sections */
+/* Sections: one gap between sections, 64px phone / 96px desktop, nothing taller.
+   Each section pads its top; the last one in <main> also pads its bottom. */
 
-.section {
-  padding-block: 72px;
+:root {
+  --section-gap: 64px;
 }
 
 @media (min-width: 720px) {
-  .section {
-    padding-block: 112px;
+  :root {
+    --section-gap: 96px;
   }
 }
 
+.section {
+  padding-block: var(--section-gap) 0;
+}
+
+/* last-of-type, not last-child: Astro can inline a <script> after the last section. */
+main > section.section:last-of-type:not(.compact) {
+  padding-bottom: var(--section-gap);
+}
+
 .section-head {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 /* Buttons */
@@ -267,9 +278,10 @@ h3 {
 .ph-btn,
 .ph-btn:hover {
   cursor: default;
-  background: transparent;
-  color: var(--gold);
-  border-color: var(--gold);
+}
+
+.btn .ph-inline {
+  color: inherit;
 }
 
 .visually-hidden {

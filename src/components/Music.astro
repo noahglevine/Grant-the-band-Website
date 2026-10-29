@@ -1,6 +1,12 @@
 ---
 import ListenButton from './ListenButton.astro';
 import { ep, links } from '../data/site';
+
+const platforms = [
+  { label: 'Spotify', href: links.spotify },
+  { label: 'Apple Music', href: links.appleMusic },
+  { label: 'YouTube', href: links.merokeLaneYoutube ?? links.youtube },
+];
 ---
 
 <section id="music" class="section" aria-labelledby="music-title">
@@ -14,19 +20,26 @@ import { ep, links } from '../data/site';
     </div>
 
     <div class="copy">
-      <h2 id="music-title" class="display h2 title">Music</h2>
+      <h2 id="music-title" class="display h2 title">Meroke Lane</h2>
       <p class="sub">Off our EP, Meroke Lane. Out everywhere.</p>
 
-      <div class="btn-row">
-        <ListenButton />
-        <a class="btn btn--secondary" href={links.spotify} rel="noopener">Spotify</a>
-        {links.appleMusic ? (
-          <a class="btn btn--secondary" href={links.appleMusic} rel="noopener">Apple Music</a>
-        ) : (
-          <span class="btn btn--secondary ph-btn" aria-disabled="true">Apple Music <span class="ph-inline">[URL]</span></span>
-        )}
-        <a class="btn btn--secondary" href={links.merokeLaneYoutube ?? links.youtube} rel="noopener">YouTube</a>
-      </div>
+      <ul class="songs" aria-label="Songs">
+        {ep.songs.map((song) => <li>“{song}”</li>)}
+      </ul>
+
+      <ListenButton />
+
+      <ul class="platforms" aria-label="Also on">
+        {platforms.map((p) => (
+          <li>
+            {p.href ? (
+              <a href={p.href} rel="noopener">{p.label}</a>
+            ) : (
+              <span>{p.label} <span class="ph-inline">[URL]</span></span>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   </div>
 </section>
@@ -36,14 +49,43 @@ import { ep, links } from '../data/site';
     display: grid;
     gap: 40px;
   }
-  .copy .btn-row {
-    margin-top: 32px;
-  }
   .cover img,
   .cover-ph {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
+  }
+  .songs {
+    margin: 24px 0 32px;
+    padding: 0;
+    list-style: none;
+  }
+  .songs li {
+    color: var(--cream);
+    line-height: 1.8;
+  }
+  .platforms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--fs-small);
+  }
+  .platforms li:not(:last-child)::after {
+    content: '·';
+    margin-inline: 10px;
+    color: var(--gold);
+  }
+  .platforms a,
+  .platforms li > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-height: 44px;
+    color: var(--gold);
+    text-underline-offset: 4px;
   }
   @media (min-width: 900px) {
     .grid {

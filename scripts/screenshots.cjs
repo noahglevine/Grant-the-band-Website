@@ -1,5 +1,6 @@
-// Full-page screenshots of / and /book at 390px and 1440px, saved to screenshots/.
-// Serves the built dist/ itself, so run `npm run build` first.
+// Full-page screenshots of / and /book at 390x844, 1312x634 (laptop) and 1440x900,
+// saved to screenshots/. Serves the built dist/ itself, so build first; use
+// `npm run build:preview` so the deploy-preview sample tickets show.
 // Run: node scripts/screenshots.cjs   (needs Playwright; not a project dependency)
 const fs = require('fs');
 const http = require('http');
@@ -16,6 +17,7 @@ const pages = [
 ];
 const widths = [
   { width: 390, height: 844 },
+  { width: 1312, height: 634 },
   { width: 1440, height: 900 },
 ];
 

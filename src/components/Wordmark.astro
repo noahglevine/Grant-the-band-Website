@@ -79,4 +79,14 @@ const Tag = href ? 'a' : 'span';
   .wordmark--hero .wm-logo {
     height: clamp(90px, 22vw, 184px);
   }
+  /* Desktop: never wider than 40% of the viewport. GRANT is ~3.9em wide, so 40vw / 3.9. */
+  @media (min-width: 720px) {
+    .wordmark--hero {
+      font-size: min(176px, 10.25vw);
+    }
+    .wordmark--hero .wm-logo {
+      height: auto;
+      width: min(40vw, 640px);
+    }
+  }
 </style>

@@ -5,6 +5,7 @@ import { hero } from '../data/site';
 ---
 
 <section class="hero" aria-labelledby="hero-title">
+  <!-- Background layer: media (or its placeholder) plus the night scrim, behind everything. -->
   <div class="media">
     {hero.video ? (
       <video
@@ -20,17 +21,21 @@ import { hero } from '../data/site';
     ) : hero.poster ? (
       <img class="video" src={hero.poster} alt={hero.alt} />
     ) : (
-      <p class="ph-note" aria-hidden="true">[Hero video loop or photo: full band, golden hour]</p>
+      <div class="video ph-block" aria-hidden="true">
+        <p class="ph-note">[Hero video loop or photo: full band, golden hour]</p>
+      </div>
     )}
-    {(hero.video || hero.poster) && <div class="scrim" />}
+    <div class="scrim" aria-hidden="true" />
   </div>
 
   <div class="wrap content">
-    <h1 id="hero-title" class="logo"><Wordmark size="hero" href={null} /></h1>
-    <p class="release">
-      <span class="label">Meroke Lane</span>
-      <span class="out display">Out everywhere</span>
-    </p>
+    <div class="center">
+      <h1 id="hero-title" class="logo"><Wordmark size="hero" href={null} /></h1>
+      <p class="release">
+        <span class="label">Meroke Lane</span>
+        <span class="out display">Out everywhere</span>
+      </p>
+    </div>
     <div class="btn-row">
       <ListenButton />
       <a class="btn btn--secondary" href="/shows">Shows</a>
@@ -53,9 +58,7 @@ import { hero } from '../data/site';
   .hero {
     position: relative;
     display: flex;
-    align-items: center;
     min-height: 100svh;
-    padding-block: 112px 64px;
     overflow: hidden;
     isolation: isolate;
     text-align: center;
@@ -71,17 +74,15 @@ import { hero } from '../data/site';
     height: 100%;
     object-fit: cover;
   }
-  /* Night gradient scrim behind the text: night 0% to 70%. */
-  .scrim {
-    position: absolute;
-    inset: 0;
-    background: var(--scrim);
+  /* Until the footage lands: one neutral night block in the same background layer. */
+  .ph-block {
+    background: var(--lift);
   }
   .ph-note {
     position: absolute;
+    top: 88px;
     left: 0;
     right: 0;
-    bottom: 16px;
     margin: 0 auto;
     padding-inline: var(--gutter);
     color: var(--gold);
@@ -89,10 +90,25 @@ import { hero } from '../data/site';
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
+  /* Night gradient scrim: night 0% to 70%. */
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: var(--scrim);
+  }
+  /* Logo and release fill the space; buttons sit in the lower third. */
   .content {
     display: grid;
+    grid-template-rows: 1fr auto;
     justify-items: center;
     gap: 32px;
+    padding-block: 104px 12svh;
+  }
+  .center {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 28px;
   }
   .logo {
     margin: 0;
@@ -106,7 +122,7 @@ import { hero } from '../data/site';
     max-width: none;
   }
   .out {
-    font-size: clamp(30px, 6vw, 64px);
+    font-size: clamp(28px, 4vw, 48px);
   }
   .btn-row {
     justify-content: center;

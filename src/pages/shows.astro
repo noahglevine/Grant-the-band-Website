@@ -5,10 +5,10 @@ import TicketList from '../components/TicketList.astro';
 import Signup from '../components/Signup.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_URL } from '../data/site';
-import { upcomingShows, musicEventJsonLd } from '../lib/shows';
+import { upcomingShows, showsJsonLd } from '../lib/shows';
 
 const shows = upcomingShows();
-const jsonLd = shows.map((s) => musicEventJsonLd(s, SITE_URL));
+const jsonLd = showsJsonLd(shows, SITE_URL);
 ---
 
 <Base

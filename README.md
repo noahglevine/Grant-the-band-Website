@@ -33,7 +33,7 @@ Links, the booking email, hero video, cover art and clip IDs all live in `src/da
 
 ## Screenshots
 
-`npm run build && npm run screenshots` saves full-page shots of `/` and `/book` at 390px and 1440px to `screenshots/`. Needs Playwright. Fails if a page scrolls sideways.
+`npm run build:preview && npm run screenshots` saves full-page shots of `/` and `/book` at 390x844, 1312x634 and 1440x900 to `screenshots/`. `build:preview` sets `CONTEXT=deploy-preview`, like a Netlify deploy preview, so the two sample tickets render while `shows.json` is empty. Needs Playwright. Fails if a page scrolls sideways.
 
 ## Hero video
 

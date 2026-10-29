@@ -8,7 +8,7 @@ interface Props {
   variant?: 'band' | 'compact' | 'inline';
   line?: string;
 }
-const { id = 'newsletter', variant = 'band', line = 'New music and show dates, first.' } = Astro.props;
+const { id = 'newsletter', variant = 'band', line = 'New music and show dates, before anyone else.' } = Astro.props;
 const titleId = `${id}-title`;
 ---
 
@@ -27,7 +27,7 @@ const titleId = `${id}-title`;
   <section id={id} class:list={['signup', 'section', { compact: variant === 'compact' }]} aria-labelledby={titleId}>
     <div class="wrap inner">
       <div class="copy">
-        <h2 id={titleId} class="display h2 title">Newsletter</h2>
+        <h2 id={titleId} class="display h2 title">First to know.</h2>
         <p class="sub">{line}</p>
       </div>
       <form class="form" data-signup-placeholder novalidate>
@@ -81,9 +81,6 @@ const titleId = `${id}-title`;
     }
   }
 
-  .signup:not(.signup--inline) {
-    border-top: 1px solid var(--hairline);
-  }
   .inner {
     display: grid;
     gap: 32px;
@@ -102,9 +99,6 @@ const titleId = `${id}-title`;
   }
   .compact .wrap {
     padding-inline: 0;
-  }
-  .compact h2 {
-    font-size: 44px;
   }
   .compact .form {
     grid-template-columns: 1fr;
