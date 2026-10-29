@@ -31,6 +31,10 @@ Edit `src/data/now.json` with the latest Instagram post: `title`, `url`, and `po
 
 Links, the booking email, hero video, cover art and clip IDs all live in `src/data/site.ts`. Anything left `null` renders as a labeled placeholder.
 
+## Screenshots
+
+`npm run build && npm run screenshots` saves full-page shots of `/` and `/book` at 390px and 1440px to `screenshots/`. Needs Playwright. Fails if a page scrolls sideways.
+
 ## OG images and favicons
 
 Rendered from the site fonts: `node scripts/make-images.cjs` (needs Playwright installed). Outputs to `public/`.

@@ -185,6 +185,8 @@ Hero video loop (Man on a Train outro, Talkhouse), Meroke Lane cover art, three 
 
 ## Ongoing maintenance
 
+- After every change on a PR branch: `npm run build && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/` and `/book` at 390px and 1440px to `screenshots/` (`home-390.png`, `home-1440.png`, `book-390.png`, `book-1440.png`). Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
+
 - New show: Noah says "add 12/5 Talkhouse 8pm". Edit shows.json on a branch, open a PR, merge after Noah approves the preview.
 - Weekly: update now.json to the latest post.
 - Keep this file current when decisions change.
