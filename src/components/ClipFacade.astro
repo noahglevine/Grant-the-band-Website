@@ -28,10 +28,10 @@ const label = `Play ${clip.song}, ${clip.where}`;
       </button>
     </yt-facade>
   ) : (
-    <div class="frame ph">[YouTube URL + thumbnail]</div>
+    <div class="frame ph">[YouTube clip + thumbnail]</div>
   )}
   <figcaption>
-    <span class="song">{clip.song}</span>
+    <span class="song">“{clip.song}”</span>
     <span class="where">{clip.where}</span>
   </figcaption>
 </figure>
@@ -66,7 +66,7 @@ const label = `Play ${clip.song}, ${clip.where}`;
     display: block;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    background: var(--placeholder);
+    background: var(--lift);
   }
   .frame :global(img),
   .frame :global(iframe) {
@@ -87,12 +87,12 @@ const label = `Play ${clip.song}, ${clip.where}`;
     height: 60px;
     border: 0;
     border-radius: 50%;
-    background: var(--accent);
-    color: var(--bg);
+    background: var(--gold);
+    color: var(--night);
     cursor: pointer;
   }
   .frame:hover .play {
-    background: var(--text);
+    background: var(--cream);
   }
   figcaption {
     display: grid;
@@ -100,12 +100,11 @@ const label = `Play ${clip.song}, ${clip.where}`;
     padding-top: 14px;
   }
   .song {
-    color: var(--text);
+    color: var(--cream);
     font-size: 20px;
-    font-weight: 700;
   }
   .where {
-    color: var(--muted);
+    color: var(--gold);
     font-size: var(--fs-small);
   }
 </style>

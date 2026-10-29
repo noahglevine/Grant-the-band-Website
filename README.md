@@ -35,6 +35,16 @@ Links, the booking email, hero video, cover art and clip IDs all live in `src/da
 
 `npm run build && npm run screenshots` saves full-page shots of `/` and `/book` at 390px and 1440px to `screenshots/`. Needs Playwright. Fails if a page scrolls sideways.
 
+## Hero video
+
+Grade and encode the loop before it goes in `public/media/`:
+
+```sh
+scripts/grade-video.sh source.mov public/media/hero-loop.mp4
+```
+
+Applies the warm grade from CLAUDE.md, strips audio, writes H.264 with faststart plus a `-poster.jpg`, and warns if the file is over 3 MB. Then set `hero.video` and `hero.poster` in `src/data/site.ts`.
+
 ## OG images and favicons
 
 Rendered from the site fonts: `node scripts/make-images.cjs` (needs Playwright installed). Outputs to `public/`.

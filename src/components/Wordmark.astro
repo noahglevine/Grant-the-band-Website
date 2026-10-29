@@ -1,5 +1,7 @@
 ---
 // The only place the wordmark is drawn. Header, footer, /now and the home hero all use this.
+// Small sizes: "GRANT THE BAND" in display caps. Hero: "GRANT" large with "the band"
+// handwritten in Reenie Beanie (the one handwritten line on that screen).
 import { wordmarkSvg } from '../data/site';
 
 interface Props {
@@ -18,33 +20,28 @@ const Tag = href ? 'a' : 'span';
 >
   {wordmarkSvg ? (
     <img class="wm-logo" src={wordmarkSvg} alt="GRANT the band" />
-  ) : (
+  ) : size === 'hero' ? (
     <>
       <span class="wm-grant">GRANT</span>{' '}<span class="wm-band">the band</span>
     </>
+  ) : (
+    <span class="wm-small">GRANT the band</span>
   )}
 </Tag>
 
 <style>
   .wordmark {
     display: inline-flex;
-    align-items: baseline;
-    gap: 0.28em;
     text-decoration: none;
     line-height: 1;
     white-space: nowrap;
+    color: var(--cream);
   }
-  .wm-grant {
-    font-stretch: 125%;
-    font-weight: 800;
-    letter-spacing: 0.01em;
-    color: var(--text);
-  }
-  .wm-band {
-    font-family: var(--script);
-    font-weight: 600;
-    font-size: 1.12em;
-    color: var(--accent);
+  .wm-small {
+    font-family: var(--display);
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
   .wm-logo {
     display: block;
@@ -52,29 +49,32 @@ const Tag = href ? 'a' : 'span';
     width: auto;
   }
   .wordmark--md {
-    font-size: 1.375rem;
+    font-size: 17px;
   }
   .wordmark--lg {
-    font-size: 2rem;
+    font-size: 20px;
   }
 
-  /* Hero lockup: GRANT full width, "the band" tucked under the right edge.
+  /* Hero lockup: GRANT wide and centered, "the band" handwritten under the right edge.
      At least 90px tall on phones, 140px on desktop. */
   .wordmark--hero {
     flex-direction: column;
     align-items: flex-end;
-    gap: 0;
-    font-size: clamp(76px, 19vw, 184px);
+    font-size: clamp(80px, 22vw, 176px);
   }
-  .wordmark--hero .wm-grant {
-    font-weight: 900;
-    line-height: 0.82;
-    letter-spacing: 0;
+  .wm-grant {
+    font-family: var(--display);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    margin-right: -0.06em; /* trailing tracking */
+    line-height: 0.9;
   }
-  .wordmark--hero .wm-band {
-    font-size: 0.4em;
-    margin-top: 0.06em;
-    margin-right: 0.04em;
+  .wm-band {
+    font-family: var(--script);
+    font-weight: 400;
+    font-size: 0.42em;
+    line-height: 1;
+    color: var(--gold);
   }
   .wordmark--hero .wm-logo {
     height: clamp(90px, 22vw, 184px);

@@ -1,0 +1,29 @@
+---
+import Ticket from './Ticket.astro';
+import type { Show } from '../lib/shows';
+
+interface Props {
+  shows: Show[];
+  utm?: string;
+}
+const { shows, utm } = Astro.props;
+---
+
+<ul class="tickets">
+  {shows.map((show, i) => <Ticket show={show} handwritten={i === 0} utm={utm} />)}
+</ul>
+
+<style>
+  .tickets {
+    display: grid;
+    gap: 40px;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 720px) {
+    .tickets {
+      gap: 56px;
+      padding-block: 8px;
+    }
+  }
+</style>

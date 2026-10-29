@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Wordmark from '../components/Wordmark.astro';
-import ShowRow from '../components/ShowRow.astro';
+import TicketList from '../components/TicketList.astro';
 import BookingEmail from '../components/BookingEmail.astro';
 import Signup from '../components/Signup.astro';
 import now from '../data/now.json';
@@ -42,16 +42,14 @@ const hasCard = Boolean(now.title && now.url);
 
     {next && (
       <section class="next" aria-label="Next show">
-        <span class="label">Next show</span>
-        <ul>
-          <ShowRow show={next} utm={BIO_UTM} />
-        </ul>
+        <span class="label">Next stop</span>
+        <TicketList shows={[next]} utm={BIO_UTM} />
       </section>
     )}
 
     <nav class="links" aria-label="Links">
       <a class="btn btn--primary" href="#newsletter">Get show dates</a>
-      <a class="btn btn--secondary" href={withUtm(links.spotify)} rel="noopener">Listen to Meroke Lane</a>
+      <a class="btn btn--secondary" href={withUtm(links.hyperfollow ?? links.spotify)} rel="noopener">Listen to Meroke Lane</a>
       <a class="btn btn--secondary" href="/#video">Watch us live</a>
       <a class="btn btn--secondary" href="/book">Book us</a>
     </nav>
@@ -81,7 +79,7 @@ const hasCard = Boolean(now.title && now.url);
   }
   .tag {
     margin: 0;
-    color: var(--body);
+    color: var(--cream);
   }
   .card {
     display: grid;
@@ -100,24 +98,11 @@ const hasCard = Boolean(now.title && now.url);
     border-radius: 12px;
   }
   .card-title {
-    color: var(--text);
+    color: var(--cream);
     font-size: var(--fs-row);
-    font-weight: 700;
-  }
-  .next ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-bottom: 1px solid var(--line);
   }
   .label {
-    display: block;
     margin-bottom: 4px;
-    color: var(--muted);
-    font-size: var(--fs-min);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
   }
   .links {
     display: grid;
@@ -138,18 +123,18 @@ const hasCard = Boolean(now.title && now.url);
   }
   .booking {
     margin: 0;
-    color: var(--body);
+    color: var(--cream);
   }
   .booking :global(a) {
-    color: var(--accent);
-    font-weight: 600;
+    color: var(--gold);
+    font-weight: 500;
   }
   .foot a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    color: var(--muted);
-    font-weight: 600;
+    color: var(--gold);
+    font-weight: 500;
     text-decoration: none;
   }
 </style>

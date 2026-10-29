@@ -3,8 +3,8 @@
 // action/fields for the provider's embed and delete the submit handler below.
 interface Props {
   id?: string;
-  // band: full-width amber section (home, /shows). compact: amber card (/now).
-  // inline: just the line and the form, no heading (/shows empty state).
+  // band: full section with title (home, /shows). compact: same, sized for /now's column.
+  // inline: just the line and the form, no title (/shows empty state).
   variant?: 'band' | 'compact' | 'inline';
   line?: string;
 }
@@ -14,7 +14,7 @@ const titleId = `${id}-title`;
 
 {variant === 'inline' ? (
   <div id={id} class="signup signup--inline">
-    <p class="line">{line}</p>
+    <p class="sub line">{line}</p>
     <form class="form" data-signup-placeholder novalidate>
       <label class="visually-hidden" for={`${id}-email`}>Email address</label>
       <input id={`${id}-email`} class="input" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
@@ -24,16 +24,16 @@ const titleId = `${id}-title`;
     </form>
   </div>
 ) : (
-  <section id={id} class:list={['signup', 'signup--amber', { compact: variant === 'compact' }]} aria-labelledby={titleId}>
+  <section id={id} class:list={['signup', 'section', { compact: variant === 'compact' }]} aria-labelledby={titleId}>
     <div class="wrap inner">
       <div class="copy">
-        <h2 id={titleId} class="display h2">Newsletter</h2>
-        <p>{line}</p>
+        <h2 id={titleId} class="display h2 title">Newsletter</h2>
+        <p class="sub">{line}</p>
       </div>
       <form class="form" data-signup-placeholder novalidate>
         <label class="visually-hidden" for={`${id}-email`}>Email address</label>
         <input id={`${id}-email`} class="input" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
-        <button class="btn submit" type="submit">Sign up</button>
+        <button class="btn btn--primary" type="submit">Sign up</button>
         <p class="status" role="status" aria-live="polite"></p>
         <p class="ph-tag">[Email provider: Kit or MailerLite, not connected yet]</p>
       </form>
@@ -59,18 +59,15 @@ const titleId = `${id}-title`;
   }
   .status {
     margin: 0;
-    font-weight: 600;
+    color: var(--cream);
   }
   .status:empty {
     display: none;
   }
   .ph-tag {
     margin: 0;
-    justify-self: start;
-    padding: 4px 8px;
-    border: 1px dashed currentColor;
+    color: var(--gold);
     font-size: var(--fs-min);
-    font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
@@ -84,81 +81,39 @@ const titleId = `${id}-title`;
     }
   }
 
-  /* Amber band */
-  .signup--amber {
-    background: var(--accent);
-    color: var(--bg);
-    padding-block: 72px;
+  .signup:not(.signup--inline) {
+    border-top: 1px solid var(--hairline);
   }
   .inner {
     display: grid;
-    gap: 28px;
-  }
-  h2 {
-    color: var(--bg);
-  }
-  /* "NEWSLETTER" is one long word: at 44px and 125% width it's ~400px, wider than a
-     phone column. Keep the size, narrow the width on small screens. */
-  @media (max-width: 479px) {
-    h2 {
-      font-stretch: 100%;
-    }
-  }
-  .copy p {
-    margin: 16px 0 0;
-    font-size: var(--fs-lead);
-    font-weight: 500;
-  }
-  .signup--amber .input {
-    border-color: var(--bg);
-  }
-  .signup--amber .input:focus {
-    outline-color: var(--bg);
-    border-color: var(--bg);
-  }
-  .submit {
-    background: var(--bg);
-    color: var(--text);
-  }
-  .submit:hover {
-    background: var(--surface);
+    gap: 32px;
   }
   @media (min-width: 900px) {
-    .signup--amber:not(.compact) {
-      padding-block: 112px;
-    }
-    .signup--amber:not(.compact) .inner {
+    .signup:not(.compact) .inner {
       grid-template-columns: 1fr 1fr;
       gap: 64px;
       align-items: end;
     }
   }
-  /* Edge to edge inside /now's column, so the 44px heading has room on a 375px phone. */
+
+  /* /now: sits inside a 480px column. */
   .compact {
     padding-block: 40px;
-    margin-inline: calc(-1 * var(--gutter));
+  }
+  .compact .wrap {
+    padding-inline: 0;
   }
   .compact h2 {
     font-size: 44px;
-  }
-  .compact .copy p {
-    font-size: var(--fs-body);
   }
   .compact .form {
     grid-template-columns: 1fr;
   }
 
-  /* Inline */
   .signup--inline {
     max-width: 640px;
   }
   .signup--inline .line {
-    margin-bottom: 16px;
-    color: var(--text);
-    font-size: var(--fs-lead);
-    font-weight: 600;
-  }
-  .signup--inline .ph-tag {
-    color: var(--muted);
+    margin: 0 0 16px;
   }
 </style>

@@ -1,26 +1,22 @@
 ---
+// Full-bleed band photo. Renders nothing until the photo exists: no empty boxes as the main visual.
 import { photoBand } from '../data/site';
 ---
 
-<section class="photo-band" aria-label="Band photo">
-  {photoBand.src ? (
+{photoBand.src && (
+  <section class="photo-band" aria-label="Band photo">
     <img src={photoBand.src} alt={photoBand.alt} loading="lazy" decoding="async" />
-  ) : (
-    <div class="ph">[Band photo, full bleed]</div>
-  )}
-</section>
+  </section>
+)}
 
 <style>
-  .photo-band img,
-  .photo-band .ph {
+  .photo-band img {
     width: 100%;
     aspect-ratio: 4 / 5;
     object-fit: cover;
-    border: 0;
   }
   @media (min-width: 720px) {
-    .photo-band img,
-    .photo-band .ph {
+    .photo-band img {
       aspect-ratio: 21 / 9;
     }
   }

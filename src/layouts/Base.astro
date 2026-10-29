@@ -1,8 +1,8 @@
 ---
-import '@fontsource-variable/archivo/wdth.css';
-import '@fontsource/caveat/600.css';
+import '@fontsource-variable/montserrat/wght.css';
+import '@fontsource/reenie-beanie/400.css';
 import '../styles/global.css';
-import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import montserratLatin from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
 import { SITE_URL, searchConsoleToken } from '../data/site';
 
 interface Props {
@@ -24,10 +24,10 @@ const ogUrl = new URL(ogImage, SITE_URL).href;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={montserratLatin} as="font" type="font/woff2" crossorigin />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#16120E" />
+    <meta name="theme-color" content="#10151C" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />

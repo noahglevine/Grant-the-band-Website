@@ -6,6 +6,10 @@ const banned = [
   { re: /—/, why: 'em dash' },
   { re: /&mdash;/, why: 'em dash entity' },
   { re: /unforgettable/i, why: '"unforgettable"' },
+  // Design system guards (CLAUDE.md, Brand source of truth).
+  { re: /#16120e|#e8a64b|#1e1813|#2a2119|#3a2f25/i, why: 'retired brown token' },
+  { re: /font-weight:\s*(800|900)/, why: 'weight 800/900 (max is 700, show dates only)' },
+  { re: /Caveat|Archivo/, why: 'retired font' },
 ];
 
 const files = [];

@@ -27,7 +27,7 @@ const formats = [
   <main>
     <section class="section intro">
       <div class="wrap">
-        <h1 class="display h1">Book GRANT the band.</h1>
+        <h1 class="display h1 title">Book GRANT the band.</h1>
         <p class="lede">
           Long Island indie rock with a horn section. Originals off Meroke Lane plus covers people actually sing. We held a summer Wednesday residency at Cooper Bluff and have played The Stephen Talkhouse, 89 North and Piquet Lane.
         </p>
@@ -38,9 +38,9 @@ const formats = [
       </div>
     </section>
 
-    <section class="section section--surface" aria-labelledby="formats-title">
+    <section class="section" aria-labelledby="formats-title">
       <div class="wrap">
-        <h2 id="formats-title" class="display h2 head">Formats</h2>
+        <h2 id="formats-title" class="display h2 title head">Formats</h2>
         <ul class="formats">
           {formats.map((f) => (
             <li>
@@ -74,23 +74,23 @@ const formats = [
 
     <section id="watch" class="section" aria-labelledby="watch-title">
       <div class="wrap">
-        <h2 id="watch-title" class="display h2 head">Watch first</h2>
+        <h2 id="watch-title" class="display h2 title head">Watch first</h2>
         <div class="clips">
           {clips.map((clip) => <ClipFacade clip={clip} />)}
         </div>
       </div>
     </section>
 
-    <section class="section section--surface" aria-label="Played and press">
+    <section class="section" aria-label="Played and press">
       <div class="wrap record">
         <div>
-          <h2 class="display h2 head">Played</h2>
+          <h2 class="display h2 title head">Played</h2>
           <ul class="played">
             {venuesPlayed.map((v) => <li>{v}</li>)}
           </ul>
         </div>
         <div>
-          <h2 class="display h2 head">Press</h2>
+          <h2 class="display h2 title head">Press</h2>
           <figure class="quote">
             <blockquote>
               <p>“Everyone is executing their instrument… top shelf.”</p>
@@ -104,7 +104,7 @@ const formats = [
     <section id="contact" class="section" aria-labelledby="contact-title">
       <div class="wrap contact">
         <div>
-          <h2 id="contact-title" class="display h2 head">Contact</h2>
+          <h2 id="contact-title" class="display h2 title head">Contact</h2>
           <p class="lede">
             Email <BookingEmail /> with the date, the room and your budget. We answer within a day.
           </p>
@@ -133,28 +133,28 @@ const formats = [
   }
   .formats {
     display: grid;
-    gap: 0;
     margin: 0 0 40px;
     padding: 0;
     list-style: none;
   }
   .formats li {
     padding-block: 20px;
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--hairline);
   }
   .formats li:last-child {
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .formats h3 {
+    font-family: var(--display);
+    font-size: var(--fs-row);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
   }
   .formats p {
     margin: 8px 0 0;
-    color: var(--body);
-  }
-  .formats h3 {
-    font-size: 1.375rem;
-    font-weight: 800;
-    font-stretch: 115%;
-    text-transform: uppercase;
-    line-height: 1.1;
+    color: var(--gold);
+    font-size: var(--fs-small);
   }
   .specs {
     display: grid;
@@ -162,15 +162,15 @@ const formats = [
     margin: 0;
   }
   dt {
-    color: var(--muted);
+    color: var(--gold);
     font-size: var(--fs-min);
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-weight: 500;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
   dd {
     margin: 4px 0 0;
-    color: var(--text);
+    color: var(--cream);
   }
   .clips {
     display: grid;
@@ -187,39 +187,31 @@ const formats = [
   }
   .played li {
     padding-block: 14px;
-    border-top: 1px solid var(--line);
-    color: var(--text);
+    border-top: 1px solid var(--hairline);
+    color: var(--cream);
     font-size: var(--fs-row);
-    font-weight: 700;
     line-height: 1.25;
   }
   .played li:last-child {
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--hairline);
   }
   .quote {
     margin: 0;
     padding-left: 20px;
-    border-left: 3px solid var(--accent);
+    border-left: 2px solid var(--amber);
   }
   blockquote {
     margin: 0;
   }
   blockquote p {
     margin: 0 0 10px;
-    color: var(--text);
+    color: var(--cream);
     font-size: clamp(24px, 4vw, 34px);
-    font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.3;
   }
   figcaption {
-    color: var(--muted);
+    color: var(--gold);
     font-size: var(--fs-small);
-  }
-  @media (min-width: 900px) {
-    .record {
-      grid-template-columns: 1fr 1fr;
-      gap: 72px;
-    }
   }
   .contact {
     display: grid;
@@ -232,7 +224,7 @@ const formats = [
     }
     .formats li,
     .formats li:last-child {
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--hairline);
     }
     .specs {
       grid-template-columns: repeat(3, 1fr);
@@ -244,53 +236,14 @@ const formats = [
       grid-column: 1 / -1;
     }
   }
-  @media (min-width: 960px) {
-    .record {
-    display: grid;
-    gap: 56px;
-  }
-  .played {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .played li {
-    padding-block: 14px;
-    border-top: 1px solid var(--line);
-    color: var(--text);
-    font-size: var(--fs-row);
-    font-weight: 700;
-    line-height: 1.25;
-  }
-  .played li:last-child {
-    border-bottom: 1px solid var(--line);
-  }
-  .quote {
-    margin: 0;
-    padding-left: 20px;
-    border-left: 3px solid var(--accent);
-  }
-  blockquote {
-    margin: 0;
-  }
-  blockquote p {
-    margin: 0 0 10px;
-    color: var(--text);
-    font-size: clamp(24px, 4vw, 34px);
-    font-weight: 700;
-    line-height: 1.25;
-  }
-  figcaption {
-    color: var(--muted);
-    font-size: var(--fs-small);
-  }
   @media (min-width: 900px) {
     .record {
       grid-template-columns: 1fr 1fr;
       gap: 72px;
     }
   }
-  .contact {
+  @media (min-width: 960px) {
+    .contact {
       grid-template-columns: 5fr 6fr;
       gap: 72px;
     }

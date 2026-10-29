@@ -1,7 +1,7 @@
 ---
 import Wordmark from './Wordmark.astro';
 import BookingEmail from './BookingEmail.astro';
-import { links } from '../data/site';
+import { links, monogramPng, creditsInUse } from '../data/site';
 
 const social = [
   { label: 'Instagram', href: links.instagram },
@@ -9,6 +9,7 @@ const social = [
   { label: 'YouTube', href: links.youtube },
   { label: 'TikTok', href: links.tiktok },
 ];
+const credits = creditsInUse();
 ---
 
 <footer class="site-footer">
@@ -20,13 +21,28 @@ const social = [
       ))}
     </ul>
     <p class="booking">Booking: <BookingEmail /></p>
-    <p class="legal">© 2026 GRANT the band</p>
+    {credits.length > 0 && (
+      <p class="credits">
+        Photos:{' '}
+        {credits.map((c, i) => (
+          <>{i > 0 && ', '}<a href={c.url} rel="noopener">{c.handle}</a></>
+        ))}
+      </p>
+    )}
+    <div class="base">
+      <p class="legal">© 2026 GRANT the band</p>
+      {monogramPng ? (
+        <img class="monogram" src={monogramPng} alt="" width="48" height="48" />
+      ) : (
+        <span class="monogram-ph" aria-hidden="true">[GTB monogram]</span>
+      )}
+    </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--hairline);
     padding-block: 56px 40px;
   }
   .inner {
@@ -47,24 +63,43 @@ const social = [
     align-items: center;
     min-height: 44px;
     padding-right: 12px;
-    color: var(--text);
-    font-weight: 600;
+    color: var(--cream);
+    font-weight: 500;
     text-decoration: none;
   }
   .social a:hover {
-    color: var(--accent);
+    color: var(--gold);
   }
-  .booking {
+  .booking,
+  .credits {
     margin: 0;
-    color: var(--body);
+    color: var(--cream);
+    font-size: var(--fs-small);
   }
-  .booking :global(a) {
-    color: var(--accent);
-    font-weight: 600;
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    width: 100%;
+  }
+  .base > * {
+    white-space: nowrap;
   }
   .legal {
     margin: 0;
-    color: var(--muted);
+    color: var(--gold);
     font-size: var(--fs-small);
+  }
+  .monogram {
+    width: 48px;
+    height: auto;
+  }
+  .monogram-ph {
+    color: var(--gold);
+    font-size: var(--fs-min);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 </style>

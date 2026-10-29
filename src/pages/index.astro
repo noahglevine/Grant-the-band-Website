@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import ShowList from '../components/ShowList.astro';
+import TicketList from '../components/TicketList.astro';
 import Music from '../components/Music.astro';
 import Video from '../components/Video.astro';
 import PhotoBand from '../components/PhotoBand.astro';
@@ -33,7 +33,7 @@ const jsonLd = [musicGroup, ...shows.map((s) => musicEventJsonLd(s, SITE_URL))];
 
 <Base
   title="GRANT the band | Indie Rock from Long Island, NY"
-  description="GRANT the band. Meroke Lane out now. Listen, watch, and get show dates."
+  description="GRANT the band. Meroke Lane out everywhere. Listen, watch, and get show dates."
   ogImage="/og/home.png"
   jsonLd={jsonLd}
 >
@@ -44,8 +44,8 @@ const jsonLd = [musicGroup, ...shows.map((s) => musicEventJsonLd(s, SITE_URL))];
     {shows.length > 0 && (
       <section id="shows" class="section" aria-labelledby="shows-title">
         <div class="wrap">
-          <h2 id="shows-title" class="display h2 section-head">Shows</h2>
-          <ShowList shows={shows} />
+          <h2 id="shows-title" class="display h2 title section-head">Next stop.</h2>
+          <TicketList shows={shows} />
           <p class="all"><a href="/shows">All dates</a></p>
         </div>
       </section>
@@ -61,14 +61,14 @@ const jsonLd = [musicGroup, ...shows.map((s) => musicEventJsonLd(s, SITE_URL))];
 
 <style>
   .all {
-    margin: 24px 0 0;
+    margin: 32px 0 0;
   }
   .all a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    color: var(--accent);
-    font-weight: 700;
+    color: var(--gold);
+    font-weight: 500;
     text-underline-offset: 4px;
   }
 </style>

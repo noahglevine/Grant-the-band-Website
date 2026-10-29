@@ -3,7 +3,7 @@ import ListenButton from './ListenButton.astro';
 import { ep, links } from '../data/site';
 ---
 
-<section id="music" class="section section--surface" aria-labelledby="music-title">
+<section id="music" class="section" aria-labelledby="music-title">
   <div class="wrap grid">
     <div class="cover">
       {ep.cover ? (
@@ -14,11 +14,8 @@ import { ep, links } from '../data/site';
     </div>
 
     <div class="copy">
-      <h2 id="music-title" class="display h2 title">Meroke Lane</h2>
-
-      <ul class="tracks" aria-label="Singles">
-        {ep.singles.map((t) => <li>{t}</li>)}
-      </ul>
+      <h2 id="music-title" class="display h2 title">Music</h2>
+      <p class="sub">Off our EP, Meroke Lane. Out everywhere.</p>
 
       <div class="btn-row">
         <ListenButton />
@@ -39,30 +36,14 @@ import { ep, links } from '../data/site';
     display: grid;
     gap: 40px;
   }
+  .copy .btn-row {
+    margin-top: 32px;
+  }
   .cover img,
   .cover-ph {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-  }
-  .title {
-    margin-bottom: 24px;
-  }
-  .tracks {
-    margin: 8px 0 32px;
-    padding: 0;
-    list-style: none;
-  }
-  .tracks li {
-    padding-block: 14px;
-    border-bottom: 1px solid var(--line);
-    color: var(--text);
-    font-size: var(--fs-row);
-    font-weight: 700;
-    line-height: 1.25;
-  }
-  .tracks li:first-child {
-    border-top: 1px solid var(--line);
   }
   @media (min-width: 900px) {
     .grid {

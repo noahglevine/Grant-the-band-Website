@@ -5,7 +5,7 @@ import { clips, links } from '../data/site';
 
 <section id="video" class="section" aria-labelledby="video-title">
   <div class="wrap">
-    <h2 id="video-title" class="display h2 section-head">Video</h2>
+    <h2 id="video-title" class="display h2 title section-head">Video</h2>
     <div class="clips">
       {clips.map((clip) => <ClipFacade clip={clip} />)}
     </div>
@@ -43,8 +43,8 @@ import { clips, links } from '../data/site';
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    color: var(--accent);
-    font-weight: 700;
+    color: var(--gold);
+    font-weight: 500;
     text-underline-offset: 4px;
   }
 </style>

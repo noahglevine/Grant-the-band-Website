@@ -21,27 +21,47 @@ export const bookingEmail = 'booking@granttheband.com' as string | null;
 // Until then Wordmark.astro renders the type version.
 export const wordmarkSvg = null as string | null; // e.g. '/logo.svg'
 
+// GTB handwritten monogram (white PNG). Footer and favicon. Placeholder until supplied.
+export const monogramPng = null as string | null; // e.g. '/gtb-monogram.png'
+
 // Google Search Console verification token (content attribute only).
 export const searchConsoleToken = null as string | null;
 
 // Full band, golden hour. Video loop (with poster) or a still photo in `poster`.
+// Photographer credits. Every photo or video below names one of these, and the
+// footer lists the credits for the photos actually on the site.
+export const photographers = {
+  scottk: { handle: '@scottk_ny', url: 'https://www.instagram.com/scottk_ny' },
+} as const;
+export type PhotographerId = keyof typeof photographers;
+
+// Grade the loop with scripts/grade-video.sh before it goes in public/media/.
 export const hero = {
   video: null as string | null, // e.g. '/media/hero-loop.mp4'
   poster: null as string | null, // e.g. '/media/hero.jpg'
+  alt: 'GRANT the band live',
+  credit: null as PhotographerId | null,
 };
 
-// Full-bleed photo between Video and Newsletter on home.
+// Full-bleed photo between Video and Newsletter on home. Hidden until src is set.
 export const photoBand = {
-  src: null as string | null, // e.g. '/media/band.jpg'
-  alt: 'GRANT the band',
+  src: null as string | null, // e.g. '/media/cooper-bluff.jpg'
+  alt: 'GRANT the band at Cooper Bluff, Oyster Bay. Photo by @scottk_ny',
+  credit: 'scottk' as PhotographerId | null,
 };
+
+export function creditsInUse(): { handle: string; url: string }[] {
+  const used = [
+    hero.video || hero.poster ? hero.credit : null,
+    photoBand.src ? photoBand.credit : null,
+  ].filter((c): c is PhotographerId => Boolean(c));
+  return [...new Set(used)].map((id) => photographers[id]);
+}
 
 export const ep = {
   title: 'Meroke Lane',
   cover: null as string | null, // e.g. '/media/meroke-lane.jpg'
   // Singles to start with, not the tracklist.
-  // Singles to start with. Not the EP tracklist.
-  singles: ['Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
 };
 
 export type Clip = {

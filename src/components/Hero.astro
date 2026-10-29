@@ -18,20 +18,18 @@ import { hero } from '../data/site';
         aria-hidden="true"
       />
     ) : hero.poster ? (
-      <img class="video" src={hero.poster} alt="" />
+      <img class="video" src={hero.poster} alt={hero.alt} />
     ) : (
-      <div class="ph media-ph" aria-hidden="true">
-        <span>[Hero video loop or photo: full band, golden hour]</span>
-      </div>
+      <p class="ph-note" aria-hidden="true">[Hero video loop or photo: full band, golden hour]</p>
     )}
-    <div class="scrim" />
+    {(hero.video || hero.poster) && <div class="scrim" />}
   </div>
 
   <div class="wrap content">
     <h1 id="hero-title" class="logo"><Wordmark size="hero" href={null} /></h1>
     <p class="release">
-      <span class="kicker">Meroke Lane</span>
-      <span class="out display">Out now</span>
+      <span class="label">Meroke Lane</span>
+      <span class="out display">Out everywhere</span>
     </p>
     <div class="btn-row">
       <ListenButton />
@@ -66,31 +64,35 @@ import { hero } from '../data/site';
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--placeholder);
+    background: var(--night);
   }
   .video {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  .media-ph {
-    position: absolute;
-    inset: auto 0 0;
-    padding: 16px var(--gutter);
-    border: 0;
-    border-top: 1px dashed var(--muted);
-    background: transparent;
-  }
-  /* Flat scrim for legibility over footage. No gradients. */
+  /* Night gradient scrim behind the text: night 0% to 70%. */
   .scrim {
     position: absolute;
     inset: 0;
-    background: rgb(22 18 14 / 0.4);
+    background: var(--scrim);
+  }
+  .ph-note {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 16px;
+    margin: 0 auto;
+    padding-inline: var(--gutter);
+    color: var(--gold);
+    font-size: var(--fs-min);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
   .content {
     display: grid;
     justify-items: center;
-    gap: 28px;
+    gap: 32px;
   }
   .logo {
     margin: 0;
@@ -99,20 +101,12 @@ import { hero } from '../data/site';
   .release {
     display: grid;
     justify-items: center;
-    gap: 6px;
+    gap: 10px;
     margin: 0;
     max-width: none;
   }
-  .kicker {
-    color: var(--text);
-    font-size: var(--fs-small);
-    font-weight: 700;
-    font-stretch: 115%;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-  }
   .out {
-    font-size: clamp(44px, 8vw, 88px);
+    font-size: clamp(30px, 6vw, 64px);
   }
   .btn-row {
     justify-content: center;
