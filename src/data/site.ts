@@ -59,14 +59,14 @@ export const photos = {
     src: '/images/hero-desktop-poster.jpg',
     width: 1920,
     height: 1080,
-    alt: 'GRANT the band on stage at the Stephen Talkhouse',
+    alt: 'GRANT the band on stage at the Stephen Talkhouse, Noah mid-jump with his guitar',
     credit: null,
   },
   heroPhone: {
     src: '/images/hero-phone-poster.jpg',
     width: 1080,
     height: 1920,
-    alt: 'GRANT the band singer Noah singing with an acoustic guitar at the Stephen Talkhouse',
+    alt: 'GRANT the band singer Noah mid-jump with his guitar at the Stephen Talkhouse',
     credit: null,
   },
   talkhouseStage: {

@@ -6,8 +6,21 @@ All footage and photos are real GRANT footage and photography, with nothing AI-g
 
 | File | Size | Spec | Source |
 |---|---|---|---|
-| `hero-desktop.mp4` | 2.3 MB | 1920x1080, 8.1 s, H.264, 29.97 fps, no audio | Stephen Talkhouse, Amagansett, Feb 28 2026. "Man on a Train" finale, full band. Taken from the multi-cam edit MOAT_Talkhouse.mp4 at 8:55.75-9:03.85 |
-| `hero-phone.mp4` | 2.0 MB | 1080x1920, 10 s, H.264, 29.97 fps, no audio | Same show at 7:10.4-7:20.4. A vertical crop of Noah singing, with drums behind him |
+| `hero-desktop.mp4` | 2.7 MB | 1920x1080, 10.7 s, H.264, 29.97 fps, no audio | Stephen Talkhouse, Amagansett, Feb 28 2026, "Man on a Train". Five build-up cuts on the beat, ending on the jump. See the cut list below |
+| `hero-phone.mp4` | 2.7 MB | 1080x1920, 10.7 s, H.264, 29.97 fps, no audio | Same edit, vertical crops with each subject centered and the jump fully in frame |
+
+Cut list (timestamps in the multi-cam edit MOAT_Talkhouse.mp4 unless noted):
+
+1. Wide, full band: 8:36.3
+2. Trumpet: 5:59.7
+3. Drums: 4:44.5
+4. Bass: Andrew's gimbal camera, clip P1049778 (not in the multi-cam)
+5. Noah singing with guitar, lights flashing: 8:14.1
+6. The jump: wind-up 8:59.73, peak 9:01.74, landing 9:01.94, out 9:02.45 (holds about 0.5 s after landing, then the loop restarts on cut 1)
+
+A fan's phone screen shows in the bottom-right corner of the desktop wide shot and the jump. It was left in on Noah's call.
+
+The previous loops (desktop 8:55.75-9:03.85, phone 7:10.4-7:20.4) were replaced in PR #2.
 
 Both clips use the house warm grade (`colorbalance=rs=0.10:gs=0.02:bs=-0.12:rm=0.08:bm=-0.10:rh=0.04:bh=-0.06,eq=saturation=0.92:contrast=1.04`) and have faststart enabled. They loop cleanly enough for a muted autoplay hero. Recommended tag: `<video autoplay muted loop playsinline poster="...">`.
 
@@ -17,8 +30,8 @@ Video credit: MISSING (who shot and edited the Talkhouse multi-cam).
 
 | File | Dimensions | Size | Credit | Alt text |
 |---|---|---|---|---|
-| `hero-desktop-poster.jpg` | 1920x1080 | 193 KB | see video | GRANT the band on stage at the Stephen Talkhouse |
-| `hero-phone-poster.jpg` | 1080x1920 | 171 KB | see video | GRANT singer Noah singing with an acoustic guitar at the Stephen Talkhouse |
+| `hero-desktop-poster.jpg` | 1920x1080 | 272 KB | see video | GRANT the band on stage at the Stephen Talkhouse, Noah mid-jump with his guitar (the jump at its peak, 9:01.74) |
+| `hero-phone-poster.jpg` | 1080x1920 | 226 KB | see video | GRANT singer Noah mid-jump with his guitar at the Stephen Talkhouse (vertical crop, same frame) |
 | `talkhouse-stage.jpg` | 2400x1600 | 538 KB | MISSING | GRANT the band on stage at the Stephen Talkhouse under green light |
 | `talkhouse-noah.jpg` | 1600x2400 (portrait) | 521 KB | MISSING | GRANT singer Noah at the mic with an acoustic guitar, drummer behind |
 | `talkhouse-drums.jpg` | 2400x1600 | 539 KB | MISSING | GRANT's drummer laughing behind the kit in purple light |
