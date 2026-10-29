@@ -216,7 +216,7 @@ Single phone-width column: wordmark, gold label "MEROKE LANE · OUT EVERYWHERE",
 
 ## Placeholders Noah still owes
 
-Logo SVG (the wordmark is still the type version), stage plot PDF (to `public/press/grant-the-band-stage-plot.pdf`), Cooper Bluff video frame, `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
+Logo SVG (the wordmark is still the type version), Cooper Bluff video frame, `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
 
 ## Production guard
 
