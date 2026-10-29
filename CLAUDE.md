@@ -132,7 +132,7 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - Buttons: "Listen" (to [HYPERFOLLOW URL]) and "Shows" (to `/shows`), in the lower third.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
-3. Music (`#music`): cover art, title "MEROKE LANE", gold line "Off our EP, Meroke Lane. Out everywhere.", the four songs as a quiet list in quotes (“Man on a Train”, “Waking Up”, “Horizon”, “Peace of Mind”), one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify (the EP: https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2) · Apple Music · YouTube. Text block vertically centered against the cover art.
+3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (title pending Noah's confirmation) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify (the EP: https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2) · Apple Music · YouTube. Text block vertically centered against the cover art.
 4. Video (`#video`): title "LIVE". Three clip cards, song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Horizon” / Live at The Stephen Talkhouse; “Peace of Mind” / Unplugged at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
@@ -149,18 +149,18 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 ## /book copy
 
-- H1: "Book GRANT the band."
-- "Long Island indie rock with a horn section. Originals off Meroke Lane plus covers people actually sing. We held a summer Wednesday residency at Cooper Bluff and have played The Stephen Talkhouse, 89 North and Piquet Lane."
+- H1: "BOOKING."
+- "Indie rock with a horn section from Long Island. Originals off Meroke Lane plus the covers people came for. Two summers as the residency band at Cooper Bluff, plus The Stephen Talkhouse, 89 North, Piquet Lane, The Villager and Nag’s Head Ale House."
 - Formats, each with one line under it:
   - Full band with horns: "[NUMBER]-piece. Built for clubs, residencies and outdoor nights."
   - Trio: "[WHAT THE TRIO IS BEST FOR]"
   - Duo: "[WHAT THE DUO IS BEST FOR]"
   - Then [SET LENGTHS]. [PA AND STAGE NEEDS].
 - "Watch first": three clips, full band first.
-- "Played": The Stephen Talkhouse, Cooper Bluff, summer residency, 89 North, Piquet Lane.
+- "Played", in this order: The Stephen Talkhouse / Cooper Bluff · Summer Residency, 2025 and 2026 / 89 North / Piquet Lane / The Villager / Nag’s Head Ale House. No dates on any other venue. "Summer Residency" is capitalized.
 - "Press": “Everyone is executing their instrument… top shelf.” Torvik, reviewing “Man on a Train"
 - Downloads: stage plot and tech rider PDF (phase 2).
-- Contact: "Email booking@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type, budget, message. Honeypot field is visually hidden and aria-hidden.
+- Contact: "Email booking@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
 - No fan signup block on /book. The page is for buyers only.
 - Do not add a band member photo grid. The lineup rotates.
 

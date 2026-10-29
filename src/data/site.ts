@@ -62,7 +62,8 @@ export function creditsInUse(): { handle: string; url: string }[] {
 export const ep = {
   title: 'Meroke Lane',
   cover: null as string | null, // e.g. '/media/meroke-lane.jpg'
-  songs: ['Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
+  // EP tracklist in Spotify order. Track 1 title pending Noah's confirmation.
+  tracks: ['Meroke', 'Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
   // Singles to start with, not the tracklist.
 };
 
@@ -80,11 +81,14 @@ export const clips: Clip[] = [
   { song: 'Peace of Mind', where: 'Unplugged at Cooper Bluff', youtubeId: null, thumb: null },
 ];
 
+// /book "Played", in this order. Only the residency carries dates.
 export const venuesPlayed = [
   'The Stephen Talkhouse',
-  'Cooper Bluff, summer residency',
+  'Cooper Bluff · Summer Residency, 2025 and 2026',
   '89 North',
   'Piquet Lane',
+  'The Villager',
+  'Nag’s Head Ale House',
 ];
 
 export const book = {

@@ -51,7 +51,7 @@ const icon = (size) => `
   await shoot(og('Meroke Lane', 'Out<br>everywhere', 'granttheband.com'), 1200, 630, 'og/home.png');
   await shoot(og('Meroke Lane', 'Out<br>everywhere', 'granttheband.com'), 1200, 630, 'og/now.png');
   await shoot(og('Next stop', 'Shows', 'granttheband.com/shows'), 1200, 630, 'og/shows.png');
-  await shoot(og('Venues and private events', 'Book GRANT<br>the band', 'granttheband.com/book'), 1200, 630, 'og/book.png');
+  await shoot(og('Venues and private events', 'Booking.', 'granttheband.com/book'), 1200, 630, 'og/book.png');
   await shoot(icon(32), 32, 32, 'favicon-32.png');
   await shoot(icon(180), 180, 180, 'apple-touch-icon.png');
   await b.close();

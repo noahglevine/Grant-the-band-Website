@@ -21,11 +21,9 @@ const platforms = [
 
     <div class="copy">
       <h2 id="music-title" class="display h2 title">Meroke Lane</h2>
-      <p class="sub">Off our EP, Meroke Lane. Out everywhere.</p>
-
-      <ul class="songs" aria-label="Songs">
-        {ep.songs.map((song) => <li>“{song}”</li>)}
-      </ul>
+      <ol class="songs" aria-label="Tracklist">
+        {ep.tracks.map((track) => <li>“{track}”</li>)}
+      </ol>
 
       <ListenButton />
 
@@ -57,12 +55,17 @@ const platforms = [
   }
   .songs {
     margin: 24px 0 32px;
-    padding: 0;
-    list-style: none;
+    padding-left: 1.6em;
+    list-style: decimal;
   }
   .songs li {
     color: var(--cream);
     line-height: 1.8;
+    padding-left: 0.3em;
+  }
+  .songs li::marker {
+    color: var(--gold);
+    font-size: var(--fs-small);
   }
   .platforms {
     display: flex;
