@@ -1,29 +1,37 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import Wordmark from './Wordmark.astro';
 import ListenButton from './ListenButton.astro';
 import { hero } from '../data/site';
+
+// Use each loop only if its file is in public/. Until then the posters carry the hero.
+const exists = (p: string) => fs.existsSync(path.join(process.cwd(), 'public', p));
+const videoDesktop = exists(hero.videoDesktop) ? hero.videoDesktop : null;
+const videoPhone = exists(hero.videoPhone) ? hero.videoPhone : videoDesktop;
+const desk = hero.posterDesktop;
+const phone = hero.posterPhone;
 ---
 
 <section class="hero" aria-labelledby="hero-title">
-  <!-- Background layer: media (or its placeholder) plus the night scrim, behind everything. -->
+  <!-- Background layer: poster photo (art-directed by orientation), the loop on top once it
+       plays, and the night scrim. -->
   <div class="media">
-    {hero.video ? (
+    <picture>
+      <source media="(max-aspect-ratio: 1/1)" srcset={phone.src} width={phone.width} height={phone.height} />
+      <img class="fill" src={desk.src} width={desk.width} height={desk.height} alt={desk.alt} fetchpriority="high" />
+    </picture>
+    {videoDesktop && (
       <video
-        class="video"
-        data-src={hero.video}
-        poster={hero.poster ?? undefined}
+        class="fill loop"
+        data-desktop={videoDesktop}
+        data-phone={videoPhone}
         muted
         loop
         playsinline
         preload="none"
         aria-hidden="true"
       />
-    ) : hero.poster ? (
-      <img class="video" src={hero.poster} alt={hero.alt} />
-    ) : (
-      <div class="video ph-block" aria-hidden="true">
-        <p class="ph-note">[Hero video loop or photo: full band, golden hour]</p>
-      </div>
     )}
     <div class="scrim" aria-hidden="true" />
   </div>
@@ -44,12 +52,14 @@ import { hero } from '../data/site';
 </section>
 
 <script is:inline>
-  // Autoplay the loop only when motion is welcome. Reduced-motion visitors keep the poster
-  // and never download the video.
+  // Play the loop only when motion is welcome; reduced-motion visitors keep the poster and
+  // never download video. Portrait screens get the vertical cut.
   (function () {
-    var v = document.querySelector('.hero video[data-src]');
+    var v = document.querySelector('.hero video.loop');
     if (!v || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    v.src = v.dataset.src;
+    var portrait = matchMedia('(max-aspect-ratio: 1/1)').matches;
+    v.src = portrait ? v.dataset.phone : v.dataset.desktop;
+    v.addEventListener('playing', function () { v.classList.add('is-playing'); }, { once: true });
     v.play().catch(function () {});
   })();
 </script>
@@ -69,26 +79,19 @@ import { hero } from '../data/site';
     z-index: -1;
     background: var(--night);
   }
-  .video {
+  .fill {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  /* Until the footage lands: one neutral night block in the same background layer. */
-  .ph-block {
-    background: var(--lift);
+  .loop {
+    opacity: 0;
+    transition: opacity 0.6s;
   }
-  .ph-note {
-    position: absolute;
-    top: 88px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    padding-inline: var(--gutter);
-    color: var(--gold);
-    font-size: var(--fs-min);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .loop.is-playing {
+    opacity: 1;
   }
   /* Night gradient scrim: night 0% to 70%. */
   .scrim {

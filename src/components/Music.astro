@@ -1,6 +1,6 @@
 ---
 import ListenButton from './ListenButton.astro';
-import { ep, links } from '../data/site';
+import { ep, links, srcset } from '../data/site';
 
 const platforms = [
   { label: 'Spotify', href: links.merokeLaneSpotify },
@@ -13,7 +13,16 @@ const platforms = [
   <div class="wrap grid">
     <div class="cover">
       {ep.cover ? (
-        <img src={ep.cover} alt="Meroke Lane cover art" width="800" height="800" loading="lazy" decoding="async" />
+        <img
+          src={ep.cover.src}
+          srcset={srcset(ep.cover)}
+          sizes="(min-width: 900px) 45vw, 100vw"
+          width={ep.cover.width}
+          height={ep.cover.height}
+          alt={ep.cover.alt}
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <div class="ph cover-ph">[Meroke Lane cover art]</div>
       )}
@@ -50,6 +59,7 @@ const platforms = [
   .cover img,
   .cover-ph {
     width: 100%;
+    height: auto;
     aspect-ratio: 1;
     object-fit: cover;
   }

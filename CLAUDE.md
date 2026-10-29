@@ -18,7 +18,7 @@ Conversions, in priority order:
 
 - Astro (current stable release, static output), deployed on Netlify from GitHub
 - `main` = production. All work on branches, opened as PRs so Netlify builds a deploy preview. Never merge to main or touch DNS without Noah's explicit OK.
-- Fonts self-hosted via Fontsource: Montserrat (variable, stand-in for the Meroke Lane cover font) and Reenie Beanie
+- Fonts self-hosted via Fontsource: Montserrat (variable; confirmed as the Meroke Lane cover font, Regular 400 caps) and Reenie Beanie
 - `@astrojs/sitemap`
 - Netlify Forms for the booking form (no backend)
 - Email signup: embed form from the provider Noah picks (Kit or MailerLite free tier). Placeholder component until then.
@@ -72,7 +72,7 @@ No browns, no other surfaces. Hairline dividers are cream at low opacity. Text c
 
 ### Type
 
-- One display face: thin/regular-weight wide geometric sans, ALL CAPS, letter-spacing 0.06em. Montserrat 400 is the stand-in until Noah confirms the exact Meroke Lane cover font, then swap it (one place: `--display` in `global.css`).
+- One display face: Montserrat Regular (400), ALL CAPS, letter-spacing 0.06em. Confirmed as the Meroke Lane cover font (see `public/images/ASSETS.md`). Set in one place: `--display` in `global.css`.
 - Headlines are regular weight. Bold (700) only for show dates (the ticket: venue, date, set, line values). No 800/900 anywhere. UI text (buttons, nav) is 500.
 - Body: Montserrat 400, sentence case, 18px phone / 20px desktop, line-height 1.55, max-width 65ch.
 - Handwritten accent: Reenie Beanie (replaces Caveat everywhere). Max one handwritten line per screen.
@@ -82,7 +82,7 @@ No browns, no other surfaces. Hairline dividers are cream at low opacity. Text c
 
 ### Layout
 
-- Photo-first. Real photos full bleed with a night gradient scrim behind any text: night at 0% to 70%. That is the one gradient allowed.
+- Photo-first. Real photos full bleed with a night gradient scrim behind any text: night at 0% to 70% (front-loaded: 65% by 28% of the height, so the hero logo and label clear 3:1 and 4.5:1 at their worst spots). That is the one gradient allowed.
 - No empty colored boxes as the main visual. Until photos land, use a single neutral night block, not dashed boxes. Sections without their photo yet (the photo band) stay hidden.
 - Buttons: exactly two styles. Primary = gold fill, night text. Secondary = 1px cream outline. No gold-outline variant (placeholder buttons use the primary style).
 - Section spacing: 96px desktop / 64px phone between sections, nothing taller.
@@ -99,8 +99,8 @@ Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded cor
 
 ### Signature and credits
 
-- GTB handwritten monogram (white): small in the footer and as the favicon. Placeholder until Noah supplies the PNG (`monogramPng` in `site.ts`).
-- Credit photographers in alt text and the footer. Cooper Bluff photos: @scottk_ny. Credits are listed per photo in `site.ts` and the footer shows credits for photos actually on the site.
+- GTB handwritten monogram (white): `public/images/gtb-monogram.svg` small in the footer; the favicons render it on night (`scripts/make-images.cjs`).
+- Credit photographers in alt text and the footer. Cooper Bluff photos: @scottk_ny. Talkhouse and 89 North photos and the hero video: credit MISSING (see ASSETS.md); add it to `photographers` in `site.ts` when known. Every photo is in `photos` in `site.ts` with its credit, and the footer shows credits for photos actually rendered.
 
 ### Photo and video handling
 
@@ -109,6 +109,16 @@ Warm grade for the hero video loop (and any band footage), via `scripts/grade-vi
 ```
 colorbalance=rs=0.10:gs=0.02:bs=-0.12:rm=0.08:bm=-0.10:rh=0.04:bh=-0.06,eq=saturation=0.92:contrast=1.04
 ```
+
+### Assets
+
+`public/images/ASSETS.md` is the asset manifest (sources, sizes, alt text, credits, what's missing). Read it before touching images.
+
+- Hero: `hero-desktop-poster.jpg` (landscape screens) / `hero-phone-poster.jpg` (portrait) via `<picture>`. The graded loops go in `public/video/hero-desktop.mp4` and `hero-phone.mp4`; `Hero.astro` uses them only if the files exist, so the posters carry the hero until then. They are already graded: never re-grade.
+- Clip thumbnails: Talkhouse stage, 89 North (Noah + trombone), Cooper horns. Photo band: 89 North full band.
+- Cooper photos are small originals (540px and 1086px). Card/thumbnail sizes only, never upscaled or full bleed.
+- `scripts/make-image-sizes.sh` writes 1200px copies of the 2400px photos to `public/images/sized/` for srcset. Never resize the Meroke Lane cover: it would strip its Content Credentials.
+- Alt text follows ASSETS.md, with "GRANT the band" in full instead of "GRANT".
 
 ### Voice
 
@@ -133,7 +143,7 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
 3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (title pending Noah's confirmation) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify (the EP: https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2) · Apple Music · YouTube. Text block vertically centered against the cover art.
-4. Video (`#video`): title "LIVE". Three clip cards, song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Horizon” / Live at The Stephen Talkhouse; “Peace of Mind” / Unplugged at Cooper Bluff. Link "More on YouTube".
+4. Video (`#video`): title "LIVE". Three clip cards (YouTube IDs in `site.ts`, from ASSETS.md), song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Around the Moon” / Live at 89 North; Full show (no quotes, not a song) / Live at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
 
@@ -175,7 +185,8 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 - YouTube: https://www.youtube.com/@GRANTtheband
 - Instagram: https://www.instagram.com/grant_theband
 - TikTok: https://www.tiktok.com/@granttheband
-- Apple Music: [APPLE MUSIC URL]
+- Apple Music, Meroke Lane EP: https://music.apple.com/us/album/meroke-lane-ep/6793211371
+- HyperFollow (all platforms, "Listen" buttons): https://distrokid.com/hyperfollow/granttheband/meroke-lane
 
 ## Redirects (netlify.toml, 301)
 
@@ -201,7 +212,7 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 
 ## Placeholders Noah still owes
 
-Hero video loop or photo (full band, golden hour), band photo for the photo band, logo SVG, GTB monogram PNG (white), the exact Meroke Lane cover font, HyperFollow URL, Meroke Lane cover art, three clip YouTube URLs and thumbnails (thumbnails feature Noah), Apple Music URL, full-band piece count, trio/duo lines, set lengths, PA/stage needs, email provider choice. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
+Hero video files (`public/video/hero-desktop.mp4`, `hero-phone.mp4`; described in ASSETS.md but not committed), photographer credits for the Talkhouse and 89 North photos and the hero video, logo SVG (the wordmark is still the type version), confirmation of track 1's title ("Meroke"), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
 
 ## Brand rules (non-negotiable)
 
@@ -209,7 +220,7 @@ Hero video loop or photo (full band, golden hour), band photo for the photo band
 - Never self-deprecating, never apologetic, never defensive. No jokes at the band's expense.
 - No em dashes. No try-hard or corporate copy. No begging CTAs.
 - Never promote Encore or any app. No family, day job or personal details.
-- Never fake live footage. No AI-generated visuals on the site.
+- Never fake live footage. No AI-generated visuals on the site. One exception, approved by Noah: the released Meroke Lane EP cover, which Canva's Content Credentials list as made with Canva AI. It is the official release artwork, used unaltered with its credentials intact. Nothing else AI-made.
 
 ## Phases
 

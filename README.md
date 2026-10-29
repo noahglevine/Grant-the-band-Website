@@ -35,15 +35,19 @@ Links, the booking email, hero video, cover art and clip IDs all live in `src/da
 
 `npm run build:preview && npm run screenshots` saves full-page shots of `/` and `/book` at 390x844, 1312x634 and 1440x900 to `screenshots/`. `build:preview` sets `CONTEXT=deploy-preview`, like a Netlify deploy preview, so the two sample tickets render while `shows.json` is empty. Needs Playwright. Fails if a page scrolls sideways.
 
+## Images
+
+Everything Noah supplies is in `public/images/` with `ASSETS.md` as the manifest. Photos are registered in `photos` in `src/data/site.ts` (src, size, alt, credit). After adding a large photo, run `scripts/make-image-sizes.sh` to make its 1200px srcset copy.
+
 ## Hero video
 
-Grade and encode the loop before it goes in `public/media/`:
+The supplied loops are already graded: drop them in as `public/video/hero-desktop.mp4` and `public/video/hero-phone.mp4` and the hero picks them up on the next build. For new raw footage, grade and encode first:
 
 ```sh
-scripts/grade-video.sh source.mov public/media/hero-loop.mp4
+scripts/grade-video.sh source.mov public/video/hero-desktop.mp4
 ```
 
-Applies the warm grade from CLAUDE.md, strips audio, writes H.264 with faststart plus a `-poster.jpg`, and warns if the file is over 3 MB. Then set `hero.video` and `hero.poster` in `src/data/site.ts`.
+Applies the warm grade from CLAUDE.md, strips audio, writes H.264 with faststart plus a `-poster.jpg`, and warns if the file is over 3 MB. Poster paths live in `hero` in `src/data/site.ts`.
 
 ## OG images and favicons
 

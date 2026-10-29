@@ -9,9 +9,9 @@ export const links = {
   youtube: 'https://www.youtube.com/@GRANTtheband',
   instagram: 'https://www.instagram.com/grant_theband',
   tiktok: 'https://www.tiktok.com/@granttheband',
-  appleMusic: null as string | null, // [APPLE MUSIC URL]
-  // Meroke Lane HyperFollow (DistroKid smart link). Hero and Music "Listen" buttons.
-  hyperfollow: null as string | null, // [HYPERFOLLOW URL]
+  appleMusic: 'https://music.apple.com/us/album/meroke-lane-ep/6793211371' as string | null, // the EP
+  // Meroke Lane HyperFollow (DistroKid smart link, all platforms). Hero and Music "Listen" buttons.
+  hyperfollow: 'https://distrokid.com/hyperfollow/granttheband/meroke-lane' as string | null,
   // Meroke Lane on YouTube. Falls back to the channel until there's a playlist URL.
   merokeLaneYoutube: null as string | null,
 };
@@ -22,64 +22,134 @@ export const bookingEmail = 'booking@granttheband.com' as string | null;
 // Until then Wordmark.astro renders the type version.
 export const wordmarkSvg = null as string | null; // e.g. '/logo.svg'
 
-// GTB handwritten monogram (white PNG). Footer and favicon. Placeholder until supplied.
-export const monogramPng = null as string | null; // e.g. '/gtb-monogram.png'
+// GTB handwritten monogram, white on transparent. Footer (SVG) and favicon (rendered on night).
+export const monogram = { svg: '/images/gtb-monogram.svg', png: '/images/gtb-monogram.png' };
 
 // Google Search Console verification token (content attribute only).
 export const searchConsoleToken = null as string | null;
 
-// Full band, golden hour. Video loop (with poster) or a still photo in `poster`.
-// Photographer credits. Every photo or video below names one of these, and the
-// footer lists the credits for the photos actually on the site.
+// Photographer credits. Every photo names one of these (or null while the credit is
+// missing), and the footer lists the credits for photos actually rendered on the site.
 export const photographers = {
   scottk: { handle: '@scottk_ny', url: 'https://www.instagram.com/scottk_ny' },
 } as const;
 export type PhotographerId = keyof typeof photographers;
 
-// Grade the loop with scripts/grade-video.sh before it goes in public/media/.
-export const hero = {
-  video: null as string | null, // e.g. '/media/hero-loop.mp4'
-  poster: null as string | null, // e.g. '/media/hero.jpg'
-  alt: 'GRANT the band live', // add the photographer: 'GRANT the band live. Photo by @handle'
-  credit: null as PhotographerId | null,
+export type Photo = {
+  src: string;
+  // Smaller copy for srcset, from scripts/make-image-sizes.sh. Same pixels, resized.
+  small?: { src: string; width: number };
+  width: number;
+  height: number;
+  alt: string;
+  credit: PhotographerId | null; // null = credit MISSING in public/images/ASSETS.md
 };
 
-// Full-bleed photo between Video and Newsletter on home. Hidden until src is set.
-export const photoBand = {
-  src: null as string | null, // e.g. '/media/cooper-bluff.jpg'
-  alt: 'GRANT the band at Cooper Bluff, Oyster Bay. Photo by @scottk_ny',
-  credit: 'scottk' as PhotographerId | null,
-};
+// From public/images/ASSETS.md. Alt text follows that file, with "GRANT the band" in full
+// and the photographer named where known. Cooper photos are small originals: card sizes only.
+export const photos = {
+  heroDesktop: {
+    src: '/images/hero-desktop-poster.jpg',
+    width: 1920,
+    height: 1080,
+    alt: 'GRANT the band on stage at the Stephen Talkhouse',
+    credit: null,
+  },
+  heroPhone: {
+    src: '/images/hero-phone-poster.jpg',
+    width: 1080,
+    height: 1920,
+    alt: 'GRANT the band singer Noah singing with an acoustic guitar at the Stephen Talkhouse',
+    credit: null,
+  },
+  talkhouseStage: {
+    src: '/images/talkhouse-stage.jpg',
+    small: { src: '/images/sized/talkhouse-stage-1200.jpg', width: 1200 },
+    width: 2400,
+    height: 1600,
+    alt: 'GRANT the band on stage at the Stephen Talkhouse under green light',
+    credit: null,
+  },
+  northFullBand: {
+    src: '/images/89north-full-band.jpg',
+    small: { src: '/images/sized/89north-full-band-1200.jpg', width: 1200 },
+    width: 2400,
+    height: 1600,
+    alt: 'GRANT the band, full band on stage at 89 North',
+    credit: null,
+  },
+  northNoahTrombone: {
+    src: '/images/89north-noah-trombone.jpg',
+    small: { src: '/images/sized/89north-noah-trombone-1200.jpg', width: 1200 },
+    width: 2400,
+    height: 1600,
+    alt: 'GRANT the band singer Noah singing with the trombone player beside him at 89 North',
+    credit: null,
+  },
+  cooperHorns: {
+    src: '/images/cooper-horns.jpg',
+    width: 1086,
+    height: 724,
+    alt: 'GRANT the band’s horn section playing at Cooper Bluff, black and white. Photo by @scottk_ny',
+    credit: 'scottk',
+  },
+  cover: {
+    // Original only: keeps the cover's Content Credentials intact (see ASSETS.md).
+    src: '/images/meroke-lane-cover.jpg',
+    width: 2000,
+    height: 2000,
+    alt: 'Meroke Lane EP cover: railroad tracks running into a golden sunset',
+    credit: null, // band artwork, not a photo credit
+  },
+} satisfies Record<string, Photo>;
 
-export function creditsInUse(): { handle: string; url: string }[] {
-  const used = [
-    hero.video || hero.poster ? hero.credit : null,
-    photoBand.src ? photoBand.credit : null,
-  ].filter((c): c is PhotographerId => Boolean(c));
-  return [...new Set(used)].map((id) => photographers[id]);
+export function srcset(photo: Photo): string | undefined {
+  return photo.small ? `${photo.small.src} ${photo.small.width}w, ${photo.src} ${photo.width}w` : undefined;
 }
+
+// Hero: graded loops from ASSETS.md (already graded, do not re-grade). Hero.astro uses each
+// video only if the file exists in public/, so the posters carry the hero until then.
+export const hero = {
+  videoDesktop: '/video/hero-desktop.mp4',
+  videoPhone: '/video/hero-phone.mp4',
+  posterDesktop: photos.heroDesktop,
+  posterPhone: photos.heroPhone,
+};
+
+// Full-bleed photo between Video and Newsletter on home. Hidden while null.
+export const photoBand: Photo | null = photos.northFullBand;
+
+// Every photo the site renders, for footer credits.
+const photosInUse: (Photo | null)[] = [hero.posterDesktop, hero.posterPhone, photoBand, photos.cover];
 
 export const ep = {
   title: 'Meroke Lane',
-  cover: null as string | null, // e.g. '/media/meroke-lane.jpg'
+  cover: photos.cover as Photo | null,
   // EP tracklist in Spotify order. Track 1 title pending Noah's confirmation.
   tracks: ['Meroke', 'Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
-  // Singles to start with, not the tracklist.
 };
 
 export type Clip = {
-  song: string;
+  title: string;
+  isSong: boolean; // songs render in quotes; "Full show" doesn't
   where: string;
   youtubeId: string | null;
-  thumb: string | null;
+  thumb: Photo | null;
 };
 
-// Full band first. /book uses this order as-is.
+// From ASSETS.md "YouTube embeds". Full band first. /book uses this order as-is.
 export const clips: Clip[] = [
-  { song: 'Man on a Train', where: 'Live at The Stephen Talkhouse', youtubeId: null, thumb: null },
-  { song: 'Horizon', where: 'Live at The Stephen Talkhouse', youtubeId: null, thumb: null },
-  { song: 'Peace of Mind', where: 'Unplugged at Cooper Bluff', youtubeId: null, thumb: null },
+  { title: 'Man on a Train', isSong: true, where: 'Live at The Stephen Talkhouse', youtubeId: 'Fz9s33Rsvh8', thumb: photos.talkhouseStage },
+  { title: 'Around the Moon', isSong: true, where: 'Live at 89 North', youtubeId: 'a1R_eGE8rbk', thumb: photos.northNoahTrombone },
+  { title: 'Full show', isSong: false, where: 'Live at Cooper Bluff', youtubeId: 'cTb2dEve5B8', thumb: photos.cooperHorns },
 ];
+
+export function creditsInUse(): { handle: string; url: string }[] {
+  const used = [...photosInUse, ...clips.map((c) => c.thumb)]
+    .map((p) => p?.credit)
+    .filter((c): c is PhotographerId => Boolean(c));
+  return [...new Set(used)].map((id) => photographers[id]);
+}
 
 // /book "Played", in this order. Only the residency carries dates.
 export const venuesPlayed = [

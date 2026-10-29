@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Warm grade + web encode for the hero loop (and any band footage), per CLAUDE.md.
-# Usage: scripts/grade-video.sh input.mov public/media/hero-loop.mp4
+# Usage: scripts/grade-video.sh input.mov public/video/hero-desktop.mp4
 # Writes the graded MP4 (no audio, H.264, faststart) and a matching JPG poster next to it.
 # Target: 6 to 10 sec, under 3 MB. Trim before grading if the source is longer.
 set -euo pipefail

@@ -69,6 +69,19 @@ function resolve(urlPath) {
       for (const p of pages) {
         await page.goto(base + p.path, { waitUntil: 'networkidle' });
         await page.evaluate(() => document.fonts.ready);
+        // Full-page shots never scroll, so lazy images would stay blank. Load them all first.
+        await page.evaluate(async () => {
+          const imgs = [...document.images];
+          imgs.forEach((i) => (i.loading = 'eager'));
+          await Promise.all(imgs.map((i) => (i.complete ? null : new Promise((r) => (i.onload = i.onerror = r)))));
+          await Promise.all(imgs.map((i) => i.decode().catch(() => {})));
+          // Scroll through once so the compositor has painted everything below the fold.
+          for (let y = 0; y < document.body.scrollHeight; y += innerHeight) {
+            scrollTo(0, y);
+            await new Promise((r) => requestAnimationFrame(() => r()));
+          }
+          scrollTo(0, 0);
+        });
         const docWidth = await page.evaluate(() => document.documentElement.scrollWidth);
         if (docWidth > vp.width) overflow.push(`${p.path} at ${vp.width}px is ${docWidth}px wide`);
         const file = `${p.name}-${vp.width}.png`;

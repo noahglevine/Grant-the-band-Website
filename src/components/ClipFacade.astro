@@ -1,18 +1,28 @@
 ---
-import type { Clip } from '../data/site';
+import { srcset, type Clip } from '../data/site';
 
 interface Props {
   clip: Clip;
 }
 const { clip } = Astro.props;
-const label = `Play ${clip.song}, ${clip.where}`;
+const label = `Play ${clip.title}, ${clip.where}`;
+const shown = clip.isSong ? `“${clip.title}”` : clip.title;
 ---
 
 <figure class="clip">
   {clip.youtubeId ? (
-    <yt-facade class="frame" data-id={clip.youtubeId} data-title={`${clip.song} (${clip.where})`}>
+    <yt-facade class="frame" data-id={clip.youtubeId} data-title={`${clip.title} (${clip.where})`}>
       {clip.thumb ? (
-        <img src={clip.thumb} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+        <img
+          src={clip.thumb.src}
+          srcset={srcset(clip.thumb)}
+          sizes="(min-width: 1100px) 60vw, (min-width: 720px) 50vw, 100vw"
+          width={clip.thumb.width}
+          height={clip.thumb.height}
+          alt={clip.thumb.alt}
+          loading="lazy"
+          decoding="async"
+        />
       ) : (
         <img
           src={`https://i.ytimg.com/vi/${clip.youtubeId}/hqdefault.jpg`}
@@ -31,7 +41,7 @@ const label = `Play ${clip.song}, ${clip.where}`;
     <div class="frame ph">[YouTube clip + thumbnail]</div>
   )}
   <figcaption>
-    <span class="song">“{clip.song}”</span>
+    <span class="song">{shown}</span>
     <span class="where">{clip.where}</span>
   </figcaption>
 </figure>

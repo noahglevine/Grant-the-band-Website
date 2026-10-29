@@ -1,7 +1,7 @@
 ---
 import Wordmark from './Wordmark.astro';
 import BookingEmail from './BookingEmail.astro';
-import { links, monogramPng, creditsInUse } from '../data/site';
+import { links, monogram, creditsInUse } from '../data/site';
 
 const social = [
   { label: 'Instagram', href: links.instagram },
@@ -31,11 +31,7 @@ const credits = creditsInUse();
     )}
     <div class="base">
       <p class="legal">© 2026 GRANT the band</p>
-      {monogramPng ? (
-        <img class="monogram" src={monogramPng} alt="" width="48" height="48" />
-      ) : (
-        <span class="monogram-ph" aria-hidden="true">[GTB monogram]</span>
-      )}
+      <img class="monogram" src={monogram.svg} alt="GTB" width="56" height="56" />
     </div>
   </div>
 </footer>
@@ -102,13 +98,7 @@ const credits = creditsInUse();
     font-size: var(--fs-small);
   }
   .monogram {
-    width: 48px;
-    height: auto;
-  }
-  .monogram-ph {
-    color: var(--gold);
-    font-size: var(--fs-min);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    width: 56px;
+    height: 56px;
   }
 </style>

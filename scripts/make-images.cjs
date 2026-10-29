@@ -9,6 +9,8 @@ const root = path.resolve(__dirname, '..');
 // Inline as data URLs: setContent pages can't load file:// fonts.
 const font = (p) =>
   'data:font/woff2;base64,' + fs.readFileSync(path.join(root, 'node_modules', p)).toString('base64');
+// The real GTB monogram (white SVG from public/images, per ASSETS.md).
+const monogram = 'data:image/svg+xml;base64,' + fs.readFileSync(path.join(root, 'public/images/gtb-monogram.svg')).toString('base64');
 const css = `
 @font-face { font-family: M; src: url(${font('@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2')}); font-weight: 100 900; }
 @font-face { font-family: R; src: url(${font('@fontsource/reenie-beanie/files/reenie-beanie-latin-400-normal.woff2')}); }
@@ -24,20 +26,20 @@ const og = (label, headline, foot) => `
 .d { font-size: 96px; font-weight: 400; letter-spacing: .06em; text-transform: uppercase; line-height: 1.02; }
 .label { color: #F6CB8A; font-size: 26px; letter-spacing: .12em; text-transform: uppercase; margin-top: 22px; }
 .foot { display: flex; justify-content: space-between; align-items: flex-end; color: #F6CB8A; font-size: 22px; letter-spacing: .06em; }
-.mono { font-family: R; font-size: 54px; color: #F4EBDD; line-height: .8; }
+.mono { width: 72px; height: 72px; }
 </style>
 <div class="card">
   <div class="wm">GRANT the band</div>
   <div><div class="rule"></div><div class="d">${headline}</div><div class="label">${label}</div></div>
-  <div class="foot"><span>${foot}</span><span class="mono">GTB</span></div>
+  <div class="foot"><span>${foot}</span><img class="mono" src="${monogram}" alt=""></div>
 </div>`;
 
-// Placeholder monogram until Noah supplies the GTB PNG: handwritten GTB, white on night.
+// Favicon: the white GTB monogram on night, so it reads on light and dark browser tabs.
 const icon = (size) => `
 <style>${css}
 .i { width: ${size}px; height: ${size}px; display: grid; place-items: center; background: #10151C; }
-.i span { font-family: R; font-size: ${size * 0.62}px; color: #FFFFFF; line-height: 1; }
-</style><div class="i"><span>GTB</span></div>`;
+.i img { width: ${Math.round(size * 0.9)}px; height: ${Math.round(size * 0.9)}px; }
+</style><div class="i"><img src="${monogram}" alt=""></div>`;
 
 (async () => {
   const b = await chromium.launch();
