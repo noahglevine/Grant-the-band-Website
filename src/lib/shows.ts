@@ -105,6 +105,6 @@ export function musicEventJsonLd(show: Show, siteUrl: string) {
       },
     },
     performer: { '@type': 'MusicGroup', name: 'GRANT the band', url: siteUrl },
-    url: show.url || `${siteUrl}/#shows`,
+    url: show.url || `${siteUrl}/shows`,
   };
 }

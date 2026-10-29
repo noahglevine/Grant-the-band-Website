@@ -116,7 +116,7 @@ colorbalance=rs=0.10:gs=0.02:bs=-0.12:rm=0.08:bm=-0.10:rh=0.04:bh=-0.06,eq=satur
 `public/images/ASSETS.md` is the asset manifest (sources, sizes, alt text, credits, what's missing). Read it before touching images.
 
 - Hero: `public/video/hero-desktop.mp4` (landscape screens) / `hero-phone.mp4` (portrait), over `hero-desktop-poster.jpg` / `hero-phone-poster.jpg` in a `<picture>`. The video fades in once it plays; reduced-motion visitors get the poster and download no video. `Hero.astro` only includes a loop if its file exists. The loops are already graded: never re-grade.
-- Clip thumbnails: Talkhouse stage, 89 North (Noah + trombone), and for the Cooper Bluff full show a color frame from the June 7 2026 video at `public/images/cooper-bluff-frame.jpg` (1920x1080; `cooper-horns.jpg` stands in until that file exists). Photo band: 89 North full band.
+- Clip thumbnails: Talkhouse stage, 89 North (Noah + trombone), and for the Cooper Bluff full show `cooper-golden-hour.jpg` (color, 540px, card size only). `cooper-horns.jpg` stays out of the main flow. Photo band: 89 North full band.
 - Cooper photos are small originals (540px and 1086px). Card/thumbnail sizes only, never upscaled or full bleed.
 - `scripts/make-image-sizes.sh` writes 1200px copies of the 2400px photos to `public/images/sized/` for srcset. Never resize the Meroke Lane cover: it would strip its Content Credentials.
 - Alt text follows ASSETS.md, with "GRANT the band" in full instead of "GRANT".
@@ -217,7 +217,7 @@ Single phone-width column: wordmark, gold label "MEROKE LANE · OUT EVERYWHERE",
 
 ## Placeholders Noah still owes
 
-Logo SVG (the wordmark is still the type version), Cooper Bluff video frame, `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
+Logo SVG (the wordmark is still the type version), `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
 
 ## Production guard
 

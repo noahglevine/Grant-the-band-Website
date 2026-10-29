@@ -1,5 +1,3 @@
-import { publicFileExists } from '../lib/env';
-
 // Single source for links, contact info and assets.
 // Anything set to null renders as a labeled placeholder on previews and is omitted on
 // production (see src/lib/env.ts).
@@ -95,15 +93,15 @@ export const photos = {
     alt: 'GRANT the band singer Noah singing with the trombone player beside him at 89 North',
     credit: null,
   },
-  // Color frame from the June 7 2026 Cooper Bluff full-show video. Used for the "Full show"
-  // card once the file is in public/images/; cooperHorns stands in until then.
-  cooperFrame: {
-    src: '/images/cooper-bluff-frame.jpg',
-    width: 1920,
-    height: 1080,
-    alt: 'GRANT the band playing the full show at Cooper Bluff',
+  // Thumb for the Cooper Bluff "Full show" card. Small original: card size only, never upscaled.
+  cooperGoldenHour: {
+    src: '/images/cooper-golden-hour.jpg',
+    width: 540,
+    height: 360,
+    alt: 'GRANT the band singer Noah singing at golden hour at Cooper Bluff',
     credit: null,
   },
+  // Not used in the main flow (black and white); kept for reference.
   cooperHorns: {
     src: '/images/cooper-horns.jpg',
     width: 1086,
@@ -156,12 +154,10 @@ export type Clip = {
 };
 
 // From ASSETS.md "YouTube embeds". Full band first. /book uses this order as-is.
-const cooperThumb = publicFileExists(photos.cooperFrame.src) ? photos.cooperFrame : photos.cooperHorns;
-
 export const clips: Clip[] = [
   { title: 'Man on a Train', isSong: true, where: 'Live at The Stephen Talkhouse', youtubeId: 'Fz9s33Rsvh8', thumb: photos.talkhouseStage },
   { title: 'Around the Moon', isSong: true, where: 'Live at 89 North', youtubeId: 'a1R_eGE8rbk', thumb: photos.northNoahTrombone },
-  { title: 'Full show', isSong: false, where: 'Live at Cooper Bluff', youtubeId: 'cTb2dEve5B8', thumb: cooperThumb },
+  { title: 'Full show', isSong: false, where: 'Live at Cooper Bluff', youtubeId: 'cTb2dEve5B8', thumb: photos.cooperGoldenHour },
 ];
 
 export function creditsInUse(): { handle: string; url: string }[] {
