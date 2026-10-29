@@ -42,7 +42,7 @@ export type Photo = {
   width: number;
   height: number;
   alt: string;
-  credit: PhotographerId | null; // null = credit MISSING in public/images/ASSETS.md
+  credit: PhotographerId | null; // null = no credit shown (Talkhouse, 89 North, hero video: by Noah's call)
 };
 
 // From public/images/ASSETS.md. Alt text follows that file, with "GRANT the band" in full
@@ -125,7 +125,7 @@ const photosInUse: (Photo | null)[] = [hero.posterDesktop, hero.posterPhone, pho
 export const ep = {
   title: 'Meroke Lane',
   cover: photos.cover as Photo | null,
-  // EP tracklist in Spotify order. Track 1 title pending Noah's confirmation.
+  // EP tracklist in Spotify order (track 1 confirmed by Noah).
   tracks: ['Meroke', 'Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
 };
 
@@ -163,7 +163,7 @@ export const press: PressQuote[] = [
     quote: 'Everyone is executing their instrument… top shelf.',
     source: 'Phillip Torvik, producer, reviewing “Man on a Train”',
     linkText: 'on TikTok',
-    url: null, // [TIKTOK URL for the Torvik review]
+    url: null, // no link, by Noah's call: "on TikTok" stays plain text
   },
   {
     quote: 'High-energy live performances with emotionally charged songwriting.',

@@ -100,7 +100,7 @@ Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded cor
 ### Signature and credits
 
 - GTB handwritten monogram (white): `public/images/gtb-monogram.svg` small in the footer; the favicons render it on night (`scripts/make-images.cjs`).
-- Credit photographers in alt text and the footer. Cooper Bluff photos: @scottk_ny. Talkhouse and 89 North photos and the hero video: credit MISSING (see ASSETS.md); add it to `photographers` in `site.ts` when known. Every photo is in `photos` in `site.ts` with its credit, and the footer shows credits for photos actually rendered.
+- Credit photographers in alt text and the footer. Cooper Bluff photos: @scottk_ny. Talkhouse and 89 North photos and the hero video ship without a credit (Noah's call); if a credit turns up later, add it to `photographers` in `site.ts`. Every photo is in `photos` in `site.ts` with its credit, and the footer shows credits for photos actually rendered.
 
 ### Photo and video handling
 
@@ -142,7 +142,7 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - Buttons: "Listen" (to [HYPERFOLLOW URL]) and "Shows" (to `/shows`), in the lower third.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
-3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (title pending Noah's confirmation) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify (the EP: https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2) · Apple Music · YouTube. Text block vertically centered against the cover art.
+3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (confirmed) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (HyperFollow), then one row of small text links: Spotify (the EP: https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2) · Apple Music · YouTube. Text block vertically centered against the cover art.
 4. Video (`#video`): title "LIVE". Three clip cards (YouTube IDs in `site.ts`, from ASSETS.md), song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Around the Moon” / Live at 89 North; Full show (no quotes, not a song) / Live at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
@@ -169,7 +169,7 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 - "Watch first": three clips, full band first.
 - "Played", in this order: The Stephen Talkhouse / Cooper Bluff · Summer Residency, 2025 and 2026 / 89 North / Piquet Lane / The Villager / Nag’s Head Ale House. No dates on any other venue. "Summer Residency" is capitalized.
 - "Press" (on /book only, never home; `press` in `site.ts`), in this order, each with an amber left rule, cream quote, small gold attribution:
-  1. “Everyone is executing their instrument… top shelf.” Phillip Torvik, producer, reviewing “Man on a Train” on TikTok ("on TikTok" links to the review once Noah supplies the URL).
+  1. “Everyone is executing their instrument… top shelf.” Phillip Torvik, producer, reviewing “Man on a Train” on TikTok ("on TikTok" is plain text, no link, by Noah's call).
   2. “High-energy live performances with emotionally charged songwriting.” Rolling Hype, February 2025 · Read the feature (links to https://rollinghype.com/grant-the-band-the-energy-the-originals-and-the-covers-you-cant-miss/, new tab, rel="noopener").
 - Downloads: stage plot and tech rider PDF (phase 2).
 - Contact: "Email booking@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
@@ -214,7 +214,7 @@ Single phone-width column: wordmark, "Indie rock from Long Island. Better in the
 
 ## Placeholders Noah still owes
 
-Photographer credits for the Talkhouse and 89 North photos and the hero video, the TikTok URL for the Torvik review, logo SVG (the wordmark is still the type version), confirmation of track 1's title ("Meroke"), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
+Logo SVG (the wordmark is still the type version), full-band piece count, trio/duo lines, set lengths, PA/stage needs, stage plot PDF, email provider choice, `now.json` content, Search Console token. Use clearly labeled placeholders until then. Never invent facts, stats or quotes.
 
 ## Brand rules (non-negotiable)
 
