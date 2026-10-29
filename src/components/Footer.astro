@@ -1,5 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
+import BookingEmail from './BookingEmail.astro';
 import { links } from '../data/site';
 
 const social = [
@@ -12,7 +13,10 @@ const social = [
 
 <footer class="site-footer">
   <div class="wrap inner">
-    <Wordmark size="lg" />
+    <div class="brand">
+      <Wordmark size="lg" />
+      <p class="booking">Booking: <BookingEmail /></p>
+    </div>
     <ul class="social">
       {social.map((s) => (
         <li><a href={s.href} rel="noopener">{s.label}</a></li>
@@ -39,6 +43,19 @@ const social = [
     padding: 0;
     list-style: none;
   }
+  .brand {
+    display: grid;
+    gap: 12px;
+  }
+  .booking {
+    margin: 0;
+    color: var(--body);
+    font-size: var(--fs-small);
+  }
+  .booking :global(a) {
+    color: var(--accent);
+    font-weight: 600;
+  }
   .social a {
     display: inline-flex;
     align-items: center;
@@ -54,7 +71,7 @@ const social = [
   .legal {
     margin: 0;
     color: var(--muted);
-    font-size: 0.875rem;
+    font-size: var(--fs-small);
   }
   @media (min-width: 720px) {
     .inner {

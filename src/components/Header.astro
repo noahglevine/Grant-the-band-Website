@@ -17,7 +17,7 @@ const base = home ? '' : '/';
         <li class="nav-link"><a href={`${base}#shows`}>Shows</a></li>
         <li class="nav-link"><a href={`${base}#music`}>Music</a></li>
         <li class="nav-link"><a href={`${base}#live`}>Live</a></li>
-        <li><a class="btn btn--secondary btn--sm" href="/book">Book us</a></li>
+        <li><a class="btn btn--secondary" href="/book">Book us</a></li>
       </ul>
     </nav>
   </div>
@@ -36,7 +36,7 @@ const base = home ? '' : '/';
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    min-height: 64px;
+    min-height: 76px;
   }
   ul {
     display: flex;
@@ -49,21 +49,21 @@ const base = home ? '' : '/';
   .nav-link a {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
-    padding: 0 10px;
+    min-height: 48px;
+    padding: 0 12px;
     color: var(--body);
-    font-size: 0.9375rem;
+    font-size: var(--fs-nav);
     font-weight: 600;
     text-decoration: none;
   }
   .nav-link a:hover {
     color: var(--accent);
   }
-  .btn--sm {
-    margin-left: 6px;
+  .btn {
+    margin-left: 8px;
   }
-  /* Tight phones: keep the wordmark and Book us; section links come back at 480px. */
-  @media (max-width: 479px) {
+  /* Tight phones: keep the wordmark and Book us; section links come back at 560px. */
+  @media (max-width: 559px) {
     .nav-link {
       display: none;
     }

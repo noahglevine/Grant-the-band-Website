@@ -12,8 +12,8 @@ const titleId = `${id}-title`;
 <section id={id} class:list={['signup', { compact }]} aria-labelledby={titleId}>
   <div class="wrap inner">
     <div class="copy">
-      <h2 id={titleId} class="display">Show dates, first.</h2>
-      <p>One email when there’s a show. That’s it. We’re not organized enough to spam you.</p>
+      <h2 id={titleId} class="display h2">Show dates, first.</h2>
+      <p>One email when there’s a show. Nothing else.</p>
     </div>
     <form class="form" data-signup-placeholder novalidate>
       <label class="visually-hidden" for={`${id}-email`}>Email address</label>
@@ -39,7 +39,7 @@ const titleId = `${id}-title`;
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const status = form.querySelector('.status');
-      if (status) status.textContent = 'Not wired up yet. This form connects once the email provider is set.';
+      if (status) status.textContent = 'Signup isn’t connected yet. It goes live with the email provider.';
     });
   });
 </script>
@@ -56,12 +56,11 @@ const titleId = `${id}-title`;
   }
   h2 {
     color: var(--bg);
-    font-size: clamp(2.5rem, 10vw, 5rem);
   }
   .copy p {
     margin: 16px 0 0;
     max-width: 30em;
-    font-size: 1.1875rem;
+    font-size: var(--fs-lead);
     font-weight: 500;
   }
   .form {
@@ -95,7 +94,7 @@ const titleId = `${id}-title`;
     justify-self: start;
     padding: 4px 8px;
     border: 1px dashed var(--bg);
-    font-size: 0.75rem;
+    font-size: var(--fs-min);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -126,11 +125,8 @@ const titleId = `${id}-title`;
   .compact .inner {
     padding-inline: 20px;
   }
-  .compact h2 {
-    font-size: 2.25rem;
-  }
   .compact .copy p {
-    font-size: 1rem;
+    font-size: var(--fs-body);
   }
   .compact .form {
     grid-template-columns: 1fr;

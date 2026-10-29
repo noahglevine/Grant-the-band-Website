@@ -1,4 +1,7 @@
 ---
+// The only place the wordmark is drawn. Header, footer and /now all use this.
+import { wordmarkSvg } from '../data/site';
+
 interface Props {
   size?: 'sm' | 'md' | 'lg';
   href?: string;
@@ -7,7 +10,13 @@ const { size = 'md', href = '/' } = Astro.props;
 ---
 
 <a class:list={['wordmark', `wordmark--${size}`]} href={href} aria-label="GRANT the band, home">
-  <span class="wm-grant">GRANT</span><span class="wm-band">the band</span>
+  {wordmarkSvg ? (
+    <img class="wm-logo" src={wordmarkSvg} alt="GRANT the band" />
+  ) : (
+    <>
+      <span class="wm-grant">GRANT</span><span class="wm-band">the band</span>
+    </>
+  )}
 </a>
 
 <style>
@@ -30,6 +39,11 @@ const { size = 'md', href = '/' } = Astro.props;
     font-weight: 600;
     font-size: 1.12em;
     color: var(--accent);
+  }
+  .wm-logo {
+    display: block;
+    height: 1.3em;
+    width: auto;
   }
   .wordmark--sm {
     font-size: 1.125rem;

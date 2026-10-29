@@ -18,12 +18,12 @@ import { ep, links } from '../data/site';
         <h2 id="music-title" class="display h2">Meroke Lane</h2>
       </div>
       <p class="lede">
-        Songs about trains, the long way home, and getting it wrong before getting it right. Start with these.
+        Songs about the roads we travel, the people who shape us, and finding our way home. Start with these.
       </p>
 
-      <ol class="tracks">
-        {ep.tracks.map((t) => <li>{t}</li>)}
-      </ol>
+      <ul class="tracks" aria-label="Singles">
+        {ep.singles.map((t) => <li>{t}</li>)}
+      </ul>
 
       <div class="btn-row">
         <a class="btn btn--primary" href={links.spotify} rel="noopener">Spotify</a>
@@ -60,29 +60,17 @@ import { ep, links } from '../data/site';
     margin: 8px 0 32px;
     padding: 0;
     list-style: none;
-    counter-reset: t;
   }
   .tracks li {
-    counter-increment: t;
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-    padding-block: 12px;
+    padding-block: 14px;
     border-bottom: 1px solid var(--line);
     color: var(--text);
-    font-size: 1.125rem;
+    font-size: var(--fs-row);
     font-weight: 700;
+    line-height: 1.25;
   }
   .tracks li:first-child {
     border-top: 1px solid var(--line);
-  }
-  .tracks li::before {
-    content: counter(t, decimal-leading-zero);
-    min-width: 1.6em;
-    color: var(--accent);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
   }
   .quote {
     margin: 48px 0 0;
@@ -101,7 +89,7 @@ import { ep, links } from '../data/site';
   }
   figcaption {
     color: var(--muted);
-    font-size: 0.9375rem;
+    font-size: var(--fs-small);
   }
   @media (min-width: 900px) {
     .grid {

@@ -4,11 +4,18 @@ import Header from '../components/Header.astro';
 import ClipFacade from '../components/ClipFacade.astro';
 import BookingEmail from '../components/BookingEmail.astro';
 import BookingForm from '../components/BookingForm.astro';
-import Signup from '../components/Signup.astro';
 import Footer from '../components/Footer.astro';
 import { clips, book } from '../data/site';
 
-const formats = ['Full band with horns', 'Trio', 'Duo'];
+const ph = (label: string) => `<span class="ph-inline">[${label}]</span>`;
+const formats = [
+  {
+    name: 'Full band with horns',
+    line: `${book.fullBandPieces ?? ph('Number')}-piece. Built for clubs, residencies and outdoor nights.`,
+  },
+  { name: 'Trio', line: book.trioBestFor ?? ph('What the trio is best for') },
+  { name: 'Duo', line: book.duoBestFor ?? ph('What the duo is best for') },
+];
 ---
 
 <Base
@@ -21,7 +28,7 @@ const formats = ['Full band with horns', 'Trio', 'Duo'];
     <section class="section intro">
       <div class="wrap">
         <span class="aside">for venues and private events</span>
-        <h1 class="display">Book GRANT the band.</h1>
+        <h1 class="display h1">Book GRANT the band.</h1>
         <p class="lede">
           Long Island indie rock with a horn section. Originals off Meroke Lane plus covers people actually sing. We held a summer Wednesday residency at Cooper Bluff and have played The Stephen Talkhouse, 89 North and Piquet Lane.
         </p>
@@ -38,7 +45,8 @@ const formats = ['Full band with horns', 'Trio', 'Duo'];
         <ul class="formats">
           {formats.map((f) => (
             <li>
-              <h3>{f}</h3>
+              <h3>{f.name}</h3>
+              <p set:html={f.line} />
             </li>
           ))}
         </ul>
@@ -86,7 +94,6 @@ const formats = ['Full band with horns', 'Trio', 'Duo'];
       </div>
     </section>
 
-    <Signup />
   </main>
   <Footer />
 </Base>
@@ -100,7 +107,6 @@ const formats = ['Full band with horns', 'Trio', 'Duo'];
     margin-bottom: 10px;
   }
   h1 {
-    font-size: clamp(2.75rem, 11vw, 7rem);
     max-width: 12ch;
     margin-bottom: 24px;
   }
@@ -124,6 +130,10 @@ const formats = ['Full band with horns', 'Trio', 'Duo'];
   .formats li:last-child {
     border-bottom: 1px solid var(--line);
   }
+  .formats p {
+    margin: 8px 0 0;
+    color: var(--body);
+  }
   .formats h3 {
     font-size: 1.375rem;
     font-weight: 800;
@@ -138,7 +148,7 @@ const formats = ['Full band with horns', 'Trio', 'Duo'];
   }
   dt {
     color: var(--muted);
-    font-size: 0.8125rem;
+    font-size: var(--fs-min);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;

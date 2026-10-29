@@ -15,6 +15,10 @@ export const links = {
 
 export const bookingEmail = null as string | null; // [BOOKING EMAIL]
 
+// Real logo, when Noah sends it: drop the SVG in public/ and set the path here.
+// Until then Wordmark.astro renders the type version.
+export const wordmarkSvg = null as string | null; // e.g. '/logo.svg'
+
 // Google Search Console verification token (content attribute only).
 export const searchConsoleToken = null as string | null;
 
@@ -26,7 +30,9 @@ export const hero = {
 export const ep = {
   title: 'Meroke Lane',
   cover: null as string | null, // e.g. '/media/meroke-lane.jpg'
-  tracks: ['Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
+  // Singles to start with, not the tracklist.
+  // Singles to start with. Not the EP tracklist.
+  singles: ['Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
 };
 
 export type Clip = {
@@ -51,6 +57,9 @@ export const venuesPlayed = [
 ];
 
 export const book = {
+  fullBandPieces: null as number | null, // [NUMBER]
+  trioBestFor: null as string | null, // [WHAT THE TRIO IS BEST FOR]
+  duoBestFor: null as string | null, // [WHAT THE DUO IS BEST FOR]
   setLengths: null as string | null, // [SET LENGTHS]
   stageNeeds: null as string | null, // [PA AND STAGE NEEDS]
   stagePlotPdf: null as string | null, // phase 2

@@ -15,6 +15,17 @@
   --max: 1180px;
   --radius: 999px;
 
+  /* Type scale. Nothing on the site goes below --fs-min. */
+  --fs-min: 15px;
+  --fs-small: 16px; /* captions, figcaptions, footer, labels */
+  --fs-body: 18px;
+  --fs-lead: 21px;
+  --fs-row: 22px; /* EP tracks, show rows */
+  --fs-aside: 30px;
+  --fs-nav: 17px;
+  --fs-button: 18px;
+  --button-h: 56px;
+
   color-scheme: dark;
 }
 
@@ -28,7 +39,7 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: 72px;
+  scroll-padding-top: 84px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -42,7 +53,7 @@ body {
   background: var(--bg);
   color: var(--body);
   font-family: var(--font);
-  font-size: 1.0625rem;
+  font-size: var(--fs-body);
   line-height: 1.55;
   font-weight: 400;
   font-stretch: 100%;
@@ -62,6 +73,7 @@ a {
 
 p {
   margin: 0 0 1em;
+  max-width: 65ch;
 }
 
 h1,
@@ -89,6 +101,14 @@ h3 {
   }
 }
 
+@media (min-width: 1024px) {
+  :root {
+    --fs-body: 20px;
+    --fs-lead: 24px;
+    --fs-aside: 36px;
+  }
+}
+
 /* Type */
 
 .display {
@@ -101,14 +121,18 @@ h3 {
   overflow-wrap: break-word;
 }
 
+.h1 {
+  font-size: clamp(60px, 13vw, 144px);
+}
+
 .h2 {
-  font-size: clamp(2.5rem, 10vw, 5.25rem);
+  font-size: clamp(44px, 8vw, 88px);
 }
 
 .aside {
   font-family: var(--script);
   font-weight: 600;
-  font-size: 1.6rem;
+  font-size: var(--fs-aside);
   line-height: 1;
   color: var(--accent);
   text-transform: none;
@@ -116,9 +140,9 @@ h3 {
 }
 
 .lede {
-  font-size: 1.1875rem;
-  line-height: 1.5;
-  max-width: 34em;
+  font-size: var(--fs-lead);
+  line-height: 1.45;
+  max-width: 32em;
 }
 
 .muted {
@@ -157,12 +181,12 @@ h3 {
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  min-height: 48px;
-  padding: 0 1.5em;
+  min-height: var(--button-h);
+  padding: 0 1.4em;
   border-radius: var(--radius);
   border: 1px solid transparent;
   font: inherit;
-  font-size: 1rem;
+  font-size: var(--fs-button);
   font-weight: 700;
   font-stretch: 110%;
   letter-spacing: 0.01em;
@@ -195,12 +219,6 @@ h3 {
   color: var(--bg);
 }
 
-.btn--sm {
-  min-height: 44px;
-  padding: 0 1.15em;
-  font-size: 0.9375rem;
-}
-
 .btn-row {
   display: flex;
   flex-wrap: wrap;
@@ -218,7 +236,7 @@ h3 {
   background: var(--placeholder);
   border: 1px dashed var(--muted);
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: var(--fs-min);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -230,7 +248,7 @@ h3 {
   background: var(--placeholder);
   border: 1px dashed var(--muted);
   color: var(--muted);
-  font-size: 0.85em;
+  font-size: max(0.85em, var(--fs-min));
   font-weight: 600;
   letter-spacing: 0.04em;
 }
@@ -255,21 +273,21 @@ h3 {
 }
 
 .field label {
-  font-size: 0.875rem;
+  font-size: var(--fs-small);
   font-weight: 600;
   color: var(--text);
 }
 
 .input {
   width: 100%;
-  min-height: 48px;
-  padding: 12px 14px;
+  min-height: var(--button-h);
+  padding: 12px 16px;
   border-radius: 8px;
   border: 1px solid var(--line);
   background: var(--bg);
   color: var(--text);
   font: inherit;
-  font-size: 1rem; /* 16px keeps iOS from zooming on focus */
+  font-size: var(--fs-body); /* 16px+ keeps iOS from zooming on focus */
 }
 
 .input::placeholder {

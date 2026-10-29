@@ -26,7 +26,6 @@ const musicGroup = {
     '@type': 'MusicAlbum',
     name: ep.title,
     albumReleaseType: 'https://schema.org/EPRelease',
-    track: ep.tracks.map((name, i) => ({ '@type': 'MusicRecording', name, position: i + 1 })),
   },
 };
 
@@ -35,7 +34,7 @@ const jsonLd = [musicGroup, ...shows.map((s) => musicEventJsonLd(s, SITE_URL))];
 
 <Base
   title="GRANT the band | Indie Rock from Long Island, NY"
-  description="Indie rock with a horn section from Long Island, NY. Originals off Meroke Lane, a few covers we have no business playing, and a set that’s better in the room."
+  description="Indie rock with a horn section from Long Island, NY. Originals off Meroke Lane, the covers you came for, and a set that’s better in the room."
   ogImage="/og/home.png"
   jsonLd={jsonLd}
 >

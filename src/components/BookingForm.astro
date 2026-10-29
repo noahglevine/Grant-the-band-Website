@@ -5,33 +5,30 @@
 
 <form class="booking" name="booking" method="POST" data-netlify="true" netlify-honeypot="company">
   <input type="hidden" name="form-name" value="booking" />
+  <!-- Honeypot: off-screen, hidden from screen readers, skipped by Tab. Bots fill it, people don't. -->
   <p class="visually-hidden" aria-hidden="true">
     <label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label>
   </p>
 
-  <div class="row">
-    <div class="field">
-      <label for="bk-name">Name</label>
-      <input id="bk-name" class="input" name="name" autocomplete="name" required />
-    </div>
-    <div class="field">
-      <label for="bk-email">Email</label>
-      <input id="bk-email" class="input" type="email" name="email" autocomplete="email" required />
-    </div>
+  <div class="field">
+    <label for="bk-name">Name</label>
+    <input id="bk-name" class="input" name="name" autocomplete="name" required />
   </div>
-  <div class="row">
-    <div class="field">
-      <label for="bk-date">Date</label>
-      <input id="bk-date" class="input" type="date" name="date" />
-    </div>
-    <div class="field">
-      <label for="bk-budget">Budget</label>
-      <input id="bk-budget" class="input" name="budget" inputmode="text" />
-    </div>
+  <div class="field">
+    <label for="bk-email">Email</label>
+    <input id="bk-email" class="input" type="email" name="email" autocomplete="email" required />
+  </div>
+  <div class="field">
+    <label for="bk-date">Date</label>
+    <input id="bk-date" class="input" type="date" name="date" />
   </div>
   <div class="field">
     <label for="bk-venue">Venue or event type</label>
     <input id="bk-venue" class="input" name="venue" placeholder="Bar, wedding, backyard, club" />
+  </div>
+  <div class="field">
+    <label for="bk-budget">Budget</label>
+    <input id="bk-budget" class="input" name="budget" />
   </div>
   <div class="field">
     <label for="bk-message">Message</label>
@@ -75,15 +72,6 @@
   .booking {
     display: grid;
     gap: 16px;
-  }
-  .row {
-    display: grid;
-    gap: 16px;
-  }
-  @media (min-width: 560px) {
-    .row {
-      grid-template-columns: 1fr 1fr;
-    }
   }
   button {
     justify-self: start;

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Wordmark from '../components/Wordmark.astro';
 import ShowRow from '../components/ShowRow.astro';
+import BookingEmail from '../components/BookingEmail.astro';
 import Signup from '../components/Signup.astro';
 import now from '../data/now.json';
 import { links } from '../data/site';
@@ -58,6 +59,7 @@ const hasCard = Boolean(now.title && now.url);
     <Signup compact />
 
     <footer class="foot">
+      <p class="booking">Booking: <BookingEmail /></p>
       <a href="/">granttheband.com</a>
     </footer>
   </main>
@@ -85,9 +87,6 @@ const hasCard = Boolean(now.title && now.url);
     display: grid;
     gap: 10px;
   }
-  .card .aside {
-    font-size: 1.5rem;
-  }
   .card-link {
     display: grid;
     gap: 12px;
@@ -102,7 +101,7 @@ const hasCard = Boolean(now.title && now.url);
   }
   .card-title {
     color: var(--text);
-    font-size: 1.125rem;
+    font-size: var(--fs-row);
     font-weight: 700;
   }
   .next ul {
@@ -115,7 +114,7 @@ const hasCard = Boolean(now.title && now.url);
     display: block;
     margin-bottom: 4px;
     color: var(--muted);
-    font-size: 0.8125rem;
+    font-size: var(--fs-min);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -131,8 +130,19 @@ const hasCard = Boolean(now.title && now.url);
     scroll-margin-top: 16px;
   }
   .foot {
-    text-align: center;
+    display: grid;
+    justify-items: center;
+    gap: 4px;
     padding-top: 8px;
+    font-size: var(--fs-small);
+  }
+  .booking {
+    margin: 0;
+    color: var(--body);
+  }
+  .booking :global(a) {
+    color: var(--accent);
+    font-weight: 600;
   }
   .foot a {
     display: inline-flex;

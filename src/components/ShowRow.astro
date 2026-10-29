@@ -22,7 +22,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
     <p class="meta">{show.town}{time && ` · ${time}`}</p>
   </div>
   {href && (
-    <a class="btn btn--secondary btn--sm details" href={href} rel="noopener" aria-label={`Details: ${show.venue}, ${d.long}`}>
+    <a class="btn btn--secondary details" href={href} rel="noopener" aria-label={`Details: ${show.venue}, ${d.long}`}>
       Details
     </a>
   )}
@@ -31,7 +31,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
 <style>
   .show {
     display: grid;
-    grid-template-columns: 64px 1fr;
+    grid-template-columns: 72px 1fr;
     grid-template-areas: 'date info' 'date cta';
     gap: 4px 16px;
     align-items: center;
@@ -46,7 +46,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
   }
   .dow,
   .mon {
-    font-size: 0.75rem;
+    font-size: var(--fs-min);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -59,7 +59,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
     color: var(--accent);
   }
   .day {
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     font-weight: 900;
     font-stretch: 125%;
     color: var(--text);
@@ -70,14 +70,14 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
   .venue {
     margin: 0;
     color: var(--text);
-    font-size: 1.1875rem;
+    font-size: var(--fs-row);
     font-weight: 700;
     line-height: 1.25;
   }
   .meta {
-    margin: 2px 0 0;
+    margin: 4px 0 0;
     color: var(--muted);
-    font-size: 0.9375rem;
+    font-size: var(--fs-small);
   }
   .details {
     grid-area: cta;
@@ -86,7 +86,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
   }
   @media (min-width: 720px) {
     .show {
-      grid-template-columns: 88px 1fr auto;
+      grid-template-columns: 96px 1fr auto;
       grid-template-areas: 'date info cta';
       padding-block: 22px;
     }
