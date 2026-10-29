@@ -152,6 +152,18 @@ Hero video loop (Man on a Train outro, Talkhouse), Meroke Lane cover art, three 
 
 **Cutover (Noah does this with you, step by step):** export Wix contacts CSV and media, confirm registrar, lower DNS TTL a day ahead, point domain to Netlify, confirm HTTPS, re-verify Search Console, submit sitemap, swap IG bio to /now. Cancel Wix after two stable weeks, before auto-renew.
 
+## Implementation decisions (Phase 1)
+
+- Astro 7.x needs Node >= 22.23.4. Netlify pins `NODE_VERSION` in `netlify.toml`; `.nvmrc` says 24.
+- `src/data/site.ts` holds every link, the booking email and asset paths. `null` renders a labeled placeholder.
+- Clean URLs without trailing slashes (`build.format: 'file'`, `trailingSlash: 'never'`).
+- "Upcoming" shows are computed at build time in America/New_York, so a show stays listed through its own day. Needs a rebuild after show dates pass (daily build hook planned for Phase 2).
+- "Details" on a show row renders only when `url` is set.
+- `/now` has its own compact signup at the bottom; "Get show dates" jumps to it. "Watch us live" goes to `/#live` (internal, no UTM).
+- YouTube facade is a small in-repo custom element (`ClipFacade.astro`), using youtube-nocookie on click.
+- `npm run build` runs `scripts/check-copy.mjs` first and fails on em dashes or "unforgettable".
+- OG images and favicons are typographic renders from `scripts/make-images.cjs`.
+
 ## Ongoing maintenance
 
 - New show: Noah says "add 12/5 Talkhouse 8pm". Edit shows.json on a branch, open a PR, merge after Noah approves the preview.
