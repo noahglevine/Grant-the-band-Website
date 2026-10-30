@@ -196,7 +196,7 @@ export const venuesPlayed: { name: string; note?: string }[] = [
   { name: 'The Stephen Talkhouse' },
   { name: 'Cooper Bluff', note: 'Summer Residency, 2025 and 2026' },
   { name: '89 North' },
-  { name: 'Piquet Lane' },
+  { name: 'Piquet Lane Tennis & Swim Club' },
   { name: 'The Villager' },
   { name: 'Nag’s Head Ale House' },
 ];
@@ -218,7 +218,9 @@ export const book = {
 };
 
 // Downloads in public/press/. Each renders only once its file exists.
+// Noah's files, used as-is (nothing in the build regenerates them).
 export const downloads = {
   stagePlot: '/press/grant-the-band-stage-plot.pdf',
-  kit: '/press/grant-the-band-press-kit.zip',
+  epk: '/press/grant-the-band-epk.pdf', // 2-page EPK
+  kit: '/press/grant-the-band-press-kit.zip', // EPK, stage plot, Photos/, Logos/, Music/, Bio.txt
 };
