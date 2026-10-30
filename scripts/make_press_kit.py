@@ -52,7 +52,7 @@ def label(c,x,y,t,col=GOLD,size=7.5,sp=1.6):
     c.setFillColorRGB(*col); c.setFont('M',size); c._code.append('%s Tc'%sp); c.drawString(x,y,t); c._code.append('0 Tc')
 def title(c,x,y,t,size=20):
     c.setStrokeColorRGB(*AMBER); c.setLineWidth(1.5); c.line(x,y+size+8,x+32,y+size+8)
-    c.setFillColorRGB(*CREAM); c.setFont('L',size); c._code.append('%s Tc'%(size*0.06)); c.drawString(x,y,t); c._code.append('0 Tc')
+    c.setFillColorRGB(*CREAM); c.setFont('R',size); c._code.append('%s Tc'%(size*0.06)); c.drawString(x,y,t); c._code.append('0 Tc')
 def para(c,x,y,text,w,font='R',size=9.5,lead=14.5,col=CREAM):
     c.setFillColorRGB(*col); c.setFont(font,size); words=text.split(); line=''
     for wd in words:
@@ -142,7 +142,7 @@ for i,(t,s,u,im) in enumerate(clips):
     c.setFillColorRGB(*GOLD); c.setFont('R',7.5); c.drawString(x,cy-th-27,s)
 y=cy-cw*0.56-60
 title(c,M,y-18,'TECH')
-items=['6 players · 19 inputs','2 mono DIs on lead (acoustic + trigger pad)','Vocal FX on lead mic (XLR in and out)','3 vocal mics','We bring our own PA','Full stage plot included in this kit']
+items=['6 players · 19 inputs','2 mono DIs on lead (acoustic + trigger pad)','Vocal FX on lead mic (XLR in and out)','3 vocal mics','We bring our own PA','Stage plot: granttheband.com/book']
 ty=y-44
 for i,t in enumerate(items):
     x=M if i<3 else M+215; yy=ty-(i%3)*16
