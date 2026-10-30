@@ -46,10 +46,8 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
       {handwritten && <p class="see script" aria-hidden="true">see you there</p>}
     </div>
     <div class="stub" aria-hidden="true">
-      <span class="cap">Admit one</span>
       <span class:list={['stub-date', { 'is-ph': !d }]}>{d ? `${mm}/${dd}` : '[MM/DD]'}</span>
       <span class="no">No. {d ? `${mm}${dd}` : '[MMDD]'}</span>
-      <span class="cap keep">Keep this stub</span>
     </div>
   </article>
   {href && (
@@ -141,7 +139,6 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
     border-top: 2px dashed rgb(30 30 30 / 0.28);
   }
   .stub-date {
-    grid-row: span 2;
     font-size: 40px;
     font-weight: 700;
     letter-spacing: 0.02em;
@@ -153,9 +150,6 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
   .no {
     font-size: var(--fs-min);
     letter-spacing: 0.04em;
-  }
-  .keep {
-    grid-column: 2;
   }
   /* Perforation notches. */
   .stub::before,
@@ -195,7 +189,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
     }
     .stub {
       grid-template-columns: 1fr;
-      align-content: space-between;
+      align-content: center;
       justify-items: start;
       gap: 6px;
       padding: 26px 24px;
@@ -203,16 +197,10 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
       border-left: 2px dashed rgb(30 30 30 / 0.28);
     }
     .stub-date {
-      grid-row: auto;
-      margin-top: 18px;
       font-size: 44px;
     }
     .stub-date.is-ph {
       font-size: 26px;
-    }
-    .keep {
-      grid-column: auto;
-      margin-top: 28px;
     }
     .stub::before,
     .stub::after {
