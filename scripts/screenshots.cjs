@@ -87,6 +87,10 @@ function resolve(urlPath) {
           }
           scrollTo(0, 0);
         });
+        // Let a lazy embed (the Spotify player on home) settle: loaded or fallen back.
+        await page
+          .waitForFunction(() => !document.querySelector('[data-embed].is-pending:not(.is-embedded)'), null, { timeout: 15000 })
+          .catch(() => {});
         const docWidth = await page.evaluate(() => document.documentElement.scrollWidth);
         if (docWidth > vp.width) overflow.push(`${p.path} at ${vp.width}px is ${docWidth}px wide`);
         const file = `${p.name}-${vp.width}.png`;

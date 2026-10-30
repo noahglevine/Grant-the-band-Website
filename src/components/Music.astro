@@ -67,11 +67,14 @@ const platforms = [
       slot.classList.remove('is-pending');
     };
     const load = async () => {
+      // Whatever happens, the reserved space never sits empty for more than 10s.
+      const timer = setTimeout(giveUp, 10000);
       // An iframe fires "load" even on an error page, so check Spotify is reachable first
       // (offline, blocked by a network or a content blocker).
       try {
-        await fetch(src, { method: 'HEAD', mode: 'no-cors' });
+        await fetch(src, { method: 'HEAD', mode: 'no-cors', signal: AbortSignal.timeout(6000) });
       } catch {
+        clearTimeout(timer);
         return giveUp();
       }
       const frame = document.createElement('iframe');
@@ -81,7 +84,6 @@ const platforms = [
       frame.width = '100%';
       frame.height = '352';
       frame.allow = 'clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-      const timer = setTimeout(giveUp, 10000);
       frame.addEventListener('load', () => {
         clearTimeout(timer);
         slot.classList.add('is-embedded');
