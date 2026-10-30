@@ -51,14 +51,6 @@ const phone = hero.posterPhone;
     <div class="scrim" aria-hidden="true" />
   </div>
 
-  {soundDesktop ? (
-    <button class="sound" type="button" aria-pressed="false">Sound on</button>
-  ) : (
-    showPlaceholders && (
-      <span class="sound ph-btn" aria-disabled="true">Sound on <span class="ph-inline">[clip]</span></span>
-    )
-  )}
-
   <!-- Bottom-left on desktop, bottom on phones: the jump happens mid-frame and stays clear. -->
   <div class="content">
     <h1 id="hero-title" class="logo"><Wordmark size="hero" href={null} /></h1>
@@ -69,6 +61,13 @@ const phone = hero.posterPhone;
     <div class="btn-row">
       <ListenButton />
       <a class="btn btn--secondary" href="/shows">Shows</a>
+      {soundDesktop ? (
+        <button class="sound" type="button" aria-pressed="false">Sound<span class="sound-state"> on</span></button>
+      ) : (
+        showPlaceholders && (
+          <span class="sound ph-btn" aria-disabled="true">Sound <span class="ph-inline">[clip]</span></span>
+        )
+      )}
     </div>
   </div>
 </section>
@@ -92,11 +91,12 @@ const phone = hero.posterPhone;
     var clip = document.querySelector('.hero video.sound-clip');
     if (!btn || !clip) return;
     var loop = document.querySelector('.hero video.loop');
+    var state = btn.querySelector('.sound-state');
     var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
     function off() {
       clip.pause();
       clip.classList.remove('is-playing');
-      btn.textContent = 'Sound on';
+      state.textContent = ' on';
       btn.setAttribute('aria-pressed', 'false');
       if (loop && !calm && loop.getAttribute('src')) loop.play().catch(function () {});
     }
@@ -109,7 +109,7 @@ const phone = hero.posterPhone;
       if (loop) loop.pause();
       clip.currentTime = 0;
       clip.muted = false;
-      btn.textContent = 'Sound off';
+      state.textContent = ' off';
       btn.setAttribute('aria-pressed', 'true');
       clip.play().then(function () {
         clip.classList.add('is-playing');
@@ -162,19 +162,17 @@ const phone = hero.posterPhone;
   .sound-clip.is-playing {
     opacity: 1;
   }
-  /* Small pill, clear of the jump. Phones: top-right, in the header row just left of the
-     Menu button (over the ceiling, above Noah at the peak). 800px+: bottom-right.
-     A 44px tap target, lighter than the page buttons. */
+  /* "Sound on": the last item in the Listen / Shows row, pushed to the right edge, so it sits
+     bottom-right in the text area and never over the jump. If a narrow phone can't fit all
+     three, it wraps under them instead of overlapping. Phones: same height as the buttons.
+     Desktop: a 44px pill centered on the row, lighter than the page buttons. */
   .sound {
-    position: absolute;
-    top: 16px;
-    right: calc(var(--gutter) + 104px);
-    z-index: 1;
+    margin-left: auto;
     display: inline-flex;
     align-items: center;
     gap: 0.4em;
-    min-height: 44px;
-    padding: 0 18px;
+    min-height: var(--button-h);
+    padding: 0 14px;
     border: 1px solid var(--cream);
     border-radius: var(--radius);
     background: rgb(16 21 28 / 0.55);
@@ -186,21 +184,24 @@ const phone = hero.posterPhone;
     white-space: nowrap;
     cursor: pointer;
   }
+  /* Under 360px only "Sound" fits beside Listen and Shows; aria-pressed still carries on/off. */
+  @media (max-width: 359px) {
+    .sound-state {
+      display: none;
+    }
+    .sound {
+      padding: 0 10px;
+    }
+    .content .btn-row {
+      gap: 8px;
+    }
+  }
   .sound[aria-pressed='true'] {
     background: var(--cream);
     color: var(--night);
   }
   .sound.ph-btn {
     cursor: default;
-  }
-  /* From 800px the header shows the full nav (no Menu button), so the pill moves to the
-     bottom-right, centered on the Listen / Shows row. */
-  @media (min-width: 800px) {
-    .sound {
-      top: auto;
-      right: var(--gutter);
-      bottom: max(30px, calc(env(safe-area-inset-bottom) + 22px));
-    }
   }
   .scrim {
     position: absolute;
@@ -228,19 +229,34 @@ const phone = hero.posterPhone;
     font-size: clamp(22px, 2.6vw, 40px);
   }
   .btn-row {
+    width: 100%;
+    align-items: center;
     margin-top: 18px;
+  }
+  /* Phones: tighter side padding (height and label size unchanged) so Listen, Shows and
+     Sound on share one row down to 360px wide. */
+  @media (max-width: 899px) {
+    .btn-row {
+      gap: 10px;
+    }
+    .btn-row :global(.btn) {
+      padding: 0 0.9em;
+    }
   }
   @media (min-width: 900px) {
     .scrim {
       background: var(--scrim-desktop);
     }
     .sound {
-      right: 6vw;
-      bottom: calc(10vh + 6px);
+      min-height: 44px;
+      padding: 0 18px;
     }
+    /* Spans 6vw to 6vw so the pill can sit at the right edge of the button row; the text
+       itself stays bottom-left. */
     .content {
       position: absolute;
       left: 6vw;
+      right: 6vw;
       bottom: 10vh;
       width: auto;
       padding: 0;
