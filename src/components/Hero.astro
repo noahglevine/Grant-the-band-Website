@@ -4,11 +4,16 @@ import path from 'node:path';
 import Wordmark from './Wordmark.astro';
 import ListenButton from './ListenButton.astro';
 import { hero } from '../data/site';
+import { showPlaceholders } from '../lib/env';
 
 // Use each loop only if its file is in public/. Until then the posters carry the hero.
 const exists = (p: string) => fs.existsSync(path.join(process.cwd(), 'public', p));
 const videoDesktop = exists(hero.videoDesktop) ? hero.videoDesktop : null;
 const videoPhone = exists(hero.videoPhone) ? hero.videoPhone : videoDesktop;
+// Sound clip: shown only once its file exists. Previews show a placeholder pill until then;
+// production hides the button.
+const soundDesktop = exists(hero.soundDesktop) ? hero.soundDesktop : null;
+const soundPhone = exists(hero.soundPhone) ? hero.soundPhone : soundDesktop;
 const desk = hero.posterDesktop;
 const phone = hero.posterPhone;
 ---
@@ -33,8 +38,26 @@ const phone = hero.posterPhone;
         aria-hidden="true"
       />
     )}
+    {soundDesktop && (
+      <video
+        class="fill sound-clip"
+        data-desktop={soundDesktop}
+        data-phone={soundPhone}
+        playsinline
+        preload="none"
+        aria-hidden="true"
+      />
+    )}
     <div class="scrim" aria-hidden="true" />
   </div>
+
+  {soundDesktop ? (
+    <button class="sound" type="button" aria-pressed="false">Sound on</button>
+  ) : (
+    showPlaceholders && (
+      <span class="sound ph-btn" aria-disabled="true">Sound on <span class="ph-inline">[clip]</span></span>
+    )
+  )}
 
   <!-- Bottom-left on desktop, bottom on phones: the jump happens mid-frame and stays clear. -->
   <div class="content">
@@ -60,6 +83,39 @@ const phone = hero.posterPhone;
     v.src = portrait ? v.dataset.phone : v.dataset.desktop;
     v.addEventListener('playing', function () { v.classList.add('is-playing'); }, { once: true });
     v.play().catch(function () {});
+  })();
+
+  // "Sound on": pause the muted loop and play the same shot with audio, in place. The clip is
+  // fetched only on tap. "Sound off", or the clip ending, goes back to the muted loop.
+  (function () {
+    var btn = document.querySelector('.hero button.sound');
+    var clip = document.querySelector('.hero video.sound-clip');
+    if (!btn || !clip) return;
+    var loop = document.querySelector('.hero video.loop');
+    var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function off() {
+      clip.pause();
+      clip.classList.remove('is-playing');
+      btn.textContent = 'Sound on';
+      btn.setAttribute('aria-pressed', 'false');
+      if (loop && !calm && loop.getAttribute('src')) loop.play().catch(function () {});
+    }
+    btn.addEventListener('click', function () {
+      if (btn.getAttribute('aria-pressed') === 'true') return off();
+      if (!clip.getAttribute('src')) {
+        // Same framing as the loop: the vertical cut on portrait screens.
+        clip.src = matchMedia('(max-aspect-ratio: 1/1)').matches ? clip.dataset.phone : clip.dataset.desktop;
+      }
+      if (loop) loop.pause();
+      clip.currentTime = 0;
+      clip.muted = false;
+      btn.textContent = 'Sound off';
+      btn.setAttribute('aria-pressed', 'true');
+      clip.play().then(function () {
+        clip.classList.add('is-playing');
+      }).catch(off);
+    });
+    clip.addEventListener('ended', off);
   })();
 </script>
 
@@ -99,6 +155,53 @@ const phone = hero.posterPhone;
   .loop.is-playing {
     opacity: 1;
   }
+  .sound-clip {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .sound-clip.is-playing {
+    opacity: 1;
+  }
+  /* Small pill, clear of the jump. Phones: top-right, in the header row just left of the
+     Menu button (over the ceiling, above Noah at the peak). 800px+: bottom-right.
+     A 44px tap target, lighter than the page buttons. */
+  .sound {
+    position: absolute;
+    top: 16px;
+    right: calc(var(--gutter) + 104px);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--cream);
+    border-radius: var(--radius);
+    background: rgb(16 21 28 / 0.55);
+    color: var(--cream);
+    font: inherit;
+    font-size: var(--fs-small);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .sound[aria-pressed='true'] {
+    background: var(--cream);
+    color: var(--night);
+  }
+  .sound.ph-btn {
+    cursor: default;
+  }
+  /* From 800px the header shows the full nav (no Menu button), so the pill moves to the
+     bottom-right, centered on the Listen / Shows row. */
+  @media (min-width: 800px) {
+    .sound {
+      top: auto;
+      right: var(--gutter);
+      bottom: max(30px, calc(env(safe-area-inset-bottom) + 22px));
+    }
+  }
   .scrim {
     position: absolute;
     inset: 0;
@@ -130,6 +233,10 @@ const phone = hero.posterPhone;
   @media (min-width: 900px) {
     .scrim {
       background: var(--scrim-desktop);
+    }
+    .sound {
+      right: 6vw;
+      bottom: calc(10vh + 6px);
     }
     .content {
       position: absolute;
