@@ -4,11 +4,16 @@ import path from 'node:path';
 import Wordmark from './Wordmark.astro';
 import ListenButton from './ListenButton.astro';
 import { hero } from '../data/site';
+import { showPlaceholders } from '../lib/env';
 
 // Use each loop only if its file is in public/. Until then the posters carry the hero.
 const exists = (p: string) => fs.existsSync(path.join(process.cwd(), 'public', p));
 const videoDesktop = exists(hero.videoDesktop) ? hero.videoDesktop : null;
 const videoPhone = exists(hero.videoPhone) ? hero.videoPhone : videoDesktop;
+// Sound clip: shown only once its file exists. Previews show a placeholder pill until then;
+// production hides the button.
+const soundDesktop = exists(hero.soundDesktop) ? hero.soundDesktop : null;
+const soundPhone = exists(hero.soundPhone) ? hero.soundPhone : soundDesktop;
 const desk = hero.posterDesktop;
 const phone = hero.posterPhone;
 ---
@@ -33,6 +38,16 @@ const phone = hero.posterPhone;
         aria-hidden="true"
       />
     )}
+    {soundDesktop && (
+      <video
+        class="fill sound-clip"
+        data-desktop={soundDesktop}
+        data-phone={soundPhone}
+        playsinline
+        preload="none"
+        aria-hidden="true"
+      />
+    )}
     <div class="scrim" aria-hidden="true" />
   </div>
 
@@ -46,6 +61,13 @@ const phone = hero.posterPhone;
     <div class="btn-row">
       <ListenButton />
       <a class="btn btn--secondary" href="/shows">Shows</a>
+      {soundDesktop ? (
+        <button class="sound" type="button" aria-pressed="false">Sound<span class="sound-state"> on</span></button>
+      ) : (
+        showPlaceholders && (
+          <span class="sound ph-btn" aria-disabled="true">Sound <span class="ph-inline">[clip]</span></span>
+        )
+      )}
     </div>
   </div>
 </section>
@@ -60,6 +82,40 @@ const phone = hero.posterPhone;
     v.src = portrait ? v.dataset.phone : v.dataset.desktop;
     v.addEventListener('playing', function () { v.classList.add('is-playing'); }, { once: true });
     v.play().catch(function () {});
+  })();
+
+  // "Sound on": pause the muted loop and play the same shot with audio, in place. The clip is
+  // fetched only on tap. "Sound off", or the clip ending, goes back to the muted loop.
+  (function () {
+    var btn = document.querySelector('.hero button.sound');
+    var clip = document.querySelector('.hero video.sound-clip');
+    if (!btn || !clip) return;
+    var loop = document.querySelector('.hero video.loop');
+    var state = btn.querySelector('.sound-state');
+    var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function off() {
+      clip.pause();
+      clip.classList.remove('is-playing');
+      state.textContent = ' on';
+      btn.setAttribute('aria-pressed', 'false');
+      if (loop && !calm && loop.getAttribute('src')) loop.play().catch(function () {});
+    }
+    btn.addEventListener('click', function () {
+      if (btn.getAttribute('aria-pressed') === 'true') return off();
+      if (!clip.getAttribute('src')) {
+        // Same framing as the loop: the vertical cut on portrait screens.
+        clip.src = matchMedia('(max-aspect-ratio: 1/1)').matches ? clip.dataset.phone : clip.dataset.desktop;
+      }
+      if (loop) loop.pause();
+      clip.currentTime = 0;
+      clip.muted = false;
+      state.textContent = ' off';
+      btn.setAttribute('aria-pressed', 'true');
+      clip.play().then(function () {
+        clip.classList.add('is-playing');
+      }).catch(off);
+    });
+    clip.addEventListener('ended', off);
   })();
 </script>
 
@@ -99,6 +155,54 @@ const phone = hero.posterPhone;
   .loop.is-playing {
     opacity: 1;
   }
+  .sound-clip {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .sound-clip.is-playing {
+    opacity: 1;
+  }
+  /* "Sound on": the last item in the Listen / Shows row, pushed to the right edge, so it sits
+     bottom-right in the text area and never over the jump. If a narrow phone can't fit all
+     three, it wraps under them instead of overlapping. Phones: same height as the buttons.
+     Desktop: a 44px pill centered on the row, lighter than the page buttons. */
+  .sound {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-height: var(--button-h);
+    padding: 0 14px;
+    border: 1px solid var(--cream);
+    border-radius: var(--radius);
+    background: rgb(16 21 28 / 0.55);
+    color: var(--cream);
+    font: inherit;
+    font-size: var(--fs-small);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  /* Under 360px only "Sound" fits beside Listen and Shows; aria-pressed still carries on/off. */
+  @media (max-width: 359px) {
+    .sound-state {
+      display: none;
+    }
+    .sound {
+      padding: 0 10px;
+    }
+    .content .btn-row {
+      gap: 8px;
+    }
+  }
+  .sound[aria-pressed='true'] {
+    background: var(--cream);
+    color: var(--night);
+  }
+  .sound.ph-btn {
+    cursor: default;
+  }
   .scrim {
     position: absolute;
     inset: 0;
@@ -125,15 +229,34 @@ const phone = hero.posterPhone;
     font-size: clamp(22px, 2.6vw, 40px);
   }
   .btn-row {
+    width: 100%;
+    align-items: center;
     margin-top: 18px;
+  }
+  /* Phones: tighter side padding (height and label size unchanged) so Listen, Shows and
+     Sound on share one row down to 360px wide. */
+  @media (max-width: 899px) {
+    .btn-row {
+      gap: 10px;
+    }
+    .btn-row :global(.btn) {
+      padding: 0 0.9em;
+    }
   }
   @media (min-width: 900px) {
     .scrim {
       background: var(--scrim-desktop);
     }
+    .sound {
+      min-height: 44px;
+      padding: 0 18px;
+    }
+    /* Spans 6vw to 6vw so the pill can sit at the right edge of the button row; the text
+       itself stays bottom-left. */
     .content {
       position: absolute;
       left: 6vw;
+      right: 6vw;
       bottom: 10vh;
       width: auto;
       padding: 0;

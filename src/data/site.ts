@@ -130,6 +130,9 @@ export function srcset(photo: Photo): string | undefined {
 export const hero = {
   videoDesktop: '/video/hero-desktop.mp4',
   videoPhone: '/video/hero-phone.mp4',
+  // "Sound on": the same shot with audio, played in place on tap. Fetched only on tap.
+  soundDesktop: '/video/hero-sound.mp4',
+  soundPhone: '/video/hero-sound-phone.mp4',
   posterDesktop: photos.heroDesktop,
   posterPhone: photos.heroPhone,
 };

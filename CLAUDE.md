@@ -144,6 +144,9 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - The logo is the H1.
    - Below: gold label "MEROKE LANE", then "OUT EVERYWHERE".
    - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), under the label.
+   - "Sound on" pill: the last item in the Listen / Shows row, right-aligned, so it sits bottom-right in the text area and never over the jump. Phones (<900px): same 56px height as Listen / Shows, which get tighter side padding (0.9em) there so all three fit on one row down to 320px; under 360px the pill reads just "Sound" (`aria-pressed` carries on/off). Desktop: a 44px pill (16px label, cream outline on a translucent night fill), 6vw from the right, centered on the row.
+   - On tap it pauses the muted loop and plays `public/video/hero-sound.mp4` (portrait screens: `hero-sound-phone.mp4`, same rule as the loop so the framing matches) with audio, in place, under the same scrim. `preload="none"`: nothing is fetched until the tap. The pill reads "Sound off" (`aria-pressed`) while playing; tapping it or the clip ending returns to the muted loop (or the poster for reduced-motion visitors).
+   - The pill renders only once `hero-sound.mp4` exists. Until then previews show a placeholder pill and production shows nothing.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
 3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the Spotify player for the EP (`links.merokeLaneEmbed`, dark theme, 352px tall, full width of the text column, title "Listen to Meroke Lane on Spotify", no autoplay), one gold primary "Listen" button (the Spotify EP), then one row of small text links: Apple Music · YouTube. Text block vertically centered against the cover art.
@@ -224,7 +227,7 @@ Single phone-width column: wordmark, gold label "MEROKE LANE · OUT EVERYWHERE",
 
 ## Placeholders Noah still owes
 
-Logo SVG (the wordmark is still the type version), `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
+Logo SVG (the wordmark is still the type version), hero sound clips (`public/video/hero-sound.mp4` and `hero-sound-phone.mp4`), `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
 
 ## Production guard
 
