@@ -19,6 +19,7 @@ const formats = [
 ];
 const setLengths = owed(book.setLengths, 'Set lengths');
 const stagePlot = publicFileExists(downloads.stagePlot) ? downloads.stagePlot : null;
+const epk = publicFileExists(downloads.epk) ? downloads.epk : null;
 const pressKit = publicFileExists(downloads.kit) ? downloads.kit : null;
 const top = photos.northFullBand;
 ---
@@ -123,11 +124,16 @@ const top = photos.northFullBand;
               </figure>
             ))}
           </div>
-          {pressKit && (
+          {(epk || pressKit || showPlaceholders) && (
             <div class="kit">
               <h3>Press kit</h3>
               <p>Photos and logo for your flyers and socials.</p>
-              <a class="btn btn--primary" href={pressKit} download>Download press kit</a>
+              {epk ? (
+                <a class="btn btn--primary" href={epk} download>Download EPK (PDF)</a>
+              ) : (
+                showPlaceholders && <span class="btn btn--primary ph-btn" aria-disabled="true">Download EPK (PDF) <span class="ph-inline">[EPK PDF]</span></span>
+              )}
+              {pressKit && <a class="kit-all" href={pressKit} download>Full press kit (photos, logos, stage plot)</a>}
             </div>
           )}
         </div>
@@ -319,6 +325,16 @@ const top = photos.northFullBand;
     margin: 8px 0 20px;
     color: var(--gold);
     font-size: var(--fs-small);
+  }
+  .kit-all {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    min-height: 44px;
+    margin-top: 12px;
+    color: var(--gold);
+    font-weight: 500;
+    text-underline-offset: 4px;
   }
   .contact {
     display: grid;
