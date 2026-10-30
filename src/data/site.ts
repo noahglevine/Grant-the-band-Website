@@ -7,6 +7,7 @@ export const SITE_URL = 'https://granttheband.com';
 export const links = {
   spotify: 'https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe', // artist page: footer, socials
   merokeLaneSpotify: 'https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2', // the EP: every "Listen" button
+  manOnATrainSpotify: 'https://open.spotify.com/track/3Qhvz4YM1P0mKKuur6SoIG', // after the hero excerpt ends
   // Spotify player for the EP on home (dark theme). Loaded only near the viewport, never on /now.
   merokeLaneEmbed: 'https://open.spotify.com/embed/album/6sBrvYJHa66nYqVTg6bNa2?theme=0' as string | null,
   youtube: 'https://www.youtube.com/@GRANTtheband',
@@ -130,9 +131,8 @@ export function srcset(photo: Photo): string | undefined {
 export const hero = {
   videoDesktop: '/video/hero-desktop.mp4',
   videoPhone: '/video/hero-phone.mp4',
-  // "Sound on": the same shot with audio, played in place on tap. Fetched only on tap.
-  soundDesktop: '/video/hero-sound.mp4',
-  soundPhone: '/video/hero-sound-phone.mp4',
+  // "Play “Man on a Train”": an audio excerpt over the muted loop. Fetched only on tap.
+  song: '/audio/hero-song.mp3',
   posterDesktop: photos.heroDesktop,
   posterPhone: photos.heroPhone,
 };
