@@ -36,14 +36,13 @@ const phone = hero.posterPhone;
     <div class="scrim" aria-hidden="true" />
   </div>
 
-  <div class="wrap content">
-    <div class="center">
-      <h1 id="hero-title" class="logo"><Wordmark size="hero" href={null} /></h1>
-      <p class="release">
-        <span class="label">Meroke Lane</span>
-        <span class="out display">Out everywhere</span>
-      </p>
-    </div>
+  <!-- Bottom-left on desktop, bottom on phones: the jump happens mid-frame and stays clear. -->
+  <div class="content">
+    <h1 id="hero-title" class="logo"><Wordmark size="hero" href={null} /></h1>
+    <p class="release">
+      <span class="label">Meroke Lane</span>
+      <span class="out display">Out everywhere</span>
+    </p>
     <div class="btn-row">
       <ListenButton />
       <a class="btn btn--secondary" href="/shows">Shows</a>
@@ -68,10 +67,10 @@ const phone = hero.posterPhone;
   .hero {
     position: relative;
     display: flex;
+    align-items: flex-end;
     min-height: 100svh;
     overflow: hidden;
     isolation: isolate;
-    text-align: center;
   }
   .media {
     position: absolute;
@@ -86,6 +85,13 @@ const phone = hero.posterPhone;
     height: 100%;
     object-fit: cover;
   }
+  /* Tall phones: the vertical cut fills the height, so lift it 10% (ceiling only) to put the
+     jump above the text. The strip it leaves at the bottom sits under the darkest scrim. */
+  @media (max-aspect-ratio: 9/16) {
+    .fill {
+      transform: translateY(-10%);
+    }
+  }
   .loop {
     opacity: 0;
     transition: opacity 0.6s;
@@ -93,25 +99,16 @@ const phone = hero.posterPhone;
   .loop.is-playing {
     opacity: 1;
   }
-  /* Night gradient scrim: night 0% to 70%. */
   .scrim {
     position: absolute;
     inset: 0;
     background: var(--scrim);
   }
-  /* Logo and release fill the space; buttons sit in the lower third. */
   .content {
     display: grid;
-    grid-template-rows: 1fr auto;
-    justify-items: center;
-    gap: 32px;
-    padding-block: 104px 12svh;
-  }
-  .center {
-    display: grid;
-    align-content: center;
-    justify-items: center;
-    gap: 28px;
+    justify-items: start;
+    width: 100%;
+    padding: 0 var(--gutter) max(24px, calc(env(safe-area-inset-bottom) + 16px));
   }
   .logo {
     margin: 0;
@@ -119,15 +116,34 @@ const phone = hero.posterPhone;
   }
   .release {
     display: grid;
-    justify-items: center;
-    gap: 10px;
-    margin: 0;
+    justify-items: start;
+    gap: 2px;
+    margin: 14px 0 0;
     max-width: none;
   }
   .out {
-    font-size: clamp(28px, 4vw, 48px);
+    font-size: clamp(22px, 2.6vw, 40px);
   }
   .btn-row {
-    justify-content: center;
+    margin-top: 18px;
+  }
+  @media (min-width: 900px) {
+    .scrim {
+      background: var(--scrim-desktop);
+    }
+    .content {
+      position: absolute;
+      left: 6vw;
+      bottom: 10vh;
+      width: auto;
+      padding: 0;
+    }
+    .release {
+      gap: 6px;
+      margin-top: 20px;
+    }
+    .btn-row {
+      margin-top: 28px;
+    }
   }
 </style>

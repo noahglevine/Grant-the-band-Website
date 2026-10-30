@@ -83,7 +83,7 @@ No browns, no other surfaces. Hairline dividers are cream at low opacity. Text c
 
 ### Layout
 
-- Photo-first. Real photos full bleed with a night gradient scrim behind any text: night at 0% to 70% (front-loaded: 70% from 30% of the height down, so over the video the hero logo stays above 3:1 and the gold label above 4.5:1 at their brightest spots). That is the one gradient allowed.
+- Photo-first. Real photos full bleed with a night gradient scrim behind any text, and only behind the text: the middle of the hero frame (the jump) stays clear and bright. Hero scrim on phones runs from the bottom up (`--scrim`), on desktop from the bottom-left corner (`--scrim-desktop`). Tuned so over every frame of the loop the hero logo stays above 3:1 and the gold lines above 4.5:1. That is the one gradient allowed (OG cards use the same night scrim).
 - No empty colored boxes as the main visual. Until photos land, use a single neutral night block, not dashed boxes. Sections without their photo yet (the photo band) stay hidden.
 - Buttons: exactly two styles. Primary = gold fill, night text. Secondary = 1px cream outline. No gold-outline variant (placeholder buttons use the primary style).
 - Section spacing: 96px desktop / 64px phone between sections, nothing taller.
@@ -127,7 +127,7 @@ Confident and dry. No self-deprecation, no hype words, no horn jokes, no em dash
 
 ### Wordmark
 
-Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/site.ts` to swap in the real logo. Hero lockup: "GRANT" in the display face, large and centered, with "the band" in Reenie Beanie (gold) under the right edge; it is the H1, min 90px tall on phones, 140px on desktop. Small header/footer wordmark: "GRANT THE BAND" in display caps, no handwriting. On desktop the hero logo is at most 40% of the viewport width.
+Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/site.ts` to swap in the real logo. Hero lockup: "GRANT" in the display face with "the band" in Reenie Beanie (gold) under the right edge; it is the H1. Phones: at most 70vw wide (15vw font, capped at 9svh by height). Desktop (900px+): at most 30vw wide. Small header/footer wordmark: "GRANT THE BAND" in display caps, no handwriting.
 
 ## Navigation (all pages)
 
@@ -138,9 +138,12 @@ Shows (`/shows`), Music (`/#music`), Video (`/#video`), Newsletter (the signup o
 Use this copy as written. Typographic apostrophes and quotes. Never use em dashes anywhere on the site.
 
 1. Hero: 100svh. The media is a full-bleed background layer behind the logo and buttons ([HERO VIDEO LOOP or PHOTO: full band, golden hour]; until it lands, a neutral night block in that same layer), graded warm, night gradient scrim. Video rules: self-hosted MP4, 6 to 10 sec, under 3 MB, poster image, `playsinline`, prefers-reduced-motion shows the poster.
-   - Centered logo, large. It is the H1.
+   - The jump (Noah mid-air, center of the frame) must stay fully visible on every size, in the loop and the posters. Nothing sits over it.
+   - Desktop (900px+): the content block (logo, label, "OUT EVERYWHERE", buttons) is left-aligned at the bottom-left, 6vw from the left and 10vh from the bottom.
+   - Phones: the content block is anchored to the bottom, left-aligned, logo just above the buttons. On tall phones (9:16 or narrower) the media layer is lifted 10% (ceiling only) so the jump clears the text.
+   - The logo is the H1.
    - Below: gold label "MEROKE LANE", then "OUT EVERYWHERE".
-   - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), in the lower third.
+   - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), under the label.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
 3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (confirmed) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (the Spotify EP), then one row of small text links: Apple Music · YouTube. Text block vertically centered against the cover art.
