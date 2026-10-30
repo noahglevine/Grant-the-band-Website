@@ -96,7 +96,7 @@ Deploy previews only (`CONTEXT === "deploy-preview"`): when there are no real up
 
 Desktop (900px+): tickets in a 2-column grid, each max 540px wide, 48px gap, rotation alternating -2deg / +1.5deg. Phones keep one column with the stub underneath.
 
-Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded corners, perforated stub, labels in copper caps (GRANT THE BAND / LIVE / DATE / SET / LINE / ADMIT ONE / KEEP THIS STUB), venue large in ink `#1E1E1E`, town under it, "LINE: MEROKE LANE" on every ticket, date on the stub (MM/DD), handwritten "see you there" in Reenie Beanie (first ticket only, to keep one handwritten line per screen), -2deg rotation on desktop, 0 on phone. Section title "NEXT STOP.". Hidden when there are no dates.
+Each show renders as the "Next stop." ticket: cream paper `#F3E9D6`, rounded corners, perforated stub, labels in copper caps (GRANT THE BAND / LIVE / DATE / SET / LINE), venue large in ink `#1E1E1E`, town under it, "LINE: MEROKE LANE" on every ticket, the stub carries only the date (MM/DD) and the "No." line (no "ADMIT ONE" or "KEEP THIS STUB"), handwritten "see you there" in Reenie Beanie (first ticket only, to keep one handwritten line per screen), -2deg rotation on desktop, 0 on phone. Section title "NEXT STOP.". Hidden when there are no dates.
 
 ### Signature and credits
 
