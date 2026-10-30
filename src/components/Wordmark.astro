@@ -57,10 +57,12 @@ const Tag = href ? 'a' : 'span';
 
   /* Hero lockup: GRANT wide and centered, "the band" handwritten under the right edge.
      At least 90px tall on phones, 140px on desktop. */
+  /* Hero lockup. GRANT is ~3.9em wide. Phones: at most 70vw wide (15vw is ~58vw), and capped
+     by height so the hero content stays under the jump. Desktop (900px+): at most 30vw wide. */
   .wordmark--hero {
     flex-direction: column;
     align-items: flex-end;
-    font-size: clamp(80px, 22vw, 176px);
+    font-size: min(15vw, 9svh);
   }
   .wm-grant {
     font-family: var(--display);
@@ -77,16 +79,15 @@ const Tag = href ? 'a' : 'span';
     color: var(--gold);
   }
   .wordmark--hero .wm-logo {
-    height: clamp(90px, 22vw, 184px);
+    height: auto;
+    width: min(58vw, 35svh);
   }
-  /* Desktop: never wider than 40% of the viewport. GRANT is ~3.9em wide, so 40vw / 3.9. */
-  @media (min-width: 720px) {
+  @media (min-width: 900px) {
     .wordmark--hero {
-      font-size: min(176px, 10.25vw);
+      font-size: 7.6vw;
     }
     .wordmark--hero .wm-logo {
-      height: auto;
-      width: min(40vw, 640px);
+      width: 30vw;
     }
   }
 </style>
