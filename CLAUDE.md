@@ -23,7 +23,7 @@ Conversions, in priority order:
 - Netlify Forms for the booking form (no backend)
 - Email signup: Kit. Our own styled form (`Signup.astro`, every variant) POSTs via fetch to `https://app.kit.com/forms/10116057/subscriptions` (field `email_address`, form uid 2dc4489060). No Kit script, no Kit styling. Success: "Check your inbox to confirm." Error: "That didn’t go through. Try again." Without JS it falls back to a plain POST to Kit.
 - YouTube clips as click-to-load facades (lite-youtube or equivalent, pinned version). No iframes on first load.
-- No Instagram feed embed. No trackers beyond Cloudflare Web Analytics: `cloudflareAnalyticsToken` in `site.ts`, beacon script on production only, nothing until the token is set.
+- No Instagram feed embed. The one third-party embed on first scroll is the Spotify player in the Music section (Noah's call; it sets Spotify's own cookies once it loads). No trackers beyond Cloudflare Web Analytics: `cloudflareAnalyticsToken` in `site.ts`, beacon script on production only, nothing until the token is set.
 - Keep dependencies minimal. Pin versions.
 
 ## Pages (4, plus a 404)
@@ -146,7 +146,10 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), under the label.
    - No tagline, no location line, no sub paragraph.
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
-3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the EP tracklist as a quiet numbered list in Spotify order: 1. “Meroke” (confirmed) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”, one gold primary "Listen" button (the Spotify EP), then one row of small text links: Apple Music · YouTube. Text block vertically centered against the cover art.
+3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the Spotify player for the EP (`links.merokeLaneEmbed`, dark theme, 352px tall, full width of the text column, title "Listen to Meroke Lane on Spotify", no autoplay), one gold primary "Listen" button (the Spotify EP), then one row of small text links: Apple Music · YouTube. Text block vertically centered against the cover art.
+   - The player is injected only when the section is within ~400px of the viewport (IntersectionObserver), with `loading="lazy"`, after a no-cors check that Spotify is reachable. Its 352px is reserved so nothing shifts. Hero and first paint load nothing from Spotify.
+   - Fallback (JS off, Spotify blocked or not loaded in 10s): the numbered tracklist in Spotify order (Spotify is the source of truth): 1. “Meroke” 2. “Horizon” 3. “Peace of Mind” 4. “Waking Up” 5. “Man on a Train”.
+   - Home only. Never on /now (keep it instant).
 4. Video (`#video`): title "LIVE". Three clip cards (YouTube IDs in `site.ts`, from ASSETS.md), song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Around the Moon” / Live at 89 North; Full show (no quotes, not a song) / Live at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
