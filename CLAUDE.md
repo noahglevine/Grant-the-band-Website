@@ -148,7 +148,7 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
 2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
 3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the Spotify player for the EP (`links.merokeLaneEmbed`, dark theme, 352px tall, full width of the text column, title "Listen to Meroke Lane on Spotify", no autoplay), one gold primary "Listen" button (the Spotify EP), then one row of small text links: Apple Music · YouTube. Text block vertically centered against the cover art.
    - The player is injected only when the section is within ~400px of the viewport (IntersectionObserver), with `loading="lazy"`, after a no-cors check that Spotify is reachable. Its 352px is reserved so nothing shifts. Hero and first paint load nothing from Spotify.
-   - Fallback (JS off, Spotify blocked or not loaded in 10s): the numbered tracklist in Spotify order: 1. “Meroke” (confirmed) 2. “Man on a Train” 3. “Waking Up” 4. “Horizon” 5. “Peace of Mind”.
+   - Fallback (JS off, Spotify blocked or not loaded in 10s): the numbered tracklist in Spotify order (Spotify is the source of truth): 1. “Meroke” 2. “Horizon” 3. “Peace of Mind” 4. “Waking Up” 5. “Man on a Train”.
    - Home only. Never on /now (keep it instant).
 4. Video (`#video`): title "LIVE". Three clip cards (YouTube IDs in `site.ts`, from ASSETS.md), song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Around the Moon” / Live at 89 North; Full show (no quotes, not a song) / Live at Cooper Bluff. Link "More on YouTube".
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.

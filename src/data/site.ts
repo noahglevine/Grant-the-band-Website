@@ -143,8 +143,8 @@ const photosInUse: (Photo | null)[] = [hero.posterDesktop, hero.posterPhone, pho
 export const ep = {
   title: 'Meroke Lane',
   cover: photos.cover as Photo | null,
-  // EP tracklist in Spotify order (track 1 confirmed by Noah).
-  tracks: ['Meroke', 'Man on a Train', 'Waking Up', 'Horizon', 'Peace of Mind'],
+  // EP tracklist in Spotify order (Spotify is the source of truth, confirmed by Noah).
+  tracks: ['Meroke', 'Horizon', 'Peace of Mind', 'Waking Up', 'Man on a Train'],
 };
 
 export type Clip = {
