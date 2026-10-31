@@ -53,3 +53,9 @@
   for = "/_astro/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# "Add to calendar" files: served as calendars so phones offer to add the event.
+[[headers]]
+  for = "/calendar/*"
+  [headers.values]
+    Content-Type = "text/calendar; charset=utf-8"

@@ -5,6 +5,7 @@ export type Show = {
   time: string; // HH:MM, 24h
   venue: string;
   town: string; // "Amagansett, NY"
+  address?: string; // street address, "396 New York Ave"
   url: string;
   endTime?: string; // HH:MM, 24h, optional
   sample?: boolean; // deploy-preview sample: date unknown, never on production
@@ -80,6 +81,58 @@ export function formatSet(show: Show): string {
   return `${sameHalf ? start.slice(0, -3) : start} - ${end}`;
 }
 
+// URL-safe id for a show: "2026-12-11-nags-head-ale-house".
+export function showSlug(show: Show): string {
+  const name = show.venue
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[’']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return `${show.date}-${name}`;
+}
+
+const placeLine = (show: Show) => [show.venue, show.address, show.town].filter(Boolean).join(', ');
+
+// Google Maps search for the venue and its street address.
+export function directionsUrl(show: Show): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(placeLine(show))}`;
+}
+
+// The show's calendar file, built by src/pages/calendar/[slug].ics.ts.
+export function calendarPath(show: Show): string {
+  return `/calendar/${showSlug(show)}.ics`;
+}
+
+const SET_HOURS = 3;
+
+// One VEVENT, 3 hours from the set time (or 8pm if no time), times in UTC.
+export function calendarIcs(show: Show, siteUrl: string, now = new Date()): string {
+  const time = show.time || '20:00';
+  const start = new Date(`${show.date}T${time}:00${nyOffset(show.date, time)}`);
+  const end = new Date(start.getTime() + SET_HOURS * 3600 * 1000);
+  const stamp = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const text = (s: string) => s.replace(/\\/g, '\\\\').replace(/([,;])/g, '\\$1').replace(/\n/g, '\\n');
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//GRANT the band//granttheband.com//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${showSlug(show)}@granttheband.com`,
+    `DTSTAMP:${stamp(now)}`,
+    `DTSTART:${stamp(start)}`,
+    `DTEND:${stamp(end)}`,
+    `SUMMARY:${text(`GRANT the band at ${show.venue}`)}`,
+    `LOCATION:${text(placeLine(show))}`,
+    `URL:${siteUrl}/shows`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+    '',
+  ].join('\r\n');
+}
+
 // Real shows only: samples have no date and must never reach search engines.
 export function showsJsonLd(shows: Show[], siteUrl: string) {
   return shows.filter((s) => !s.sample).map((s) => musicEventJsonLd(s, siteUrl));
@@ -99,11 +152,13 @@ export function musicEventJsonLd(show: Show, siteUrl: string) {
       name: show.venue,
       address: {
         '@type': 'PostalAddress',
+        ...(show.address ? { streetAddress: show.address } : {}),
         addressLocality: locality,
         ...(region ? { addressRegion: region } : {}),
         addressCountry: 'US',
       },
     },
+    image: [`${siteUrl}/og/home.png`],
     performer: { '@type': 'MusicGroup', name: 'GRANT the band', url: siteUrl },
     url: show.url || `${siteUrl}/shows`,
   };

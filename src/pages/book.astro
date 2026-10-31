@@ -7,6 +7,7 @@ import BookingForm from '../components/BookingForm.astro';
 import Footer from '../components/Footer.astro';
 import { clips, book, venuesPlayed, press, downloads, photos, srcset } from '../data/site';
 import { showPlaceholders, publicFileExists } from '../lib/env';
+import { upcomingShows, formatDateParts } from '../lib/shows';
 
 // A null value shows a labeled placeholder on previews and drops out on production.
 const owed = (value: string | null, label: string) =>
@@ -22,6 +23,9 @@ const stagePlot = publicFileExists(downloads.stagePlot) ? downloads.stagePlot : 
 const epk = publicFileExists(downloads.epk) ? downloads.epk : null;
 const pressKit = publicFileExists(downloads.kit) ? downloads.kit : null;
 const top = photos.northFullBand;
+// "Next stop" under the intro: the next real show (never a preview sample).
+const nextShow = upcomingShows().find((show) => !show.sample);
+const nextDate = nextShow ? formatDateParts(nextShow.date) : null;
 ---
 
 <Base
@@ -49,36 +53,14 @@ const top = photos.northFullBand;
         <p class="lede">
           Indie rock with a horn section from Long Island. Originals plus the covers people came for. Two summers as the residency band at Cooper Bluff.
         </p>
+        {nextShow && nextDate && (
+          <p class="next">
+            <a href="/shows">Next stop: {nextDate.weekday} {nextDate.month} {nextDate.day}, {nextShow.venue}</a>
+          </p>
+        )}
         <div class="btn-row">
           <a class="btn btn--primary" href="#contact">Contact</a>
           <a class="btn btn--secondary" href="#watch">Watch first</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="formats-title">
-      <div class="wrap">
-        <h2 id="formats-title" class="display h2 title head">Formats</h2>
-        <ul class="formats">
-          {formats.map((f) => (
-            <li>
-              <h3>{f.name}</h3>
-              {f.line && <p class:list={{ 'ph-inline': f.line.ph }}>{f.line.text}</p>}
-            </li>
-          ))}
-        </ul>
-        {setLengths && (
-          <dl class="specs">
-            <dt>Set lengths</dt>
-            <dd class:list={{ 'ph-inline': setLengths.ph }}>{setLengths.text}</dd>
-          </dl>
-        )}
-        <div class="tech">
-          <h3>Tech at a glance</h3>
-          <ul>
-            {book.tech.map((line) => <li>{line}</li>)}
-          </ul>
-          {stagePlot && <a class="plot" href={stagePlot} download>Download stage plot (PDF)</a>}
         </div>
       </div>
     </section>
@@ -124,21 +106,51 @@ const top = photos.northFullBand;
               </figure>
             ))}
           </div>
-          {(epk || pressKit || showPlaceholders) && (
-            <div class="kit">
-              <h3>Press kit</h3>
-              <p>Our EPK, plus photos and logos for your flyers and socials.</p>
-              {epk ? (
-                <a class="btn btn--primary" href={epk} download>Download EPK (PDF)</a>
-              ) : (
-                showPlaceholders && <span class="btn btn--primary ph-btn" aria-disabled="true">Download EPK (PDF) <span class="ph-inline">[EPK PDF]</span></span>
-              )}
-              {pressKit && <a class="kit-all" href={pressKit} download>Full press kit (photos, logos, stage plot)</a>}
-            </div>
-          )}
         </div>
       </div>
     </section>
+
+    <section class="section" aria-labelledby="formats-title">
+      <div class="wrap">
+        <h2 id="formats-title" class="display h2 title head">Formats</h2>
+        <ul class="formats">
+          {formats.map((f) => (
+            <li>
+              <h3>{f.name}</h3>
+              {f.line && <p class:list={{ 'ph-inline': f.line.ph }}>{f.line.text}</p>}
+            </li>
+          ))}
+        </ul>
+        {setLengths && (
+          <dl class="specs">
+            <dt>Set lengths</dt>
+            <dd class:list={{ 'ph-inline': setLengths.ph }}>{setLengths.text}</dd>
+          </dl>
+        )}
+        <div class="tech">
+          <h3>Tech at a glance</h3>
+          <ul>
+            {book.tech.map((line) => <li>{line}</li>)}
+          </ul>
+          {stagePlot && <a class="plot" href={stagePlot} download>Download stage plot (PDF)</a>}
+        </div>
+      </div>
+    </section>
+
+    {(epk || pressKit || showPlaceholders) && (
+      <section class="section" aria-labelledby="kit-title">
+        <div class="wrap kit">
+          <h2 id="kit-title" class="display h2 title head">Press kit</h2>
+          <p>Our EPK, plus photos and logos for your flyers and socials.</p>
+          {epk ? (
+            <a class="btn btn--primary" href={epk} download>Download EPK (PDF)</a>
+          ) : (
+            showPlaceholders && <span class="btn btn--primary ph-btn" aria-disabled="true">Download EPK (PDF) <span class="ph-inline">[EPK PDF]</span></span>
+          )}
+          {pressKit && <a class="kit-all" href={pressKit} download>Full press kit (photos, logos, stage plot)</a>}
+        </div>
+      </section>
+    )}
 
     <section id="contact" class="section" aria-labelledby="contact-title">
       <div class="wrap contact">
@@ -177,6 +189,17 @@ const top = photos.northFullBand;
   }
   .intro .lede {
     margin-bottom: 28px;
+  }
+  .next {
+    margin: -12px 0 24px;
+  }
+  .next a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--gold);
+    font-weight: 500;
+    text-underline-offset: 4px;
   }
   .head {
     margin-bottom: 32px;
@@ -309,20 +332,8 @@ const top = photos.northFullBand;
     text-underline-offset: 4px;
     white-space: nowrap;
   }
-  .kit {
-    margin-top: 48px;
-    padding-top: 32px;
-    border-top: 1px solid var(--hairline);
-  }
-  .kit h3 {
-    font-family: var(--display);
-    font-size: var(--fs-row);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    line-height: 1.2;
-  }
   .kit p {
-    margin: 8px 0 20px;
+    margin: 0 0 20px;
     color: var(--gold);
     font-size: var(--fs-small);
   }

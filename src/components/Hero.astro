@@ -49,8 +49,8 @@ const phone = hero.posterPhone;
       <span class="out display">Out everywhere</span>
     </p>
     <div class="btn-row">
-      <ListenButton />
-      <a class="btn btn--secondary" href="/shows">Shows</a>
+      <ListenButton class="hero-listen" />
+      <a class="btn btn--secondary hero-shows" href="/shows">Shows</a>
     </div>
     {song ? (
       <div class="song" data-spotify={links.manOnATrainSpotify}>
@@ -68,11 +68,19 @@ const phone = hero.posterPhone;
 </section>
 
 <script is:inline>
-  // Play the loop only when motion is welcome; reduced-motion visitors keep the poster and
-  // never download video. Portrait screens get the vertical cut.
+  // Play the loop only when motion and data are welcome. Reduced-motion visitors, Save-Data
+  // (Data Saver / Low Data Mode) and prefers-reduced-data keep the poster and never download
+  // video. Only one file is ever fetched: the vertical cut on portrait screens (phones), the
+  // wide cut otherwise. The <video> has no src until this runs, so nothing preloads.
   (function () {
     var v = document.querySelector('.hero video.loop');
-    if (!v || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var c = navigator.connection;
+    if (
+      !v ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      matchMedia('(prefers-reduced-data: reduce)').matches ||
+      (c && c.saveData)
+    ) return;
     var portrait = matchMedia('(max-aspect-ratio: 1/1)').matches;
     v.src = portrait ? v.dataset.phone : v.dataset.desktop;
     v.addEventListener('playing', function () { v.classList.add('is-playing'); }, { once: true });
@@ -205,6 +213,22 @@ const phone = hero.posterPhone;
   }
   .btn-row {
     margin-top: 18px;
+  }
+  /* Phones: no Listen in the hero (the Music section and the song pill cover listening), so
+     Shows is the one primary button. Desktop keeps Listen + Shows. */
+  @media (max-width: 899px) {
+    .btn-row :global(.hero-listen) {
+      display: none;
+    }
+    .hero-shows {
+      background: var(--gold);
+      color: var(--night);
+      border-color: transparent;
+    }
+    .hero-shows:hover {
+      background: var(--cream);
+      color: var(--night);
+    }
   }
   /* Short phones (iPhone SE size): tighter vertical rhythm so the extra song row doesn't push
      the text up into the jump. */

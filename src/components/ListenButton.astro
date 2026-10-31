@@ -1,6 +1,11 @@
 ---
 // "Listen" goes to Meroke Lane on Spotify.
 import { links } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+const { class: extra } = Astro.props;
 ---
 
-<a class="btn btn--primary" href={links.merokeLaneSpotify} rel="noopener">Listen</a>
+<a class:list={['btn btn--primary', extra]} href={links.merokeLaneSpotify} rel="noopener">Listen</a>

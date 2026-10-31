@@ -1,6 +1,6 @@
 ---
 // One show as the "Next stop." ticket, matched to the approved Canva master.
-import { formatDateParts, formatSet, type Show } from '../lib/shows';
+import { formatDateParts, formatSet, directionsUrl, calendarPath, type Show } from '../lib/shows';
 
 interface Props {
   show: Show;
@@ -50,8 +50,12 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
       <span class="no">No. {d ? `${mm}${dd}` : '[MMDD]'}</span>
     </div>
   </article>
-  {href && (
-    <a class="details" href={href} rel="noopener">Details<span class="visually-hidden">: {show.venue}, {dateLong}</span></a>
+  {!show.sample && (
+    <p class="actions">
+      <a href={directionsUrl(show)} target="_blank" rel="noopener">Directions<span class="visually-hidden"> to {show.venue}</span></a>
+      <a href={calendarPath(show)}>Add to calendar<span class="visually-hidden">: {show.venue}, {dateLong}</span></a>
+      {href && <a href={href} rel="noopener">Details<span class="visually-hidden">: {show.venue}, {dateLong}</span></a>}
+    </p>
   )}
 </li>
 
@@ -169,14 +173,35 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
     right: -12px;
   }
 
-  .details {
+  /* Small text links under the ticket: Directions · Add to calendar (· Details). */
+  /* Quiet gold text links: 15px on phones, 16px from 900px; every link is a 44px tap target. */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px 0 0;
+    max-width: none;
+    font-size: var(--fs-min);
+  }
+  @media (min-width: 900px) {
+    .actions {
+      font-size: var(--fs-small);
+    }
+  }
+  .actions a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
-    margin-top: 10px;
     color: var(--gold);
     font-weight: 500;
     text-underline-offset: 4px;
+  }
+  .actions a + a::before {
+    content: '·';
+    display: inline-block;
+    margin-inline: 10px;
+    color: var(--gold);
+    text-decoration: none;
   }
 
   @media (min-width: 640px) {

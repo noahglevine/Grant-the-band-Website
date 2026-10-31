@@ -40,14 +40,16 @@ Conversions, in priority order:
 
 ```json
 [
-  { "date": "2026-12-05", "time": "20:00", "venue": "The Stephen Talkhouse", "town": "Amagansett, NY", "url": "" }
+  { "date": "2026-12-05", "time": "20:00", "venue": "The Stephen Talkhouse", "address": "161 Main St", "town": "Amagansett, NY", "url": "" }
 ]
 ```
 
 - Upcoming shows only (date >= build date), sorted ascending, on `/shows` and home.
 - Home shows section renders ONLY when there are upcoming dates. When empty, omit it entirely.
 - `/shows` with no upcoming dates: "No dates announced." plus an inline email signup "Get them first."
-- Generate schema.org `MusicEvent` JSON-LD for each upcoming show (home when shown, and `/shows`).
+- `address` is the street address (optional). Nag’s Head Ale House is "396 New York Ave" (Noah to confirm).
+- Generate schema.org `MusicEvent` JSON-LD for each upcoming show (home when shown, and `/shows`), with `streetAddress` (when set) and `image` (`og/home.png`).
+- Under every ticket (/, /shows, /now): small quiet gold text links (15px phone, 16px desktop, 44px tap height) "Directions" (Google Maps search for venue + address + town, new tab) and "Add to calendar" (`/calendar/<date>-<venue>.ics`, built per upcoming show by `src/pages/calendar/[slug].ics.ts`: title "GRANT the band at <venue>", start = date/time, 3h, location = venue + address + town; served as `text/calendar` via `netlify.toml`). "Details" joins them only when `url` is set. No price or door info. Preview sample tickets get no links.
 - `/now` shows the next show in a single row, or hides the row if none.
 
 `src/data/now.json` holds the /now top card: `{ "title": "", "url": "", "poster": "" }`. Updated weekly to match the latest Instagram post.
@@ -135,7 +137,7 @@ Shows (`/shows`), Music (`/#music`), Video (`/#video`), Newsletter (the signup o
 
 ## Back to top (all pages)
 
-`BackToTop.astro`, included in `Base.astro`: a 56px round button fixed bottom-right (night fill, 1px cream outline) with only a cream up-chevron (18px stroke icon) centered in it, `aria-label="Back to top"`. No monogram on it: the GTB monogram lives in the footer only (where it also links to the top). The button fades in only after the hero has scrolled away (on pages without a hero, the first screen) and fades out whenever a ticket, a signup form or a footer (the site footer or /now's) passes through the bottom strip of the screen where it sits, so it never covers them. Both links scroll to the top smoothly (instantly for reduced motion) without adding `#top` to the URL, and move keyboard focus to the page's H1. Without JS the button stays hidden and the footer monogram jumps to `#top` (the `<body>` id).
+`BackToTop.astro`, included in `Base.astro`: a 56px round button fixed bottom-right (night fill, 1px cream outline) with only a cream up-chevron (18px stroke icon) centered in it, `aria-label="Back to top"`. No monogram on it: the GTB monogram lives in the footer only (where it also links to the top). The button fades in only after the hero has scrolled away (on pages without a hero, the first screen) and fades out whenever a ticket (with its links), a signup form or a footer (the site footer or /now's) passes through the bottom strip of the screen where it sits, so it never covers them. Both links scroll to the top smoothly (instantly for reduced motion) without adding `#top` to the URL, and move keyboard focus to the page's H1. Without JS the button stays hidden and the footer monogram jumps to `#top` (the `<body>` id).
 
 ## Home sections and copy
 
@@ -147,7 +149,8 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - Phones: the content block is anchored to the bottom, left-aligned, logo just above the buttons. On tall phones (9:16 or narrower) the media layer is lifted 10% (ceiling only) so the jump clears the text.
    - The logo is the H1.
    - Below: gold label "MEROKE LANE", then "OUT EVERYWHERE".
-   - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), under the label.
+   - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), under the label. Phones (<900px): no Listen in the hero; "Shows" is the one primary (gold) button. Desktop keeps Listen + Shows.
+   - The loop downloads one file only: `hero-phone.mp4` on portrait screens, `hero-desktop.mp4` otherwise. Reduced motion, Save-Data and `prefers-reduced-data` get the poster and no video.
    - Song button: its own row under Listen / Shows (a 44px pill, 16px label, cream outline on a translucent night fill; lighter than the page buttons), reading ▶ Play “Man on a Train” (the ▶ is an inline SVG, not an emoji). On tap it plays `public/audio/hero-song.mp3` (`preload="none"`: nothing is fetched until the tap) over the muted loop, which keeps playing. While it plays the button reads "Pause". When the excerpt ends it becomes a link, "Hear the full song on Spotify", to the track (`links.manOnATrainSpotify`, https://open.spotify.com/track/3Qhvz4YM1P0mKKuur6SoIG), opening in a new tab.
    - The song button renders only once `hero-song.mp3` exists. Until then previews show a placeholder and production shows nothing. No video swap: the hero never replaces the loop.
    - Short phones (max-height 720px) get tighter vertical spacing in the hero text so the extra row doesn't push the wordmark into the jump.
@@ -173,9 +176,11 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 ## /book copy
 
+- Section order: top photo + intro > Watch first > Played + Press > Formats + Tech at a glance > Press kit > Contact.
 - H1: "BOOKING."
 - Full-bleed photo directly under the header: `89north-full-band.jpg`, 50vh phone / 60vh desktop, object-fit cover.
 - "Indie rock with a horn section from Long Island. Originals plus the covers people came for. Two summers as the residency band at Cooper Bluff." (The full venue list lives in Played.)
+- When a real show is coming up, one gold line under the intro links to /shows: "Next stop: <Fri Dec 11>, <venue>".
 - Formats, each with one line under it:
   - Full band with horns: "6-piece with horns. Built for clubs, residencies and outdoor nights."
   - Trio: "Acoustic. Built for private events and acoustic shows."
@@ -188,15 +193,15 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
   1. “Everyone is executing their instrument… top shelf.” Phillip Torvik, producer, reviewing “Man on a Train” on TikTok ("on TikTok" is plain text, no link, by Noah's call).
   2. “High-energy live performances with emotionally charged songwriting.” Rolling Hype, February 2025 · Read the feature (links to https://rollinghype.com/grant-the-band-the-energy-the-originals-and-the-covers-you-cant-miss/, new tab, rel="noopener").
 - Stage plot: "Download stage plot (PDF)" under Tech at a glance, linking `/press/grant-the-band-stage-plot.pdf`. Renders only if that file exists.
-- "Press kit" block under Press: "Our EPK, plus photos and logos for your flyers and socials.", primary button "Download EPK (PDF)" (`/press/grant-the-band-epk.pdf`, the 2-page EPK), then a secondary text link "Full press kit (photos, logos, stage plot)" (`/press/grant-the-band-press-kit.zip`). Each renders only if its file exists.
+- "Press kit" section (its own section, after Formats): "Our EPK, plus photos and logos for your flyers and socials.", primary button "Download EPK (PDF)" (`/press/grant-the-band-epk.pdf`, the 2-page EPK), then a secondary text link "Full press kit (photos, logos, stage plot)" (`/press/grant-the-band-press-kit.zip`). Each renders only if its file exists.
 - `scripts/make_press_kit.py` (Noah's) is the only way the EPK and press kit get built. Run it from the repo root (`pip install reportlab qrcode pillow`, then `python3 scripts/make_press_kit.py`; it downloads Montserrat and Reenie Beanie from raw.githubusercontent.com). It writes `public/press/grant-the-band-epk.pdf` (2 pages) and `public/press/grant-the-band-press-kit.zip`, which unzips to `GRANT-the-band-Press-Kit/` with the EPK, the stage plot, Photos/, Logos/ (monogram, light and dark wordmarks), Music/ (EP cover) and Bio.txt. Commit both outputs. Rerun it whenever venues, photos, press, formats or the tracklist change: its copy lives in the script, not in `site.ts`. `npm run build` never runs it. The stage plot PDF is Noah's file, used as-is.
-- Contact: "Email contact@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
+- Contact: "Email contact@granttheband.com with the date, the room and your budget. We answer within a day." Plus a Netlify form, fields in this order: name, email, phone (optional, `type="tel"`), date, venue or event type (placeholder "Club, private event, wedding, festival"), budget, message. Honeypot field is visually hidden and aria-hidden.
 - No fan signup block on /book. The page is for buyers only.
 - Do not add a band member photo grid. The lineup rotates.
 
 ## /now
 
-Single phone-width column: wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
+Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
 
 ## Links
 
