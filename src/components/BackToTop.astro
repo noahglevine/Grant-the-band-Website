@@ -14,7 +14,7 @@
   const btn = document.querySelector<HTMLAnchorElement>('[data-to-top]');
   if (btn) {
     // What the button must never sit on.
-    const AVOID = '.ticket, .signup .form, .site-footer, [data-page-end]';
+    const AVOID = '.ticket-item, .signup .form, .site-footer, [data-page-end]';
     const hero = document.querySelector<HTMLElement>('.hero');
     let pastHero = false;
     const under = new Set<Element>();
