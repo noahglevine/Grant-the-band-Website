@@ -174,13 +174,19 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
   }
 
   /* Small text links under the ticket: Directions · Add to calendar (· Details). */
+  /* Quiet gold text links: 15px on phones, 16px from 900px; every link is a 44px tap target. */
   .actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     margin: 10px 0 0;
     max-width: none;
-    font-size: var(--fs-small);
+    font-size: var(--fs-min);
+  }
+  @media (min-width: 900px) {
+    .actions {
+      font-size: var(--fs-small);
+    }
   }
   .actions a {
     display: inline-flex;

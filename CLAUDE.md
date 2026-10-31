@@ -49,7 +49,7 @@ Conversions, in priority order:
 - `/shows` with no upcoming dates: "No dates announced." plus an inline email signup "Get them first."
 - `address` is the street address (optional). Nag’s Head Ale House is "396 New York Ave" (Noah to confirm).
 - Generate schema.org `MusicEvent` JSON-LD for each upcoming show (home when shown, and `/shows`), with `streetAddress` (when set) and `image` (`og/home.png`).
-- Under every ticket (/, /shows, /now): small gold text links "Directions" (Google Maps search for venue + address + town, new tab) and "Add to calendar" (`/calendar/<date>-<venue>.ics`, built per upcoming show by `src/pages/calendar/[slug].ics.ts`: title "GRANT the band at <venue>", start = date/time, 3h, location = venue + address + town; served as `text/calendar` via `netlify.toml`). "Details" joins them only when `url` is set. No price or door info. Preview sample tickets get no links.
+- Under every ticket (/, /shows, /now): small quiet gold text links (15px phone, 16px desktop, 44px tap height) "Directions" (Google Maps search for venue + address + town, new tab) and "Add to calendar" (`/calendar/<date>-<venue>.ics`, built per upcoming show by `src/pages/calendar/[slug].ics.ts`: title "GRANT the band at <venue>", start = date/time, 3h, location = venue + address + town; served as `text/calendar` via `netlify.toml`). "Details" joins them only when `url` is set. No price or door info. Preview sample tickets get no links.
 - `/now` shows the next show in a single row, or hides the row if none.
 
 `src/data/now.json` holds the /now top card: `{ "title": "", "url": "", "poster": "" }`. Updated weekly to match the latest Instagram post.
