@@ -5,6 +5,7 @@ import '../styles/global.css';
 import montserratLatin from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2?url';
 import { SITE_URL, searchConsoleToken, cloudflareAnalyticsToken } from '../data/site';
 import { isProduction } from '../lib/env';
+import BackToTop from '../components/BackToTop.astro';
 
 interface Props {
   title: string;
@@ -51,7 +52,8 @@ const ogUrl = new URL(ogImage, SITE_URL).href;
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
     {cfBeacon && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={cfBeacon} />}
   </head>
-  <body>
+  <body id="top">
     <slot />
+    <BackToTop />
   </body>
 </html>

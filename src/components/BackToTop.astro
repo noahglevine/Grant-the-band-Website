@@ -1,0 +1,101 @@
+---
+// Back to top: a small round button with the GTB monogram, bottom-right on every page.
+// Appears once the first screen has scrolled away, hides when the footer is in view (the
+// footer monogram takes over there). Without JS it never shows; the footer link still works.
+import { monogram } from '../data/site';
+---
+
+<a class="to-top" href="#top" aria-label="Back to top" data-to-top>
+  <svg class="chev" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+  <img class="mono" src={monogram.svg} alt="" width="30" height="30" />
+</a>
+
+<script>
+  const btn = document.querySelector<HTMLAnchorElement>('[data-to-top]');
+  // The site footer, or the end of /now (its own short footer).
+  const footer = document.querySelector('.site-footer, [data-page-end]');
+  if (btn) {
+    let pastFold = false;
+    let atFooter = false;
+    const update = () => btn.classList.toggle('is-visible', pastFold && !atFooter);
+    const onScroll = () => {
+      const next = scrollY > innerHeight * 0.9;
+      if (next !== pastFold) {
+        pastFold = next;
+        update();
+      }
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    if (footer) {
+      new IntersectionObserver((entries) => {
+        atFooter = entries[0].isIntersecting;
+        update();
+      }).observe(footer);
+    }
+  }
+
+  // Every "#top" link (this button and the footer monogram) scrolls up without adding #top to
+  // the URL, then moves keyboard focus to the page's H1.
+  document.querySelectorAll<HTMLAnchorElement>('a[href="#top"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' });
+      const h1 = document.querySelector<HTMLElement>('main h1');
+      if (h1) {
+        h1.setAttribute('tabindex', '-1');
+        h1.focus({ preventScroll: true });
+      }
+    });
+  });
+</script>
+
+<style>
+  .to-top {
+    position: fixed;
+    right: var(--gutter);
+    bottom: max(16px, calc(env(safe-area-inset-bottom) + 12px));
+    z-index: 15;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0;
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--cream);
+    border-radius: 50%;
+    background: rgb(16 21 28 / 0.8);
+    color: var(--cream);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition:
+      opacity 0.2s,
+      transform 0.2s,
+      visibility 0.2s,
+      border-color 0.15s;
+  }
+  .to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .to-top:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .chev {
+    margin-bottom: -4px;
+    color: var(--gold);
+  }
+  .mono {
+    width: 30px;
+    height: 30px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .to-top {
+      transition: none;
+    }
+  }
+</style>

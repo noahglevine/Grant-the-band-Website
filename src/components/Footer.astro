@@ -31,7 +31,7 @@ const credits = creditsInUse();
     )}
     <div class="base">
       <p class="legal">© 2026 GRANT the band</p>
-      <img class="monogram" src={monogram.svg} alt="GTB" width="56" height="56" />
+      <a class="top-link" href="#top" aria-label="Back to top"><img class="monogram" src={monogram.svg} alt="" width="56" height="56" /></a>
     </div>
   </div>
 </footer>
@@ -96,6 +96,10 @@ const credits = creditsInUse();
     margin: 0;
     color: var(--gold);
     font-size: var(--fs-small);
+  }
+  .top-link {
+    display: block;
+    border-radius: 50%;
   }
   .monogram {
     width: 56px;
