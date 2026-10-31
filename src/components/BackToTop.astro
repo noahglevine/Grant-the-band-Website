@@ -1,38 +1,55 @@
 ---
-// Back to top: a small round button with the GTB monogram, bottom-right on every page.
-// Appears once the first screen has scrolled away, hides when the footer is in view (the
-// footer monogram takes over there). Without JS it never shows; the footer link still works.
-import { monogram } from '../data/site';
+// Back to top: a round outlined button with a cream up-chevron, bottom-right on every page.
+// It fades in only once the hero (or, on pages without one, the first screen) has scrolled
+// away, and fades out whenever a ticket, a signup form or a footer passes through the strip
+// at the bottom of the screen where it sits, so it never covers them. Without JS it never
+// shows; the footer monogram still links to the top.
 ---
 
 <a class="to-top" href="#top" aria-label="Back to top" data-to-top>
-  <svg class="chev" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
-  <img class="mono" src={monogram.svg} alt="" width="30" height="30" />
+  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 15l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
 </a>
 
 <script>
   const btn = document.querySelector<HTMLAnchorElement>('[data-to-top]');
-  // The site footer, or the end of /now (its own short footer).
-  const footer = document.querySelector('.site-footer, [data-page-end]');
   if (btn) {
-    let pastFold = false;
-    let atFooter = false;
-    const update = () => btn.classList.toggle('is-visible', pastFold && !atFooter);
+    // What the button must never sit on.
+    const AVOID = '.ticket, .signup .form, .site-footer, [data-page-end]';
+    const hero = document.querySelector<HTMLElement>('.hero');
+    let pastHero = false;
+    const under = new Set<Element>();
+    const update = () => btn.classList.toggle('is-visible', pastHero && under.size === 0);
+
     const onScroll = () => {
-      const next = scrollY > innerHeight * 0.9;
-      if (next !== pastFold) {
-        pastFold = next;
+      const fold = hero ? hero.offsetTop + hero.offsetHeight : innerHeight * 0.9;
+      const next = scrollY >= fold - 1;
+      if (next !== pastHero) {
+        pastHero = next;
         update();
       }
     };
     addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    if (footer) {
-      new IntersectionObserver((entries) => {
-        atFooter = entries[0].isIntersecting;
-        update();
-      }).observe(footer);
-    }
+
+    // Watch only the bottom strip of the viewport the button occupies (its height, its offset
+    // and a little air). Rebuilt on resize because the strip is measured in pixels.
+    let io: IntersectionObserver | undefined;
+    const watch = () => {
+      io?.disconnect();
+      under.clear();
+      const r = btn.getBoundingClientRect();
+      const strip = innerHeight - r.top + 16;
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) e.isIntersecting ? under.add(e.target) : under.delete(e.target);
+          update();
+        },
+        { rootMargin: `-${Math.max(0, Math.round(innerHeight - strip))}px 0px 0px 0px` },
+      );
+      document.querySelectorAll(AVOID).forEach((el) => io!.observe(el));
+    };
+    watch();
+    addEventListener('resize', watch);
   }
 
   // Every "#top" link (this button and the footer monogram) scrolls up without adding #top to
@@ -59,8 +76,6 @@ import { monogram } from '../data/site';
     z-index: 15;
     display: grid;
     place-items: center;
-    align-content: center;
-    gap: 0;
     width: 56px;
     height: 56px;
     border: 1px solid var(--cream);
@@ -71,10 +86,11 @@ import { monogram } from '../data/site';
     visibility: hidden;
     transform: translateY(8px);
     transition:
-      opacity 0.2s,
-      transform 0.2s,
-      visibility 0.2s,
-      border-color 0.15s;
+      opacity 0.25s,
+      transform 0.25s,
+      visibility 0.25s,
+      border-color 0.15s,
+      color 0.15s;
   }
   .to-top.is-visible {
     opacity: 1;
@@ -84,14 +100,6 @@ import { monogram } from '../data/site';
   .to-top:hover {
     border-color: var(--gold);
     color: var(--gold);
-  }
-  .chev {
-    margin-bottom: -4px;
-    color: var(--gold);
-  }
-  .mono {
-    width: 30px;
-    height: 30px;
   }
   @media (prefers-reduced-motion: reduce) {
     .to-top {

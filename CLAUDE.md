@@ -135,7 +135,7 @@ Shows (`/shows`), Music (`/#music`), Video (`/#video`), Newsletter (the signup o
 
 ## Back to top (all pages)
 
-`BackToTop.astro`, included in `Base.astro`: a 56px round button fixed bottom-right (night fill, 1px cream outline, gold up chevron over the GTB monogram), `aria-label="Back to top"`. It fades in once the first screen has scrolled away and hides when the footer is in view (the site footer, or /now's own footer). On short pages it never appears. The footer's GTB monogram is also a "back to top" link. Both scroll to the top smoothly (instantly for reduced motion) without adding `#top` to the URL, and move keyboard focus to the page's H1. Without JS the button stays hidden and the footer monogram jumps to `#top` (the `<body>` id).
+`BackToTop.astro`, included in `Base.astro`: a 56px round button fixed bottom-right (night fill, 1px cream outline) with only a cream up-chevron (18px stroke icon) centered in it, `aria-label="Back to top"`. No monogram on it: the GTB monogram lives in the footer only (where it also links to the top). The button fades in only after the hero has scrolled away (on pages without a hero, the first screen) and fades out whenever a ticket, a signup form or a footer (the site footer or /now's) passes through the bottom strip of the screen where it sits, so it never covers them. Both links scroll to the top smoothly (instantly for reduced motion) without adding `#top` to the URL, and move keyboard focus to the page's H1. Without JS the button stays hidden and the footer monogram jumps to `#top` (the `<body>` id).
 
 ## Home sections and copy
 
