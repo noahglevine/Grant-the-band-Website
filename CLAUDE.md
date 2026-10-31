@@ -133,6 +133,10 @@ Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/si
 
 Shows (`/shows`), Music (`/#music`), Video (`/#video`), Newsletter (the signup on the current page, else `/#newsletter`), Booking (`/book`). Phones get a menu button. On home the header carries no wordmark; the hero logo is the headline.
 
+## Back to top (all pages)
+
+`BackToTop.astro`, included in `Base.astro`: a 56px round button fixed bottom-right (night fill, 1px cream outline) with only a cream up-chevron (18px stroke icon) centered in it, `aria-label="Back to top"`. No monogram on it: the GTB monogram lives in the footer only (where it also links to the top). The button fades in only after the hero has scrolled away (on pages without a hero, the first screen) and fades out whenever a ticket, a signup form or a footer (the site footer or /now's) passes through the bottom strip of the screen where it sits, so it never covers them. Both links scroll to the top smoothly (instantly for reduced motion) without adding `#top` to the URL, and move keyboard focus to the page's H1. Without JS the button stays hidden and the footer monogram jumps to `#top` (the `<body>` id).
+
 ## Home sections and copy
 
 Use this copy as written. Typographic apostrophes and quotes. Never use em dashes anywhere on the site.
