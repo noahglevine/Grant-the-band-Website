@@ -13,6 +13,7 @@ export const links = {
   youtube: 'https://www.youtube.com/@GRANTtheband',
   instagram: 'https://www.instagram.com/grant_theband',
   tiktok: 'https://www.tiktok.com/@granttheband',
+  merch: 'https://shop.granttheband.com', // Shopify merch store (Printful). Nav, footer, /now
   appleMusic: 'https://music.apple.com/us/album/meroke-lane-ep/6793211371' as string | null, // the EP
   // Meroke Lane on YouTube. Falls back to the channel until there's a playlist URL.
   merokeLaneYoutube: null as string | null,

@@ -1,5 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
+import { links } from '../data/site';
 
 interface Props {
   // Home: no wordmark (the hero logo is the headline), header sits over the hero.
@@ -14,6 +15,7 @@ const items = [
   { label: 'Shows', href: '/shows' },
   { label: 'Music', href: `${base}#music` },
   { label: 'Video', href: `${base}#video` },
+  { label: 'Merch', href: links.merch },
   { label: 'Newsletter', href: newsletterHref },
   { label: 'Booking', href: '/book' },
 ];

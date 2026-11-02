@@ -133,7 +133,7 @@ Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/si
 
 ## Navigation (all pages)
 
-Shows (`/shows`), Music (`/#music`), Video (`/#video`), Newsletter (the signup on the current page, else `/#newsletter`), Booking (`/book`). Phones get a menu button. On home the header carries no wordmark; the hero logo is the headline.
+Shows (`/shows`), Music (`/#music`), Video (`/#video`), Merch (`links.merch`, https://shop.granttheband.com, the Shopify store), Newsletter (the signup on the current page, else `/#newsletter`), Booking (`/book`). Phones get a menu button. On home the header carries no wordmark; the hero logo is the headline.
 
 ## Back to top (all pages)
 
@@ -164,8 +164,8 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
 
-Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Newsletter, Booking.
-7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Contact: contact@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
+Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Merch, Newsletter, Booking.
+7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Merch: shop.granttheband.com" (links to the store), "Contact: contact@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
@@ -201,7 +201,7 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 ## /now
 
-Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
+Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Watch us live", "Shop merch" (store, with UTM), "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
 
 ## Links
 
@@ -219,9 +219,9 @@ Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark
 /music                 -> /#music
 /video                 -> /#video
 /about                 -> /
-/shop                  -> /
-/category/*            -> /
-/product-page/*        -> /
+/shop                  -> https://shop.granttheband.com
+/category/*            -> https://shop.granttheband.com
+/product-page/*        -> https://shop.granttheband.com
 ```
 
 ## SEO

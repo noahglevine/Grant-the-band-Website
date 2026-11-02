@@ -28,17 +28,17 @@
 
 [[redirects]]
   from = "/shop"
-  to = "/"
+  to = "https://shop.granttheband.com"
   status = 301
 
 [[redirects]]
   from = "/category/*"
-  to = "/"
+  to = "https://shop.granttheband.com"
   status = 301
 
 [[redirects]]
   from = "/product-page/*"
-  to = "/"
+  to = "https://shop.granttheband.com"
   status = 301
 
 [[headers]]
