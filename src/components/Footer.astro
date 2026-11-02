@@ -20,6 +20,7 @@ const credits = creditsInUse();
         <li><a href={s.href} rel="noopener">{s.label}</a></li>
       ))}
     </ul>
+    <p class="merch">Merch: <a href={links.merch} rel="noopener">shop.granttheband.com</a></p>
     {bookingEmail && <p class="booking">Contact: <BookingEmail /></p>}
     {credits.length > 0 && (
       <p class="credits">
@@ -75,6 +76,7 @@ const credits = creditsInUse();
       gap: 0 8px;
     }
   }
+  .merch,
   .booking,
   .credits {
     margin: 0;
