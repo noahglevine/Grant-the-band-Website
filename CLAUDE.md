@@ -164,7 +164,7 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
 5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
 6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
 
-Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Newsletter, Booking.
+Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Merch, Newsletter, Booking.
 7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Merch: shop.granttheband.com" (links to the store), "Contact: contact@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
