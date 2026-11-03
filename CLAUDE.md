@@ -201,7 +201,7 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 ## /now
 
-Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Merch" (`shopUrl`, with UTM), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
+Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; poster in a 4:5 frame, taller posters cropped from 25% down so the jump stays in and the stage floor drops out; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Merch" (`shopUrl`, with UTM), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
 
 ## Links
 
@@ -236,7 +236,7 @@ Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark
 
 ## Placeholders Noah still owes
 
-Logo SVG (the wordmark is still the type version), the hero song excerpt (`public/audio/hero-song.mp3`), `now.json` content, Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
+Logo SVG (the wordmark is still the type version), Search Console token, Cloudflare Web Analytics token. Labeled placeholders show on previews only.
 
 ## Production guard
 

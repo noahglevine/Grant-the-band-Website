@@ -100,8 +100,11 @@ const poster = now.poster || null;
   .card-link img,
   .poster {
     width: 100%;
+    height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
+    /* Taller posters (like the 9:16 hero still) crop a little high: keeps the jump, drops the stage floor. 4:5 posters are unaffected. */
+    object-position: 50% 25%;
     border-radius: 12px;
   }
   .card-title {
