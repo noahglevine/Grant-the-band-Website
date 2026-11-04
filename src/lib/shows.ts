@@ -7,6 +7,7 @@ export type Show = {
   town: string; // "Amagansett, NY"
   address?: string; // street address, "396 New York Ave"
   url: string;
+  ticketsSoon?: boolean; // no ticket link yet: says "Tickets coming soon" until url is set
   endTime?: string; // HH:MM, 24h, optional
   sample?: boolean; // deploy-preview sample: date unknown, never on production
 };

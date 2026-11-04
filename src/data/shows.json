@@ -1,4 +1,4 @@
 [
   { "date": "2026-12-11", "time": "19:00", "venue": "Nag’s Head Ale House", "address": "396 New York Ave", "town": "Huntington, NY", "url": "" },
-  { "date": "2027-02-27", "time": "19:30", "venue": "The Stephen Talkhouse", "address": "161 Main St", "town": "Amagansett, NY", "url": "" }
+  { "date": "2027-02-27", "time": "19:30", "venue": "The Stephen Talkhouse", "address": "161 Main St", "town": "Amagansett, NY", "url": "", "ticketsSoon": true }
 ]

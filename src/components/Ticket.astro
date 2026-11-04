@@ -55,6 +55,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
       <a href={directionsUrl(show)} target="_blank" rel="noopener">Directions<span class="visually-hidden"> to {show.venue}</span></a>
       <a href={calendarPath(show)}>Add to calendar<span class="visually-hidden">: {show.venue}, {dateLong}</span></a>
       {href && <a href={href} rel="noopener">Details<span class="visually-hidden">: {show.venue}, {dateLong}</span></a>}
+      {!href && show.ticketsSoon && <span class="soon">Tickets coming soon</span>}
     </p>
   )}
 </li>
@@ -188,7 +189,8 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
       font-size: var(--fs-small);
     }
   }
-  .actions a {
+  .actions a,
+  .actions .soon {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
@@ -196,12 +198,28 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
     font-weight: 500;
     text-underline-offset: 4px;
   }
-  .actions a + a::before {
+  /* Phones: its own line under the links, no separator. From 900px it joins the row. */
+  .actions .soon {
+    flex-basis: 100%;
+    font-weight: 400;
+  }
+  @media (min-width: 900px) {
+    .actions .soon {
+      flex-basis: auto;
+    }
+  }
+  .actions a + a::before,
+  .actions a + .soon::before {
     content: '·';
     display: inline-block;
     margin-inline: 10px;
     color: var(--gold);
     text-decoration: none;
+  }
+  @media (max-width: 899px) {
+    .actions a + .soon::before {
+      content: none;
+    }
   }
 
   @media (min-width: 640px) {
