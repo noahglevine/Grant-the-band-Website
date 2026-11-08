@@ -70,7 +70,7 @@ const isSwipe = swipe && shows.length > 1;
     }
   }
 
-  /* Under 900px: one row, each ticket 86% of the screen wide (at most 540px) so the next peeks in, snapping into place. The
+  /* Under 900px: one row, each ticket about 80% of the screen (at most 540px) so 40px of the next shows, snapping into place. The
      row runs to the screen edges and keeps the page gutter as its inner padding. */
   @media (max-width: 899px) {
     .tickets--swipe {
@@ -78,7 +78,7 @@ const isSwipe = swipe && shows.length > 1;
          doesn't widen the page. */
       position: relative;
       grid-auto-flow: column;
-      grid-auto-columns: min(86vw, 540px);
+      grid-auto-columns: min(calc(100vw - 72px), 540px); /* 16 gutter + 16 gap + 40 of the next */
       gap: 16px;
       margin-inline: calc(-1 * var(--gutter));
       padding: 4px var(--gutter) 6px;

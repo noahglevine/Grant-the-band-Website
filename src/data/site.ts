@@ -83,6 +83,22 @@ export const photos = {
     alt: 'GRANT the band singer Noah mid-jump with his guitar at the Stephen Talkhouse',
     credit: null,
   },
+  // The home Talkhouse strip: the wide "room" cut of the hero loop (0.4s, blue light) and its
+  // vertical cut, trimmed to Noah and the drummer. Frames from the graded loop: never re-grade.
+  talkhouseRoom: {
+    src: '/images/talkhouse-room.jpg',
+    width: 1920,
+    height: 1080,
+    alt: 'GRANT the band on stage at the Stephen Talkhouse in blue light, the full band and the room',
+    credit: null,
+  },
+  talkhouseRoomPhone: {
+    src: '/images/talkhouse-room-phone.jpg',
+    width: 880,
+    height: 1100,
+    alt: 'GRANT the band singer Noah at the mic with his guitar at the Stephen Talkhouse, the drummer behind him',
+    credit: null,
+  },
   talkhouseStage: {
     src: '/images/talkhouse-stage.jpg',
     small: { src: '/images/sized/talkhouse-stage-1200.jpg', width: 1200 },
@@ -152,7 +168,7 @@ export const hero = {
 export const photoBand: Photo | null = photos.northFullBand;
 
 // Every photo the site renders, for footer credits.
-const photosInUse: (Photo | null)[] = [hero.posterDesktop, hero.posterPhone, photoBand, photos.cover];
+const photosInUse: (Photo | null)[] = [hero.posterDesktop, hero.posterPhone, photoBand, photos.cover, photos.talkhouseRoom, photos.talkhouseRoomPhone];
 
 export const ep = {
   title: 'Meroke Lane',

@@ -1,7 +1,7 @@
 ---
 // The site header. One fixed bar: on home it starts transparent over the hero (no wordmark, the
 // hero logo is the headline) and pins once the hero has scrolled away; on inner pages it is
-// pinned from the start. Pinned: night at 92% with a hairline rule, wordmark left, nav right
+// pinned from the start. Pinned: solid night with a hairline rule, wordmark left, nav right
 // (1024px+), gold "Shows" pill far right, 64px tall (56px on phones). It slides away on scroll
 // down and back on scroll up; with reduced motion it stays put. Phones and tablets (<1024px) get "Menu",
 // which opens the set list: a full-screen overlay with the pages as numbered songs.
@@ -188,7 +188,7 @@ const nextDate = next ? formatDateParts(next.date) : null;
     visibility: hidden;
   }
   .site-header.is-pinned {
-    background: rgb(16 21 28 / 0.92);
+    background: var(--night); /* solid: nothing shows through */
     box-shadow: inset 0 -1px 0 var(--hairline); /* the 1px rule, inside the 64/56px */
   }
   .site-header.is-hidden {
