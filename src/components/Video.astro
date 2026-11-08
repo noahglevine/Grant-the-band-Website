@@ -3,7 +3,9 @@ import ClipFacade from './ClipFacade.astro';
 import { clips, links } from '../data/site';
 ---
 
-<section id="video" class="section" aria-labelledby="video-title">
+<section id="live" class="section" aria-labelledby="video-title">
+  <!-- Old links to /#video (before the nav said "Live") still land here. -->
+  <span id="video" class="old-anchor" aria-hidden="true"></span>
   <div class="wrap">
     <h2 id="video-title" class="display h2 title section-head">Live</h2>
     <div class="clips">
@@ -14,6 +16,9 @@ import { clips, links } from '../data/site';
 </section>
 
 <style>
+  .old-anchor {
+    display: block;
+  }
   .clips {
     display: grid;
     gap: 32px;

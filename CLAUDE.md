@@ -70,6 +70,8 @@ The masters (Canva folder "GRANT the band - Social Templates"): 4:5 and 9:16 Sho
 --copper: #AE5F2A   ticket/print accents only
 ```
 
+Site ticket labels (GRANT THE BAND / LIVE / DATE / SET / LINE) use `--ticket-label` #944F21, copper darkened to 5.13:1 on the ticket paper (AA). #AE5F2A (3.9:1) stays for print (EPK, social templates).
+
 Ticket only: paper `#F3E9D6`, ink `#1E1E1E`.
 No browns, no other surfaces. Hairline dividers are cream at low opacity. Text contrast 4.5:1 or better.
 
@@ -85,7 +87,7 @@ No browns, no other surfaces. Hairline dividers are cream at low opacity. Text c
 
 ### Layout
 
-- Photo-first. Real photos full bleed with a night gradient scrim behind any text, and only behind the text: the middle of the hero frame (the jump) stays clear and bright. Hero scrim on phones runs from the bottom up (`--scrim`), on desktop from the bottom-left corner (`--scrim-desktop`). Tuned so over every frame of the loop the hero logo stays above 3:1 and the gold lines above 4.5:1. That is the one gradient allowed (OG cards use the same night scrim).
+- Photo-first. Real photos full bleed with a night gradient scrim behind any text, and only behind the text: the middle of the hero frame (the jump) stays clear and bright. Hero scrim on phones runs from the bottom up (`--scrim`: ~94% night behind the whole text block, so the neon sign at the stage front doesn't read through the wordmark, fading to 0 by mid-frame), on desktop from the bottom-left corner (`--scrim-desktop`). Tuned so over every frame of the loop the hero logo stays above 3:1 and the gold lines above 4.5:1. That is the one gradient allowed (OG cards use the same night scrim).
 - No empty colored boxes as the main visual. Until photos land, use a single neutral night block, not dashed boxes. Sections without their photo yet (the photo band) stay hidden.
 - Buttons: exactly two styles. Primary = gold fill, night text. Secondary = 1px cream outline. No gold-outline variant (placeholder buttons use the primary style).
 - Section spacing: 96px desktop / 64px phone between sections, nothing taller.
@@ -133,7 +135,10 @@ Lives only in `src/components/Wordmark.astro`; set `wordmarkSvg` in `src/data/si
 
 ## Navigation (all pages)
 
-Shows (`/shows`), Music (`/#music`), Video (`/#video`), Shop (`shopUrl` in `site.ts`, https://shop.granttheband.com, the Shopify store), Newsletter (the signup on the current page, else `/#newsletter`), Booking (`/book`). Phones get a menu button. On home the header carries no wordmark; the hero logo is the headline.
+Shows (`/shows`), Music (`/#music`), Live (`/#live`; the old `#video` anchor still lands there), Shop (`shopUrl` in `site.ts`, https://shop.granttheband.com, the Shopify store), Newsletter (the signup on the current page, else `/#newsletter`), Booking (`/book`).
+
+- One fixed header (`Header.astro`). On home it starts transparent over the hero with no wordmark (the hero logo is the headline) and pins once the hero has scrolled away; inner pages are pinned from the start. Pinned: solid night (#10151C, nothing shows through) with a 1px hairline rule (drawn inside), "GRANT the band" wordmark left (links home), nav right (1024px+), a compact gold "Shows" pill far right (44px, the bar is too slim for the 56px page button). 64px tall from 900px, 56px below. It slides away on scroll down (after ~120px) and back on scroll up; with reduced motion it never hides and nothing animates.
+- Under 1024px: "Menu" opens the set list: a full-screen night overlay with the GTB monogram (links home) and "Close" on top, "tonight’s set" in Reenie Beanie, the six pages as a numbered set list (01 Shows / 02 Music / 03 Live / 04 Shop / 05 Newsletter / 06 Booking, display caps 30px, 60px rows), then "Next stop: <Fri Dec 11> · <venue>" linking to that ticket on /shows, then the social icons. Focus stays inside, Esc closes and returns focus to Menu, the page behind is inert and doesn't scroll. Without JS the nav wraps under the bar.
 
 ## Back to top (all pages)
 
@@ -149,29 +154,32 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
    - Phones: the content block is anchored to the bottom, left-aligned, logo just above the buttons. On tall phones (9:16 or narrower) the media layer is lifted 10% (ceiling only) so the jump clears the text.
    - The logo is the H1.
    - Below: gold label "MEROKE LANE", then "OUT EVERYWHERE".
-   - Buttons: "Listen" (to Meroke Lane on Spotify) and "Shows" (to `/shows`), under the label. Phones (<900px): no Listen in the hero; "Shows" is the one primary (gold) button. Desktop keeps Listen + Shows.
+   - Buttons: "Shows" (to `/shows`) is the one primary (gold) button at every size, then "Listen" (to Meroke Lane on Spotify) as secondary (outline). Phones (<600px): no Listen in the hero (Shows + the song pill). Tablets (upright iPads included) and desktop show Shows + Listen.
    - The loop downloads one file only: `hero-phone.mp4` on portrait screens, `hero-desktop.mp4` otherwise. Reduced motion, Save-Data and `prefers-reduced-data` get the poster and no video.
    - Song button: its own row under Listen / Shows (a 44px pill, 16px label, cream outline on a translucent night fill; lighter than the page buttons), reading ▶ Play “Man on a Train” (the ▶ is an inline SVG, not an emoji). On tap it plays `public/audio/hero-song.mp3` (`preload="none"`: nothing is fetched until the tap) over the muted loop, which keeps playing. While it plays the button reads "Pause". When the excerpt ends it becomes a link, "Hear the full song on Spotify", to the track (`links.manOnATrainSpotify`, https://open.spotify.com/track/3Qhvz4YM1P0mKKuur6SoIG), opening in a new tab.
    - The song button renders only once `hero-song.mp3` exists. Until then previews show a placeholder and production shows nothing. No video swap: the hero never replaces the loop.
    - Short phones (max-height 720px) get tighter vertical spacing in the hero text so the extra row doesn't push the wordmark into the jump.
    - No tagline, no location line, no sub paragraph.
-2. Next stop (only when there are upcoming dates): title "NEXT STOP.", one ticket per show, link to `/shows`.
+2. Next stop (only when there are upcoming dates): title "NEXT STOP.", every upcoming show as a full ticket, equal billing (and each one's MusicEvent JSON-LD). 900px+: two per row, equal size (900 to 1099px use a narrower stub and a 26px venue so two fit). Under 900px: a sideways swipe row (CSS scroll-snap) labelled "Upcoming shows", each ticket about 80% of the screen (`100vw - 72px`, max 540px) so 40px of the next shows, tickets focusable, with position dots under it (44px targets, "Show 1 of 2", the current one gold). One show: a single ticket, no swipe, no dots. Each ticket keeps its Directions / Add to calendar / Tickets coming soon row. Then "Get the dates first" to `#newsletter` (smooth scroll). Each ticket on /shows has the id `<date>-<venue>` (`/shows#2027-02-27-the-stephen-talkhouse`).
 3. Music (`#music`): cover art, title "MEROKE LANE" (heading only, no gold line), the Spotify player for the EP (`links.merokeLaneEmbed`, dark theme, 352px tall, full width of the text column, title "Listen to Meroke Lane on Spotify", no autoplay), one gold primary "Listen" button (the Spotify EP), then one row of small text links: Apple Music · YouTube. Text block vertically centered against the cover art.
    - The player is injected only when the section is within ~400px of the viewport (IntersectionObserver), with `loading="lazy"`, after a no-cors check that Spotify is reachable. Its 352px is reserved so nothing shifts. Hero and first paint load nothing from Spotify.
    - Fallback (JS off, Spotify blocked or not loaded in 10s): the numbered tracklist in Spotify order (Spotify is the source of truth): 1. “Meroke” 2. “Horizon” 3. “Peace of Mind” 4. “Waking Up” 5. “Man on a Train”.
    - Home only. Never on /now (keep it instant).
-4. Video (`#video`): title "LIVE". Three clip cards (YouTube IDs in `site.ts`, from ASSETS.md), song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Around the Moon” / Live at 89 North; Full show (no quotes, not a song) / Live at Cooper Bluff. Link "More on YouTube".
-5. Photo band: full-bleed band photo, no text. Hidden until the photo exists.
-6. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
+4. Shop (`#shop`), after Music: title "SHOP" (amber rule), three products from the store, in this order: GTB Signature Tee, GRANT the band Tee, GTB Signature Hoodie (`shopFeatured` in `site.ts`, title + store handle). Each card: square image (lazy, from Shopify's CDN, srcset), name, price (gold), linking to its product page. Then "Shop all" to the store. Read at build time by `src/lib/shop.ts`: `/products.json` first, then each product's `/products/<handle>.js` (the store-wide feed answers 404 on this store). Anything that fails is left out; nothing back means no section at all. `SHOP_FEED_URL=https://shop.invalid npm run build:production` checks that. Phones: a sideways row (62% cards); 720px+: three across.
+5. Live (`#live`): title "LIVE". Three clip cards (YouTube IDs in `site.ts`, from ASSETS.md), song in quotes plus a gold line: “Man on a Train” / Live at The Stephen Talkhouse; “Around the Moon” / Live at 89 North; Full show (no quotes, not a song) / Live at Cooper Bluff. Link "More on YouTube".
+6. Between Live and the signup, while a Stephen Talkhouse show is upcoming (`FeatureStrip.astro`): the Talkhouse feature strip, full bleed, its own frames from the hero loop (never the hero poster again): `talkhouse-room.jpg`, the wide room cut in blue light, at 21:9 from the top so the neon sign stays out (phones: `talkhouse-room-phone.jpg`, 4:5, Noah and the drummer), under the night scrim from the bottom-left: "Back at The Stephen Talkhouse." (display, section-title size) and "Sat Feb 27 · Amagansett" (gold label). The whole strip links to that ticket on /shows. After the show (the next build), it reverts to the photo band: the 89 North full band, no text.
+7. Newsletter (`#newsletter`): title "FIRST TO KNOW.", gold line "New music and show dates, before anyone else." Email field + "Sign up". Same copy everywhere the signup appears (except the /shows empty state's inline "Get them first.").
 
-Section titles are statements, not category words. Nav labels stay Shows, Music, Video, Shop, Newsletter, Booking.
-7. Footer (every page): small wordmark, Instagram, Spotify, YouTube, TikTok (a 2x2 grid on phones), "Merch: shop.granttheband.com" (links to the store), "Contact: contact@granttheband.com", photo credits, "© 2026 GRANT the band", GTB monogram. No location line.
+Section titles are statements, not category words. Nav labels stay Shows, Music, Live, Shop, Newsletter, Booking.
+8. Footer (every page): small wordmark, the social icon row, "Booking: contact@granttheband.com", "Merch: shop.granttheband.com" (links to the store), "Get the dates first" (to the signup on the page, `/#newsletter` from /book), photo credits, "© 2026 GRANT the band", GTB monogram. No location line. Every footer link is a 44px target.
+
+Social icons (`SocialIcons.astro`, footer and phone menu): one monoline set drawn in the component (Instagram, Spotify, YouTube, TikTok), 24px icons in 44px targets, each `aria-label`led with the platform name, cream (gold on hover).
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 ## /shows
 
-- H1 "Shows". One ticket per upcoming show from shows.json.
+- H1 "Shows". One ticket per upcoming show from shows.json, then a quiet gold "Get the dates first" link to the signup on the page (`#newsletter`).
 - Empty: "No dates announced." + inline signup "Get them first."
 
 ## /book copy
@@ -201,7 +209,7 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 ## /now
 
-Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; poster in a 4:5 frame, taller posters cropped from 25% down so the jump stays in and the stage floor drops out; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Merch" (`shopUrl`, with UTM), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
+Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; a centered gold play button on the poster, same style as the Live clips; under the title a gold "Watch on Instagram" text link, same URL, new tab; poster in a 4:5 frame, taller posters cropped from 25% down so the jump stays in and the stage floor drops out; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Merch" (`shopUrl`, with UTM), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
 
 ## Links
 
@@ -217,7 +225,7 @@ Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark
 ```
 /book-online           -> /book
 /music                 -> /#music
-/video                 -> /#video
+/video                 -> /#live
 /about                 -> /
 /shop                  -> https://shop.granttheband.com
 /category/*            -> https://shop.granttheband.com
@@ -248,6 +256,7 @@ On `CONTEXT === "production"` nothing unfinished renders: no [BRACKETED] text, n
 - Never self-deprecating, never apologetic, never defensive. No jokes at the band's expense.
 - No em dashes. No try-hard or corporate copy. No begging CTAs.
 - Never promote Encore or any app. No family, day job or personal details.
+- Talkhouse promo (Feb 27): no close-ups of the Feb 2026 Talkhouse trombonist or lead guitarist. The strip's wide frame shows them small and full length; its phone frame leaves them out.
 - Never fake live footage. No AI-generated visuals on the site. One exception, approved by Noah: the released Meroke Lane EP cover, which Canva's Content Credentials list as made with Canva AI. It is the official release artwork, used unaltered with its credentials intact. Nothing else AI-made.
 
 ## Phases
@@ -265,14 +274,15 @@ On `CONTEXT === "production"` nothing unfinished renders: no [BRACKETED] text, n
 - Clean URLs without trailing slashes (`build.format: 'file'`, `trailingSlash: 'never'`).
 - "Upcoming" shows are computed at build time in America/New_York, so a show stays listed through its own day. Needs a rebuild after show dates pass (daily build hook planned for Phase 2).
 - "Details" on a show row renders only when `url` is set.
-- `/now` has its own compact signup at the bottom; "Get show dates" jumps to it. "Watch us live" goes to `/#video` (internal, no UTM).
+- `/now` has its own compact signup at the bottom; "Get show dates" jumps to it. "Watch us live" goes to `/#live` (internal, no UTM).
 - YouTube facade is a small in-repo custom element (`ClipFacade.astro`), using youtube-nocookie on click.
 - `npm run build` runs `scripts/check-copy.mjs` first and fails on em dashes or "unforgettable".
 - OG images (band photo + scrim + lockup) and favicons (monogram on night) render from `scripts/make-images.cjs`.
 
 ## Ongoing maintenance
 
-- After every change on a PR branch: `npm run build:preview && npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/`, `/book`, `/now`, `/shows` and `/404` at 390x844, 1312x634 (laptop) and 1440x900 to `screenshots/` (`<page>-<width>.png`: home, book, now, shows, 404 × 390, 1312, 1440). Build with `CONTEXT=deploy-preview` so the sample tickets show, as on the preview. Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
+- Tap targets: every link is at least 44px tall. The header and footer wordmark links and /book's "Read the feature" get it from padding (offset by negative margin), so the type and the layout don't move.
+- After every change on a PR branch: `npm run build:preview && npm run screenshots`. For other sizes or pages: `SCREENSHOT_SIZES=393x852,1194x834 SCREENSHOT_PAGES=home,now npm run screenshots`. That writes full-page Playwright (headless Chromium) screenshots of `/`, `/book`, `/now`, `/shows` and `/404` at 390x844, 1312x634 (laptop) and 1440x900 to `screenshots/` (`<page>-<width>.png`: home, book, now, shows, 404 × 390, 1312, 1440). Build with `CONTEXT=deploy-preview` so the sample tickets show, as on the preview. Commit them with the change and list the file names in a PR comment. The script fails on horizontal overflow. If a headless browser can't run in the environment, say so to Noah instead of skipping.
 
 - New show: Noah says "add 12/5 Talkhouse 8pm". Edit shows.json on a branch, open a PR, merge after Noah approves the preview.
 - Weekly: update now.json to the latest post.

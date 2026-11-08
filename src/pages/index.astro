@@ -5,7 +5,8 @@ import Hero from '../components/Hero.astro';
 import TicketList from '../components/TicketList.astro';
 import Music from '../components/Music.astro';
 import Video from '../components/Video.astro';
-import PhotoBand from '../components/PhotoBand.astro';
+import FeatureStrip from '../components/FeatureStrip.astro';
+import ShopRow from '../components/ShopRow.astro';
 import Signup from '../components/Signup.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_URL, links, ep } from '../data/site';
@@ -45,25 +46,30 @@ const jsonLd = [musicGroup, ...showsJsonLd(shows, SITE_URL)];
       <section id="shows" class="section" aria-labelledby="shows-title">
         <div class="wrap">
           <h2 id="shows-title" class="display h2 title section-head">Next stop.</h2>
-          <TicketList shows={shows} />
-          <p class="all"><a href="/shows">All dates</a></p>
+          <TicketList shows={shows} swipe />
+          <p class="more" data-avoid-to-top>
+            <a href="#newsletter">Get the dates first</a>
+          </p>
         </div>
       </section>
     )}
 
     <Music />
+    <ShopRow />
     <Video />
-    <PhotoBand />
+    <FeatureStrip />
     <Signup />
   </main>
   <Footer />
 </Base>
 
 <style>
-  .all {
-    margin: 32px 0 0;
+  /* "Get the dates first": quiet gold text link, 44px tall. */
+  .more {
+    margin: 24px 0 0;
+    max-width: none;
   }
-  .all a {
+  .more a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;

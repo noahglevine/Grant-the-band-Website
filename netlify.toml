@@ -18,7 +18,7 @@
 
 [[redirects]]
   from = "/video"
-  to = "/#video"
+  to = "/#live"
   status = 301
 
 [[redirects]]

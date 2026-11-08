@@ -32,6 +32,8 @@ Video credit: MISSING (who shot and edited the Talkhouse multi-cam).
 |---|---|---|---|---|
 | `hero-desktop-poster.jpg` | 1920x1080 | 272 KB | see video | GRANT the band on stage at the Stephen Talkhouse, Noah mid-jump with his guitar (the jump at its peak, 9:01.74) |
 | `hero-phone-poster.jpg` | 1080x1920 | 226 KB | see video | GRANT singer Noah mid-jump with his guitar at the Stephen Talkhouse (vertical crop, same frame) |
+| `talkhouse-room.jpg` | 1920x1080 | 262 KB | see video | GRANT the band on stage at the Stephen Talkhouse in blue light, the full band and the room (frame at 0.4s of `hero-desktop.mp4`, the wide cut; home Talkhouse strip, shown at 21:9 from the top) |
+| `talkhouse-room-phone.jpg` | 880x1100 | 115 KB | see video | GRANT the band singer Noah at the mic with his guitar at the Stephen Talkhouse, the drummer behind him (frame at 0.4s of `hero-phone.mp4`, cut to 4:5 at x200-1080, y400-1500 to leave the trombonist out; home Talkhouse strip on phones) |
 | `talkhouse-stage.jpg` | 2400x1600 | 538 KB | MISSING | GRANT the band on stage at the Stephen Talkhouse under green light |
 | `talkhouse-noah.jpg` | 1600x2400 (portrait) | 521 KB | MISSING | GRANT singer Noah at the mic with an acoustic guitar, drummer behind |
 | `talkhouse-drums.jpg` | 2400x1600 | 539 KB | MISSING | GRANT's drummer laughing behind the kit in purple light |

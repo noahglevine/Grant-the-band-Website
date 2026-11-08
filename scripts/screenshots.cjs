@@ -2,6 +2,7 @@
 // saved to screenshots/. Serves the built dist/ itself, so build first; use
 // `npm run build:preview` so the deploy-preview sample tickets show.
 // Run: node scripts/screenshots.cjs   (needs Playwright; not a project dependency)
+// Other sizes or pages for a review: SCREENSHOT_SIZES=393x852,1194x834 SCREENSHOT_PAGES=home,now
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
@@ -11,18 +12,28 @@ const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
 const out = path.join(root, 'screenshots');
 
-const pages = [
+const allPages = [
   { name: 'home', path: '/' },
   { name: 'book', path: '/book' },
   { name: 'now', path: '/now' },
   { name: 'shows', path: '/shows' },
   { name: '404', path: '/404' },
 ];
-const widths = [
+const defaultWidths = [
   { width: 390, height: 844 },
   { width: 1312, height: 634 },
   { width: 1440, height: 900 },
 ];
+
+const pickPages = (process.env.SCREENSHOT_PAGES || '').split(',').filter(Boolean);
+const pages = pickPages.length ? allPages.filter((p) => pickPages.includes(p.name)) : allPages;
+const sizes = (process.env.SCREENSHOT_SIZES || '').split(',').filter(Boolean);
+const widths = sizes.length
+  ? sizes.map((s) => {
+      const [width, height] = s.split('x').map(Number);
+      return { width, height };
+    })
+  : defaultWidths;
 
 const types = {
   '.html': 'text/html; charset=utf-8',

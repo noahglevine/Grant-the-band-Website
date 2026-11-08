@@ -21,6 +21,14 @@ export const links = {
 // Shopify merch store (Printful). Nav "Shop", footer, /now "Merch".
 export const shopUrl = 'https://shop.granttheband.com';
 
+// The home Shop row: these three, in this order, read from the store at build time.
+// `handle` is the product's URL slug on the store (it kept its original slug when renamed).
+export const shopFeatured = [
+  { title: 'GTB Signature Tee', handle: 'short-sleeve-unisex-t-shirt-gtb-signature' },
+  { title: 'GRANT the band Tee', handle: 'short-sleeve-unisex-grant-the-band-t-shirt' },
+  { title: 'GTB Signature Hoodie', handle: 'unisex-hoodie-gtb-signature' },
+];
+
 export const bookingEmail = 'contact@granttheband.com' as string | null;
 
 // Real logo, when Noah sends it: drop the SVG in public/ and set the path here.
@@ -73,6 +81,22 @@ export const photos = {
     width: 1080,
     height: 1920,
     alt: 'GRANT the band singer Noah mid-jump with his guitar at the Stephen Talkhouse',
+    credit: null,
+  },
+  // The home Talkhouse strip: the wide "room" cut of the hero loop (0.4s, blue light) and its
+  // vertical cut, trimmed to Noah and the drummer. Frames from the graded loop: never re-grade.
+  talkhouseRoom: {
+    src: '/images/talkhouse-room.jpg',
+    width: 1920,
+    height: 1080,
+    alt: 'GRANT the band on stage at the Stephen Talkhouse in blue light, the full band and the room',
+    credit: null,
+  },
+  talkhouseRoomPhone: {
+    src: '/images/talkhouse-room-phone.jpg',
+    width: 880,
+    height: 1100,
+    alt: 'GRANT the band singer Noah at the mic with his guitar at the Stephen Talkhouse, the drummer behind him',
     credit: null,
   },
   talkhouseStage: {
@@ -144,7 +168,7 @@ export const hero = {
 export const photoBand: Photo | null = photos.northFullBand;
 
 // Every photo the site renders, for footer credits.
-const photosInUse: (Photo | null)[] = [hero.posterDesktop, hero.posterPhone, photoBand, photos.cover];
+const photosInUse: (Photo | null)[] = [hero.posterDesktop, hero.posterPhone, photoBand, photos.cover, photos.talkhouseRoom, photos.talkhouseRoomPhone];
 
 export const ep = {
   title: 'Meroke Lane',

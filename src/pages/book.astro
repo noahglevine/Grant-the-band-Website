@@ -165,7 +165,7 @@ const nextDate = nextShow ? formatDateParts(nextShow.date) : null;
     </section>
 
   </main>
-  <Footer />
+  <Footer signupHref="/#newsletter" />
 </Base>
 
 <style>
@@ -327,7 +327,11 @@ const nextDate = nextShow ? formatDateParts(nextShow.date) : null;
     color: var(--gold);
     font-size: var(--fs-small);
   }
+  /* "Read the feature": 44px tap height from padding, same type. */
   figcaption a {
+    display: inline-block;
+    padding-block: calc((44px - 1lh) / 2);
+    margin-block: calc((1lh - 44px) / 2); /* the caption keeps its line height */
     color: var(--gold);
     text-underline-offset: 4px;
     white-space: nowrap;

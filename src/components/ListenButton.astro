@@ -4,8 +4,10 @@ import { links } from '../data/site';
 
 interface Props {
   class?: string;
+  // The hero shows Listen as the secondary next to Shows; everywhere else it is primary.
+  variant?: 'primary' | 'secondary';
 }
-const { class: extra } = Astro.props;
+const { class: extra, variant = 'primary' } = Astro.props;
 ---
 
-<a class:list={['btn btn--primary', extra]} href={links.merokeLaneSpotify} rel="noopener">Listen</a>
+<a class:list={['btn', `btn--${variant}`, extra]} href={links.merokeLaneSpotify} rel="noopener">Listen</a>

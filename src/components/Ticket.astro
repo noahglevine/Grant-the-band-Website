@@ -1,14 +1,16 @@
 ---
 // One show as the "Next stop." ticket, matched to the approved Canva master.
-import { formatDateParts, formatSet, directionsUrl, calendarPath, type Show } from '../lib/shows';
+import { formatDateParts, formatSet, directionsUrl, calendarPath, showSlug, type Show } from '../lib/shows';
 
 interface Props {
   show: Show;
   // Max one handwritten line per screen: only the first ticket in a list says it.
   handwritten?: boolean;
   utm?: string;
+  // In home's swipe row each ticket takes focus, so a keyboard can bring it into view.
+  focusable?: boolean;
 }
-const { show, handwritten = false, utm } = Astro.props;
+const { show, handwritten = false, utm, focusable = false } = Astro.props;
 // Preview samples have no date yet: show [DATE] placeholders instead.
 const d = show.sample ? null : formatDateParts(show.date);
 const [, mm, dd] = show.sample ? ['', '', ''] : show.date.split('-');
@@ -18,8 +20,8 @@ const time = formatSet(show);
 const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}${utm}` : show.url;
 ---
 
-<li class="ticket-item">
-  <article class="ticket" aria-label={`GRANT the band live at ${show.venue}, ${show.town}, ${dateLong}${time ? `, ${time}` : ''}`}>
+<li class="ticket-item" id={show.sample ? undefined : showSlug(show)}>
+  <article class="ticket" tabindex={focusable ? 0 : undefined} aria-label={`GRANT the band live at ${show.venue}, ${show.town}, ${dateLong}${time ? `, ${time}` : ''}`}>
     <div class="main">
       <div class="top" aria-hidden="true">
         <span>GRANT the band</span>
@@ -61,6 +63,8 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
 </li>
 
 <style>
+  /* /shows#<date>-<venue> (home's "Also" list) lands below the sticky header through the
+     page's scroll-padding-top. */
   .ticket-item {
     list-style: none;
   }
@@ -81,7 +85,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
   .top,
   dt,
   .cap {
-    color: var(--copper);
+    color: var(--ticket-label);
     font-size: var(--fs-min);
     font-weight: 500;
     letter-spacing: 0.12em;

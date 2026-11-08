@@ -1,35 +1,34 @@
 ---
 import Wordmark from './Wordmark.astro';
 import BookingEmail from './BookingEmail.astro';
-import { links, shopUrl, monogram, creditsInUse, bookingEmail } from '../data/site';
+import SocialIcons from './SocialIcons.astro';
+import { shopUrl, monogram, creditsInUse, bookingEmail } from '../data/site';
 
-const social = [
-  { label: 'Instagram', href: links.instagram },
-  { label: 'Spotify', href: links.spotify },
-  { label: 'YouTube', href: links.youtube },
-  { label: 'TikTok', href: links.tiktok },
-];
+interface Props {
+  // The newsletter signup: on the page where there is one, else home's (/book has none).
+  signupHref?: string;
+}
+const { signupHref = '#newsletter' } = Astro.props;
 const credits = creditsInUse();
 ---
 
 <footer class="site-footer">
   <div class="wrap inner">
     <Wordmark size="lg" />
-    <ul class="social">
-      {social.map((s) => (
-        <li><a href={s.href} rel="noopener">{s.label}</a></li>
-      ))}
-    </ul>
-    <p class="merch">Merch: <a href={shopUrl} rel="noopener">shop.granttheband.com</a></p>
-    {bookingEmail && <p class="booking">Contact: <BookingEmail /></p>}
-    {credits.length > 0 && (
-      <p class="credits">
-        Photos:{' '}
-        {credits.map((c, i) => (
-          <>{i > 0 && ', '}<a href={c.url} rel="noopener">{c.handle}</a></>
-        ))}
-      </p>
-    )}
+    <SocialIcons />
+    <div class="lines">
+      {bookingEmail && <p>Booking: <BookingEmail /></p>}
+      <p>Merch: <a href={shopUrl} rel="noopener">shop.granttheband.com</a></p>
+      <p><a class="signup-link" href={signupHref}>Get the dates first</a></p>
+      {credits.length > 0 && (
+        <p>
+          Photos:{' '}
+          {credits.map((c, i) => (
+            <>{i > 0 && ', '}<a href={c.url} rel="noopener">{c.handle}</a></>
+          ))}
+        </p>
+      )}
+    </div>
     <div class="base">
       <p class="legal">© 2026 GRANT the band</p>
       <a class="top-link" href="#top" aria-label="Back to top"><img class="monogram" src={monogram.svg} alt="" width="56" height="56" /></a>
@@ -47,41 +46,28 @@ const credits = creditsInUse();
     justify-items: start;
     gap: 20px;
   }
-  /* Phones: 2x2 grid so no link wraps onto a line by itself. */
-  .social {
+  .lines {
     display: grid;
-    grid-template-columns: repeat(2, auto);
-    justify-content: start;
-    gap: 0 32px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    gap: 2px;
   }
-  .social a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding-right: 12px;
-    color: var(--cream);
-    font-weight: 500;
-    text-decoration: none;
-  }
-  .social a:hover {
-    color: var(--gold);
-  }
-  @media (min-width: 560px) {
-    .social {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0 8px;
-    }
-  }
-  .merch,
-  .booking,
-  .credits {
+  .lines p {
     margin: 0;
     color: var(--cream);
     font-size: var(--fs-small);
+  }
+  /* Every text link here is a 44px target, from padding, without spreading the lines apart. */
+  .lines :global(a) {
+    display: inline-block;
+    padding-block: calc((44px - 1lh) / 2);
+    margin-block: calc((1lh - 44px) / 2);
+    color: var(--gold);
+    text-underline-offset: 4px;
+  }
+  .lines p {
+    padding-block: 10px;
+  }
+  .signup-link {
+    font-weight: 500;
   }
   .base {
     display: flex;
