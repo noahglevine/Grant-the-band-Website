@@ -7,8 +7,10 @@ interface Props {
   // Max one handwritten line per screen: only the first ticket in a list says it.
   handwritten?: boolean;
   utm?: string;
+  // In home's swipe row each ticket takes focus, so a keyboard can bring it into view.
+  focusable?: boolean;
 }
-const { show, handwritten = false, utm } = Astro.props;
+const { show, handwritten = false, utm, focusable = false } = Astro.props;
 // Preview samples have no date yet: show [DATE] placeholders instead.
 const d = show.sample ? null : formatDateParts(show.date);
 const [, mm, dd] = show.sample ? ['', '', ''] : show.date.split('-');
@@ -19,7 +21,7 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
 ---
 
 <li class="ticket-item" id={show.sample ? undefined : showSlug(show)}>
-  <article class="ticket" aria-label={`GRANT the band live at ${show.venue}, ${show.town}, ${dateLong}${time ? `, ${time}` : ''}`}>
+  <article class="ticket" tabindex={focusable ? 0 : undefined} aria-label={`GRANT the band live at ${show.venue}, ${show.town}, ${dateLong}${time ? `, ${time}` : ''}`}>
     <div class="main">
       <div class="top" aria-hidden="true">
         <span>GRANT the band</span>

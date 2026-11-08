@@ -1,9 +1,16 @@
 ---
+// The site header. One fixed bar: on home it starts transparent over the hero (no wordmark, the
+// hero logo is the headline) and pins once the hero has scrolled away; on inner pages it is
+// pinned from the start. Pinned: night at 92% with a hairline rule, wordmark left, nav right
+// (1024px+), gold "Shows" pill far right, 64px tall (56px on phones). It slides away on scroll
+// down and back on scroll up; with reduced motion it stays put. Phones and tablets (<1024px) get "Menu",
+// which opens the set list: a full-screen overlay with the pages as numbered songs.
 import Wordmark from './Wordmark.astro';
-import { shopUrl } from '../data/site';
+import SocialIcons from './SocialIcons.astro';
+import { shopUrl, monogram } from '../data/site';
+import { upcomingShows, showSlug, formatDateParts } from '../lib/shows';
 
 interface Props {
-  // Home: no wordmark (the hero logo is the headline), header sits over the hero.
   home?: boolean;
   // Where "Newsletter" goes. Pages without a signup (like /book) point at home's.
   newsletterHref?: string;
@@ -14,135 +21,391 @@ const base = home ? '' : '/';
 const items = [
   { label: 'Shows', href: '/shows' },
   { label: 'Music', href: `${base}#music` },
-  { label: 'Video', href: `${base}#video` },
+  { label: 'Live', href: `${base}#live` },
   { label: 'Shop', href: shopUrl },
   { label: 'Newsletter', href: newsletterHref },
   { label: 'Booking', href: '/book' },
 ];
+
+// The set list's last line: the next real show, linking to its ticket on /shows.
+const next = upcomingShows().find((show) => !show.sample);
+const nextDate = next ? formatDateParts(next.date) : null;
 ---
 
-<header class:list={['site-header', { 'site-header--home': home }]} data-header>
+<header class:list={['site-header', home ? 'is-home' : 'is-pinned']} data-header>
   <div class="wrap bar">
-    {home ? <span /> : <Wordmark />}
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
-      Menu
-    </button>
-    <nav id="site-nav" aria-label="Main">
+    <span class="brand"><Wordmark /></span>
+    <nav class="nav" aria-label="Main">
       <ul>
         {items.map((i) => (
           <li><a href={i.href}>{i.label}</a></li>
         ))}
       </ul>
     </nav>
+    <a class="pill" href="/shows">Shows</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-haspopup="dialog" hidden>Menu</button>
   </div>
 </header>
+{!home && <div class="header-space" aria-hidden="true" />}
+
+<div id="site-menu" class="menu" role="dialog" aria-modal="true" aria-labelledby="menu-title" hidden data-menu>
+  <div class="wrap menu-inner">
+    <div class="menu-top">
+      <a class="menu-home" href="/" aria-label="GRANT the band, home"><img src={monogram.svg} alt="" width="44" height="44" /></a>
+      <button class="menu-close" type="button">Close</button>
+    </div>
+    <p id="menu-title" class="menu-title script">tonight’s set</p>
+    <ol class="setlist">
+      {items.map((i, n) => (
+        <li>
+          <a href={i.href}><span class="num" aria-hidden="true">{String(n + 1).padStart(2, '0')}</span><span class="song">{i.label}</span></a>
+        </li>
+      ))}
+    </ol>
+    <div class="menu-foot">
+      {next && nextDate && (
+        <a class="menu-next" href={`/shows#${showSlug(next)}`}>Next stop: {nextDate.weekday} {nextDate.month} {nextDate.day} · {next.venue}</a>
+      )}
+      <SocialIcons />
+    </div>
+  </div>
+</div>
 
 <script>
-  // Phones get a Menu button. Without JS the links simply stay visible.
   const header = document.querySelector<HTMLElement>('[data-header]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
   const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
-  if (header && toggle) {
+  const calm = matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (header) {
+    // Pinning and hide-on-scroll.
+    const hero = document.querySelector<HTMLElement>('.hero');
+    let lastY = scrollY;
+    let downBy = 0;
+    const onScroll = () => {
+      const y = scrollY;
+      if (hero) {
+        const pinned = y > hero.offsetTop + hero.offsetHeight - header.offsetHeight;
+        if (pinned !== header.classList.contains('is-pinned')) {
+          header.classList.toggle('is-pinned', pinned);
+          header.classList.remove('is-hidden');
+          downBy = 0;
+        }
+      }
+      const delta = y - lastY;
+      lastY = y;
+      if (!header.classList.contains('is-pinned') || calm.matches || header.contains(document.activeElement)) {
+        header.classList.remove('is-hidden');
+        return;
+      }
+      if (delta > 0) {
+        downBy += delta;
+        // A little room before it goes, so a short scroll doesn't flicker it.
+        if (downBy > 120 && y > 200) header.classList.add('is-hidden');
+      } else if (delta < -6) {
+        downBy = 0;
+        header.classList.remove('is-hidden');
+      }
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+  }
+
+  if (header && menu && toggle) {
+    // Phones: the set list. Focus stays inside while it's open, Esc closes, the page behind
+    // neither scrolls nor takes focus.
     header.classList.add('is-collapsible');
     toggle.hidden = false;
-    const set = (open: boolean) => {
-      header.classList.toggle('is-open', open);
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.textContent = open ? 'Close' : 'Menu';
+    const closeBtn = menu.querySelector<HTMLButtonElement>('.menu-close')!;
+    const others = () => [...document.body.children].filter((el) => el !== menu && el.tagName !== 'SCRIPT') as HTMLElement[];
+    const focusables = () =>
+      [...menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')].filter((el) => el.offsetParent !== null);
+
+    const open = () => {
+      menu.hidden = false;
+      document.documentElement.classList.add('menu-open');
+      others().forEach((el) => (el.inert = true));
+      toggle.setAttribute('aria-expanded', 'true');
+      closeBtn.focus();
     };
-    toggle.addEventListener('click', () => set(!header.classList.contains('is-open')));
-    header.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', () => set(false)));
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && header.classList.contains('is-open')) {
-        set(false);
-        toggle.focus();
+    const close = (returnFocus = true) => {
+      menu.hidden = true;
+      document.documentElement.classList.remove('menu-open');
+      others().forEach((el) => (el.inert = false));
+      toggle.setAttribute('aria-expanded', 'false');
+      if (returnFocus) toggle.focus();
+    };
+
+    toggle.addEventListener('click', open);
+    closeBtn.addEventListener('click', () => close());
+    // Following a link closes the menu; the page then moves to it.
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => close(false)));
+    menu.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+        return;
       }
+      if (e.key !== 'Tab') return;
+      const list = focusables();
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
+    // Rotating a tablet past 1024px brings the full nav: don't leave the overlay up behind it.
+    matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+      if (e.matches && !menu.hidden) close(false);
     });
   }
 </script>
 
 <style>
   .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: var(--night);
-    border-bottom: 1px solid var(--hairline);
-  }
-  .site-header--home {
-    position: absolute;
+    --bar: 56px;
+    position: fixed;
     inset: 0 0 auto;
-    background: transparent;
-    border-bottom: 0;
+    z-index: 20;
+    transition: transform 0.25s ease, background-color 0.25s ease;
   }
+  @media (min-width: 900px) {
+    .site-header {
+      --bar: 64px;
+    }
+  }
+  /* Home, over the hero: transparent, scrolls away with the hero; no wordmark, no pill. */
+  .site-header.is-home:not(.is-pinned) {
+    position: absolute;
+  }
+  .site-header.is-home:not(.is-pinned) .brand,
+  .site-header.is-home:not(.is-pinned) .pill {
+    visibility: hidden;
+  }
+  .site-header.is-pinned {
+    background: rgb(16 21 28 / 0.92);
+    box-shadow: inset 0 -1px 0 var(--hairline); /* the 1px rule, inside the 64/56px */
+  }
+  .site-header.is-hidden {
+    transform: translateY(-100%);
+  }
+  .header-space {
+    height: 56px;
+  }
+  @media (min-width: 900px) {
+    .header-space {
+      height: 64px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-header {
+      transition: none;
+    }
+    .site-header.is-hidden {
+      transform: none;
+    }
+  }
+
   .bar {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 8px 16px;
-    min-height: 76px;
+    gap: 8px;
+    min-height: var(--bar);
   }
-  ul {
+  .brand {
+    margin-right: auto;
+  }
+  .nav ul {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0 4px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  nav a {
+  .nav a {
     display: inline-flex;
     align-items: center;
-    min-height: 48px;
+    min-height: 44px;
     padding: 0 12px;
     color: var(--cream);
     font-size: var(--fs-nav);
     font-weight: 500;
     text-decoration: none;
   }
-  nav a:hover {
+  .nav a:hover {
     color: var(--gold);
   }
-  .menu-toggle {
-    min-height: 48px;
-    padding: 0 20px;
+  /* The header's own primary action: a compact gold pill (the bar is too slim for the 56px
+     page button), still a 44px target. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius);
+    background: var(--gold);
+    color: var(--night);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .pill:hover {
+    background: var(--cream);
+  }
+  .menu-toggle,
+  .menu-close {
+    min-height: 44px;
+    padding: 0 16px;
     border: 1px solid var(--cream);
     border-radius: var(--radius);
     background: transparent;
     color: var(--cream);
     font: inherit;
-    font-size: var(--fs-nav);
+    font-size: var(--fs-small);
     font-weight: 500;
     cursor: pointer;
   }
 
-  @media (max-width: 799px) {
-    .is-collapsible nav {
+  /* Phones and tablets: Menu instead of the nav (the full nav and the pill need 1024px). Without
+     JS the nav wraps under the bar. */
+  @media (max-width: 1023px) {
+    .is-collapsible .nav {
       display: none;
+    }
+    .site-header:not(.is-collapsible) .bar {
+      flex-wrap: wrap;
+    }
+    .site-header:not(.is-collapsible) .nav {
       flex-basis: 100%;
-      padding-bottom: 16px;
+      padding-bottom: 8px;
     }
-    .is-collapsible.is-open nav {
-      display: block;
-    }
-    .is-collapsible.is-open {
-      background: var(--night);
-    }
-    .is-collapsible ul {
-      display: grid;
-    }
-    .is-collapsible nav a {
-      width: 100%;
-      min-height: 56px;
-      padding: 0;
-      font-size: var(--fs-row);
-      border-top: 1px solid var(--hairline);
+    .bar :global(.wordmark--md) {
+      font-size: 15px;
     }
   }
-  @media (min-width: 800px) {
+  /* The smallest phones: a little less padding so wordmark, pill and Menu fit on one line. */
+  @media (max-width: 399px) {
+    .bar {
+      gap: 6px;
+    }
+    .pill {
+      padding: 0 14px;
+    }
+    .menu-toggle {
+      padding: 0 12px;
+    }
+    .bar :global(.wm-small) {
+      letter-spacing: 0.08em;
+    }
+  }
+  @media (min-width: 1024px) {
     .menu-toggle {
       display: none;
     }
+    .pill {
+      margin-left: 8px;
+    }
+  }
+
+  /* The set list. */
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--night);
+  }
+  .menu[hidden] {
+    display: none;
+  }
+  :global(html.menu-open),
+  :global(html.menu-open body) {
+    overflow: hidden;
+  }
+  .menu-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding-block: 6px max(24px, calc(env(safe-area-inset-bottom) + 16px));
+  }
+  .menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+  }
+  .menu-home {
+    display: block;
+    border-radius: 50%;
+  }
+  .menu-home img {
+    width: 44px;
+    height: 44px;
+  }
+  .menu-title {
+    margin: 20px 0 8px;
+    color: var(--gold);
+    font-size: 40px;
+    line-height: 1;
+  }
+  .setlist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .setlist li {
+    border-top: 1px solid var(--hairline);
+  }
+  .setlist li:last-child {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .setlist a {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    min-height: 60px;
+    padding-block: 12px;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .setlist a:hover .song,
+  .setlist a:focus-visible .song {
+    color: var(--gold);
+  }
+  .num {
+    min-width: 2ch;
+    color: var(--gold);
+    font-size: var(--fs-min);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
+  }
+  .song {
+    font-family: var(--display);
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .menu-foot {
+    display: grid;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 28px;
+  }
+  .menu-next {
+    display: inline-block;
+    padding-block: calc((44px - 1lh) / 2);
+    color: var(--gold);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    text-underline-offset: 4px;
   }
 </style>

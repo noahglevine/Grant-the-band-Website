@@ -21,6 +21,14 @@ export const links = {
 // Shopify merch store (Printful). Nav "Shop", footer, /now "Merch".
 export const shopUrl = 'https://shop.granttheband.com';
 
+// The home Shop row: these three, in this order, read from the store at build time.
+// `handle` is the product's URL slug on the store (it kept its original slug when renamed).
+export const shopFeatured = [
+  { title: 'GTB Signature Tee', handle: 'short-sleeve-unisex-t-shirt-gtb-signature' },
+  { title: 'GRANT the band Tee', handle: 'short-sleeve-unisex-grant-the-band-t-shirt' },
+  { title: 'GTB Signature Hoodie', handle: 'unisex-hoodie-gtb-signature' },
+];
+
 export const bookingEmail = 'contact@granttheband.com' as string | null;
 
 // Real logo, when Noah sends it: drop the SVG in public/ and set the path here.

@@ -5,13 +5,56 @@ import type { Show } from '../lib/shows';
 interface Props {
   shows: Show[];
   utm?: string;
+  // Home: equal billing. Under 900px the tickets sit in a sideways swipe row (the next one
+  // peeking in) with position dots; from 900px, two full tickets per row.
+  swipe?: boolean;
 }
-const { shows, utm } = Astro.props;
+const { shows, utm, swipe = false } = Astro.props;
+const isSwipe = swipe && shows.length > 1;
 ---
 
-<ul class="tickets">
-  {shows.map((show, i) => <Ticket show={show} handwritten={i === 0} utm={utm} />)}
-</ul>
+{isSwipe ? (
+  <div class="swipe" data-swipe>
+    <ul class="tickets tickets--swipe" aria-label="Upcoming shows">
+      {shows.map((show, i) => <Ticket show={show} handwritten={i === 0} utm={utm} focusable />)}
+    </ul>
+    <div class="dots" aria-label="Upcoming shows: position" role="group" hidden>
+      {shows.map((_, i) => (
+        <button type="button" class="dot" aria-label={`Show ${i + 1} of ${shows.length}`} aria-current={i === 0 ? 'true' : undefined} data-dot={i} />
+      ))}
+    </div>
+  </div>
+) : (
+  <ul class="tickets">
+    {shows.map((show, i) => <Ticket show={show} handwritten={i === 0} utm={utm} />)}
+  </ul>
+)}
+
+<script>
+  // Swipe row: the dots follow the ticket in view and jump to their ticket when pressed.
+  document.querySelectorAll<HTMLElement>('[data-swipe]').forEach((wrap) => {
+    const row = wrap.querySelector<HTMLElement>('.tickets--swipe')!;
+    const items = [...row.children] as HTMLElement[];
+    const dots = wrap.querySelector<HTMLElement>('.dots')!;
+    const buttons = [...dots.querySelectorAll<HTMLButtonElement>('.dot')];
+    dots.hidden = false;
+    const mark = (i: number) =>
+      buttons.forEach((b, n) => (n === i ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) mark(items.indexOf(e.target as HTMLElement));
+      },
+      { root: row, threshold: 0.6 },
+    );
+    items.forEach((li) => io.observe(li));
+    buttons.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        row.scrollTo({ left: items[i].offsetLeft - row.offsetLeft - parseFloat(getComputedStyle(row).paddingLeft), behavior: calm ? 'auto' : 'smooth' });
+      }),
+    );
+  });
+</script>
 
 <style>
   .tickets {
@@ -26,6 +69,68 @@ const { shows, utm } = Astro.props;
       padding-block: 8px;
     }
   }
+
+  /* Under 900px: one row, each ticket 86% of the screen wide (at most 540px) so the next peeks in, snapping into place. The
+     row runs to the screen edges and keeps the page gutter as its inner padding. */
+  @media (max-width: 899px) {
+    .tickets--swipe {
+      /* Positioned, so the visually hidden link text inside is clipped with the row and
+         doesn't widen the page. */
+      position: relative;
+      grid-auto-flow: column;
+      grid-auto-columns: min(86vw, 540px);
+      gap: 16px;
+      margin-inline: calc(-1 * var(--gutter));
+      padding: 4px var(--gutter) 6px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .tickets--swipe::-webkit-scrollbar {
+      display: none;
+    }
+    .tickets--swipe > :global(li) {
+      scroll-snap-align: start;
+    }
+    .dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .dots[hidden] {
+      display: none;
+    }
+    /* A 44px target around an 8px dot. */
+    .dot {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .dot::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--cream);
+      border-radius: 50%;
+    }
+    .dot[aria-current='true']::before {
+      border-color: var(--gold);
+      background: var(--gold);
+    }
+  }
+  @media (min-width: 900px) {
+    .dots {
+      display: none;
+    }
+  }
+
   /* Desktop: two columns, each ticket up to 540px, tilts alternating like a stack of stubs. */
   @media (min-width: 900px) {
     .tickets {
@@ -41,6 +146,24 @@ const { shows, utm } = Astro.props;
     /* The li comes from Ticket.astro, so the whole selector after .tickets is global. */
     .tickets > :global(:nth-child(even) .ticket) {
       transform: rotate(1.5deg);
+    }
+  }
+  /* 900 to 1099px: two tickets still fit side by side with a narrower stub and venue line. */
+  @media (min-width: 900px) and (max-width: 1099px) {
+    .tickets :global(.ticket) {
+      grid-template-columns: 1fr 140px;
+    }
+    .tickets :global(.main) {
+      padding-inline: 22px;
+    }
+    .tickets :global(.venue) {
+      font-size: 26px;
+    }
+    .tickets :global(.stub) {
+      padding-inline: 18px;
+    }
+    .tickets :global(.stub-date) {
+      font-size: 34px;
     }
   }
 </style>

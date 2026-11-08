@@ -5,20 +5,14 @@ import Hero from '../components/Hero.astro';
 import TicketList from '../components/TicketList.astro';
 import Music from '../components/Music.astro';
 import Video from '../components/Video.astro';
-import PhotoBand from '../components/PhotoBand.astro';
+import FeatureStrip from '../components/FeatureStrip.astro';
+import ShopRow from '../components/ShopRow.astro';
 import Signup from '../components/Signup.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_URL, links, ep } from '../data/site';
-import { upcomingShows, showsJsonLd, showSlug, formatDateParts } from '../lib/shows';
+import { upcomingShows, showsJsonLd } from '../lib/shows';
 
 const shows = upcomingShows();
-// Home shows only the next date; the rest are a tap away on /shows.
-const next = shows.slice(0, 1);
-// Every other upcoming show, one line each under the ticket (preview samples have no date).
-const also = shows.slice(1).filter((show) => !show.sample).map((show) => {
-  const d = formatDateParts(show.date);
-  return { show, slug: showSlug(show), date: `${d.weekday} ${d.month} ${d.day}`, long: d.long };
-});
 
 const musicGroup = {
   '@context': 'https://schema.org',
@@ -35,7 +29,7 @@ const musicGroup = {
   },
 };
 
-const jsonLd = [musicGroup, ...showsJsonLd(next, SITE_URL)];
+const jsonLd = [musicGroup, ...showsJsonLd(shows, SITE_URL)];
 ---
 
 <Base
@@ -52,26 +46,7 @@ const jsonLd = [musicGroup, ...showsJsonLd(next, SITE_URL)];
       <section id="shows" class="section" aria-labelledby="shows-title">
         <div class="wrap">
           <h2 id="shows-title" class="display h2 title section-head">Next stop.</h2>
-          <TicketList shows={next} />
-          {also.length > 0 && (
-            <div class="also" data-avoid-to-top>
-              <p class="also-label" id="also-label">Also:</p>
-              <ul aria-labelledby="also-label">
-                {also.map(({ show, slug, date, long }) => (
-                  <li>
-                    <a class="also-show" href={`/shows#${slug}`}>
-                      <time datetime={show.date}>{date}</time> · {show.venue}, {show.town}
-                    </a>
-                    {show.url ? (
-                      <a class="also-tix" href={show.url} rel="noopener">Tickets<span class="visually-hidden">: {show.venue}, {long}</span></a>
-                    ) : (
-                      show.ticketsSoon && <span class="also-soon">Tickets coming soon</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <TicketList shows={shows} swipe />
           <p class="more" data-avoid-to-top>
             <a href="#newsletter">Get the dates first</a>
           </p>
@@ -80,81 +55,15 @@ const jsonLd = [musicGroup, ...showsJsonLd(next, SITE_URL)];
     )}
 
     <Music />
+    <ShopRow />
     <Video />
-    <PhotoBand />
+    <FeatureStrip />
     <Signup />
   </main>
   <Footer />
 </Base>
 
 <style>
-  /* "Also": every other upcoming show, one line each (44px tap height, 15px+). */
-  .also {
-    margin: 32px 0 0;
-    max-width: 640px;
-  }
-  .also-label {
-    margin: 0 0 4px;
-    color: var(--gold);
-    font-size: var(--fs-min);
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .also ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .also li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    column-gap: 16px;
-    border-top: 1px solid var(--hairline);
-  }
-  .also li:last-child {
-    border-bottom: 1px solid var(--hairline);
-  }
-  /* Plain inline text so a long line wraps as a sentence; padding makes the 44px target. */
-  .also-show {
-    display: inline-block;
-    padding-block: calc((44px - 1lh) / 2);
-    color: var(--cream);
-    font-size: var(--fs-min);
-    line-height: 1.35;
-    text-decoration: none;
-  }
-  .also-show:hover {
-    color: var(--gold);
-  }
-  .also-tix,
-  .also-soon {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    color: var(--gold);
-    font-size: var(--fs-min);
-  }
-  /* Plain text, not a target: when it wraps under the venue on a phone it sits close. */
-  .also-soon {
-    min-height: 0;
-    padding-bottom: 10px;
-  }
-  .also-tix {
-    font-weight: 500;
-    text-underline-offset: 4px;
-  }
-  @media (min-width: 900px) {
-    .also-show,
-    .also-tix,
-    .also-soon {
-      font-size: var(--fs-small);
-    }
-    .also-soon {
-      padding-bottom: 0;
-    }
-  }
   /* "Get the dates first": quiet gold text link, 44px tall. */
   .more {
     margin: 24px 0 0;

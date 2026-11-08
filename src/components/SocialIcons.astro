@@ -1,0 +1,67 @@
+---
+// One monoline icon set for the band's socials: footer and phone menu. 24px icons in 44px tap
+// targets, each named for its platform. Drawn in currentColor (cream, gold on hover).
+import { links } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+const { class: extra } = Astro.props;
+
+// 24x24, 1.6 stroke, round caps: drawn here so all four share one weight and style.
+const icons = [
+  {
+    label: 'Instagram',
+    href: links.instagram,
+    paths: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor"/>',
+  },
+  {
+    label: 'Spotify',
+    href: links.spotify,
+    paths: '<circle cx="12" cy="12" r="8.75"/><path d="M7.4 9.7c3.2-.9 6.6-.6 9.4.9M8 12.7c2.6-.7 5.2-.5 7.4.7M8.6 15.5c2-.5 3.8-.3 5.4.5"/>',
+  },
+  {
+    label: 'YouTube',
+    href: links.youtube,
+    paths: '<rect x="2.75" y="5.75" width="18.5" height="12.5" rx="4"/><path d="M10.25 9.4v5.2l4.5-2.6z"/>',
+  },
+  {
+    label: 'TikTok',
+    href: links.tiktok,
+    paths: '<path d="M13.75 3v12.25a4 4 0 1 1-4-4"/><path d="M13.75 3c.5 3 2.6 4.85 5.5 5.1"/>',
+  },
+];
+---
+
+<ul class:list={['social-icons', extra]}>
+  {icons.map((icon) => (
+    <li>
+      <a href={icon.href} rel="noopener" aria-label={icon.label}>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" set:html={icon.paths} />
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .social-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0 0 0 -10px; /* the first icon lines up with the text above it */
+    padding: 0;
+    list-style: none;
+  }
+  .social-icons a {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--cream);
+  }
+  .social-icons a:hover,
+  .social-icons a:focus-visible {
+    color: var(--gold);
+  }
+</style>

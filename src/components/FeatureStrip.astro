@@ -1,0 +1,97 @@
+---
+// Between Live and the signup: while the Stephen Talkhouse show is upcoming, a full-bleed still
+// from the Talkhouse loop with "Back at The Stephen Talkhouse." that links to its ticket on
+// /shows. After the date (the build after it), the 89 North photo band returns.
+// Talkhouse promo rule: no close-ups of the Feb 2026 Talkhouse trombonist or lead guitarist. The
+// wide still shows them small and full length; the phone still is Noah and the drummer only.
+import PhotoBand from './PhotoBand.astro';
+import { hero } from '../data/site';
+import { upcomingShows, showSlug, formatDateParts } from '../lib/shows';
+
+const talkhouse = upcomingShows().find((show) => !show.sample && /talkhouse/i.test(show.venue));
+const d = talkhouse ? formatDateParts(talkhouse.date) : null;
+const place = talkhouse?.town.replace(/,\s*[A-Z]{2}$/, '');
+const desk = hero.posterDesktop;
+const phone = hero.posterPhone;
+---
+
+{talkhouse && d ? (
+  <section class="feature" aria-label="The Stephen Talkhouse">
+    <a class="feature-link" href={`/shows#${showSlug(talkhouse)}`}>
+      <picture>
+        <source media="(max-width: 719px)" srcset={phone.src} width={phone.width} height={phone.height} />
+        <img src={desk.src} width={desk.width} height={desk.height} alt="" loading="lazy" decoding="async" />
+      </picture>
+      <span class="scrim" aria-hidden="true" />
+      <span class="copy">
+        <span class="feature-title display">Back at The Stephen Talkhouse.</span>
+        <span class="label">{d.weekday} {d.month} {d.day} · {place}</span>
+      </span>
+    </a>
+  </section>
+) : (
+  <PhotoBand />
+)}
+
+<style>
+  .feature {
+    margin-top: var(--section-gap);
+  }
+  .feature-link {
+    position: relative;
+    display: block;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .feature img {
+    width: 100%;
+    height: auto;
+    /* Phones: the vertical still at 4:5, cropped from the top so the neon sign at the stage
+       front stays out. Wide screens: the wide still at 21:9, the same crop. */
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 30%;
+  }
+  @media (min-width: 720px) {
+    .feature img {
+      aspect-ratio: 21 / 9;
+      object-position: 50% 4%;
+    }
+  }
+  /* The night scrim, from the bottom-left corner, behind the words only. */
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(16 21 28 / 0.94) 0%, rgb(16 21 28 / 0.88) 30%, rgb(16 21 28 / 0.7) 42%, rgb(16 21 28 / 0) 62%);
+  }
+  @media (min-width: 720px) {
+    .scrim {
+      background: var(--scrim-desktop);
+    }
+  }
+  .copy {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: 28px;
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+  }
+  @media (min-width: 900px) {
+    .copy {
+      left: 6vw;
+      bottom: 10%;
+    }
+  }
+  .feature-title {
+    max-width: 14ch;
+    font-size: clamp(40px, 4.5vw, 56px); /* the section-title size */
+    line-height: 1.05;
+  }
+  .feature-link:hover .feature-title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+  }
+</style>
