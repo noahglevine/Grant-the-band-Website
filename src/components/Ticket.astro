@@ -1,6 +1,6 @@
 ---
 // One show as the "Next stop." ticket, matched to the approved Canva master.
-import { formatDateParts, formatSet, directionsUrl, calendarPath, type Show } from '../lib/shows';
+import { formatDateParts, formatSet, directionsUrl, calendarPath, showSlug, type Show } from '../lib/shows';
 
 interface Props {
   show: Show;
@@ -18,7 +18,7 @@ const time = formatSet(show);
 const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}${utm}` : show.url;
 ---
 
-<li class="ticket-item">
+<li class="ticket-item" id={show.sample ? undefined : showSlug(show)}>
   <article class="ticket" aria-label={`GRANT the band live at ${show.venue}, ${show.town}, ${dateLong}${time ? `, ${time}` : ''}`}>
     <div class="main">
       <div class="top" aria-hidden="true">
@@ -61,6 +61,8 @@ const href = show.url && utm ? `${show.url}${show.url.includes('?') ? '&' : '?'}
 </li>
 
 <style>
+  /* /shows#<date>-<venue> (home's "Also" list) lands below the sticky header through the
+     page's scroll-padding-top. */
   .ticket-item {
     list-style: none;
   }
