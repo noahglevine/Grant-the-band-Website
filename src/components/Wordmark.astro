@@ -37,6 +37,16 @@ const Tag = href ? 'a' : 'span';
     white-space: nowrap;
     color: var(--cream);
   }
+  /* Header and footer links: a 44px tap target from padding, the type unchanged. The hero
+     lockup is a span (not a link) and keeps its own box. */
+  a.wordmark--md,
+  a.wordmark--lg {
+    align-items: center;
+    box-sizing: content-box;
+    min-height: 1em;
+    padding-block: calc((44px - 1em) / 2);
+    margin-block: calc((1em - 44px) / 2); /* the layout keeps its old spacing */
+  }
   .wm-small {
     font-family: var(--display);
     font-weight: 400;

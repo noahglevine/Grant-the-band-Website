@@ -12,6 +12,8 @@ import { SITE_URL, links, ep } from '../data/site';
 import { upcomingShows, showsJsonLd } from '../lib/shows';
 
 const shows = upcomingShows();
+// Home shows only the next date; the rest are a tap away on /shows.
+const next = shows.slice(0, 1);
 
 const musicGroup = {
   '@context': 'https://schema.org',
@@ -28,7 +30,7 @@ const musicGroup = {
   },
 };
 
-const jsonLd = [musicGroup, ...showsJsonLd(shows, SITE_URL)];
+const jsonLd = [musicGroup, ...showsJsonLd(next, SITE_URL)];
 ---
 
 <Base
@@ -45,8 +47,11 @@ const jsonLd = [musicGroup, ...showsJsonLd(shows, SITE_URL)];
       <section id="shows" class="section" aria-labelledby="shows-title">
         <div class="wrap">
           <h2 id="shows-title" class="display h2 title section-head">Next stop.</h2>
-          <TicketList shows={shows} />
-          <p class="all"><a href="/shows">All dates</a></p>
+          <TicketList shows={next} />
+          <p class="more" data-avoid-to-top>
+            {shows.length > 1 && <a href="/shows">All dates ({shows.length})</a>}
+            <a href="#newsletter">Get the dates first</a>
+          </p>
         </div>
       </section>
     )}
@@ -60,10 +65,15 @@ const jsonLd = [musicGroup, ...showsJsonLd(shows, SITE_URL)];
 </Base>
 
 <style>
-  .all {
+  /* "All dates (N)" and "Get the dates first": quiet gold text links, 44px tall. */
+  .more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 28px;
     margin: 32px 0 0;
+    max-width: none;
   }
-  .all a {
+  .more a {
     display: inline-flex;
     align-items: center;
     min-height: 44px;

@@ -49,8 +49,8 @@ const phone = hero.posterPhone;
       <span class="out display">Out everywhere</span>
     </p>
     <div class="btn-row">
-      <ListenButton class="hero-listen" />
-      <a class="btn btn--secondary hero-shows" href="/shows">Shows</a>
+      <a class="btn btn--primary hero-shows" href="/shows">Shows</a>
+      <ListenButton class="hero-listen" variant="secondary" />
     </div>
     {song ? (
       <div class="song" data-spotify={links.manOnATrainSpotify}>
@@ -186,6 +186,8 @@ const phone = hero.posterPhone;
   .song-btn.ph-btn {
     cursor: default;
   }
+  /* Phones (--scrim): ~94% night behind the whole text block, so the neon sign at the stage front
+     doesn't read through the wordmark, fading to nothing by mid-frame (the jump). */
   .scrim {
     position: absolute;
     inset: 0;
@@ -214,20 +216,12 @@ const phone = hero.posterPhone;
   .btn-row {
     margin-top: 18px;
   }
-  /* Phones: no Listen in the hero (the Music section and the song pill cover listening), so
-     Shows is the one primary button. Desktop keeps Listen + Shows. */
-  @media (max-width: 899px) {
+  /* Shows is the one primary action at every size. Phones: no Listen in the hero (the Music
+     section and the song pill cover listening). Tablets (600px+, upright iPads included) and
+     desktop add Listen as secondary. */
+  @media (max-width: 599px) {
     .btn-row :global(.hero-listen) {
       display: none;
-    }
-    .hero-shows {
-      background: var(--gold);
-      color: var(--night);
-      border-color: transparent;
-    }
-    .hero-shows:hover {
-      background: var(--cream);
-      color: var(--night);
     }
   }
   /* Short phones (iPhone SE size): tighter vertical rhythm so the extra song row doesn't push
