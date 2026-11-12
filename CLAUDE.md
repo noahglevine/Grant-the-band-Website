@@ -173,7 +173,7 @@ Use this copy as written. Typographic apostrophes and quotes. Never use em dashe
 Section titles are statements, not category words. Nav labels stay Shows, Music, Live, Shop, Newsletter, Booking.
 8. Footer (every page): small wordmark, the social icon row, "Booking: contact@granttheband.com", "Merch: shop.granttheband.com" (links to the store), "Get the dates first" (to the signup on the page, `/#newsletter` from /book), photo credits, "© 2026 GRANT the band", GTB monogram. No location line. Every footer link is a 44px target.
 
-Social icons (`SocialIcons.astro`, footer and phone menu): one monoline set drawn in the component (Instagram, Spotify, YouTube, TikTok), 24px icons in 44px targets, each `aria-label`led with the platform name, cream (gold on hover).
+Social icons (`SocialIcons.astro`, footer and phone menu): one monoline set drawn in the component (Instagram, Facebook, Spotify, YouTube, TikTok; Facebook's label is "GRANT the band on Facebook"), 24px icons in 44px targets, each `aria-label`led with the platform name, cream (gold on hover).
 
 Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
@@ -217,6 +217,7 @@ Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark
 - Spotify, Meroke Lane EP (every "Listen" button, /now with UTM): https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2. No HyperFollow anywhere.
 - YouTube: https://www.youtube.com/@GRANTtheband
 - Instagram: https://www.instagram.com/grant_theband
+- Facebook: https://www.facebook.com/GRANTthebandmusic
 - TikTok: https://www.tiktok.com/@granttheband
 - Apple Music, Meroke Lane EP: https://music.apple.com/us/album/meroke-lane-ep/6793211371
 

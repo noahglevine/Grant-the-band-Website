@@ -12,6 +12,7 @@ export const links = {
   merokeLaneEmbed: 'https://open.spotify.com/embed/album/6sBrvYJHa66nYqVTg6bNa2?theme=0' as string | null,
   youtube: 'https://www.youtube.com/@GRANTtheband',
   instagram: 'https://www.instagram.com/grant_theband',
+  facebook: 'https://www.facebook.com/GRANTthebandmusic',
   tiktok: 'https://www.tiktok.com/@granttheband',
   appleMusic: 'https://music.apple.com/us/album/meroke-lane-ep/6793211371' as string | null, // the EP
   // Meroke Lane on YouTube. Falls back to the channel until there's a playlist URL.
