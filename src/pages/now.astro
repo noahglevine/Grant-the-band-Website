@@ -6,7 +6,7 @@ import BookingEmail from '../components/BookingEmail.astro';
 import Signup from '../components/Signup.astro';
 import now from '../data/now.json';
 import { links, shopUrl, bookingEmail } from '../data/site';
-import { upcomingShows } from '../lib/shows';
+import { upcomingShows, todayLocal } from '../lib/shows';
 import { withUtm, BIO_UTM } from '../lib/utm';
 import { showPlaceholders } from '../lib/env';
 
@@ -15,6 +15,18 @@ const hasCard = Boolean(now.title && now.url);
 // Production omits the card until now.json is filled; previews show what's owed.
 const showCard = hasCard || showPlaceholders;
 const poster = now.poster || null;
+
+// Feature week: one link (a release, a video) goes first and biggest, above the latest clip
+// and the next show. It drops off on the first build after `until` (Long Island date), and
+// clearing `feature` in now.json restores the normal order. Its link leaves the list below
+// so the page never shows the same button twice.
+type Feature = { label: string; url: string; until?: string };
+const featureData = (now as { feature?: Feature | null }).feature ?? null;
+const feature =
+  featureData?.label && featureData?.url && (!featureData.until || todayLocal() <= featureData.until)
+    ? featureData
+    : null;
+const listenInList = feature?.url !== links.merokeLaneSpotify;
 ---
 
 <Base
@@ -28,6 +40,10 @@ const poster = now.poster || null;
       <Wordmark size="lg" />
       <p class="tag label">Meroke Lane · Out everywhere</p>
     </header>
+
+    {feature && (
+      <a class="btn btn--primary feature" href={withUtm(feature.url)} rel="noopener">{feature.label}</a>
+    )}
 
     {showCard && (
       <section class="card" aria-label="The one you just watched">
@@ -64,7 +80,9 @@ const poster = now.poster || null;
 
     <nav class="links" aria-label="Links">
       <a class="btn btn--primary" href="#newsletter">Get show dates</a>
-      <a class="btn btn--secondary" href={withUtm(links.merokeLaneSpotify)} rel="noopener">Listen to Meroke Lane</a>
+      {listenInList && (
+        <a class="btn btn--secondary" href={withUtm(links.merokeLaneSpotify)} rel="noopener">Listen to Meroke Lane</a>
+      )}
       <a class="btn btn--secondary" href={withUtm(shopUrl)} rel="noopener">Merch</a>
       <a class="btn btn--secondary" href="/#live">Watch us live</a>
       <a class="btn btn--secondary" href="/book">Book us</a>
@@ -95,6 +113,15 @@ const poster = now.poster || null;
   }
   .tag {
     margin: 0;
+  }
+  /* The feature-week button: the primary style, one size up, so it is the first and biggest
+     thing under the wordmark. */
+  .feature {
+    width: 100%;
+    min-height: 72px;
+    font-size: var(--fs-lead);
+    white-space: normal;
+    text-align: center;
   }
   .card {
     display: grid;

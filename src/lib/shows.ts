@@ -16,7 +16,7 @@ const TZ = 'America/New_York';
 
 // Today's date on Long Island, as YYYY-MM-DD. Shows are compared as plain dates
 // so a show stays listed through its own day.
-function todayLocal(now = new Date()): string {
+export function todayLocal(now = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(now);
 }
 
