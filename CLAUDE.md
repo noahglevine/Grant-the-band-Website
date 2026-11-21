@@ -211,6 +211,8 @@ Not on home: venue list, press quote, booking teaser. Those live on `/book`.
 
 Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark, gold label "MEROKE LANE · OUT EVERYWHERE", top card from now.json ("The one you just watched"; a centered gold play button on the poster, same style as the Live clips; under the title a gold "Watch on Instagram" text link, same URL, new tab; poster in a 4:5 frame, taller posters cropped from 25% down so the jump stays in and the stage floor drops out; omitted on production while now.json is empty), next show row, buttons "Get show dates" (primary), "Listen to Meroke Lane" (Spotify EP), "Merch" (`shopUrl`, with UTM), "Watch us live", "Book us". Footer "Contact: contact@granttheband.com" and "granttheband.com". Meta description: "GRANT the band. The latest clip, the next show, and where to listen." No "Long Island" and no "Better in the room" on /now. Add UTM params to outbound links (utm_source=instagram&utm_medium=bio).
 
+Feature week: `feature` in now.json (`{ "label", "url", "until": "YYYY-MM-DD" }`) puts one link first and biggest, right under the wordmark and above the top card: the primary gold button, full width, 72px tall, 21-24px label. It drops off on the first build after `until` (Long Island date), and `"feature": null` restores the normal order. When it points at the Meroke Lane EP, the "Listen to Meroke Lane" button leaves the list below so it never shows twice. "Get show dates" stays the list's primary. Meroke Lane week (W6): Sat 11/21 to Sat 11/28, 2026.
+
 ## Links
 
 - Spotify (artist, footer and socials): https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe

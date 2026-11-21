@@ -1,5 +1,10 @@
 {
   "title": "Save the date: Fri Dec 11 at Nag’s Head",
   "url": "https://www.instagram.com/reel/DfM9FeKiH71/",
-  "poster": "/images/hero-phone-poster.jpg"
+  "poster": "/images/hero-phone-poster.jpg",
+  "feature": {
+    "label": "Listen to Meroke Lane",
+    "url": "https://open.spotify.com/album/6sBrvYJHa66nYqVTg6bNa2",
+    "until": "2026-11-28"
+  }
 }
