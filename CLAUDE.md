@@ -213,6 +213,8 @@ Single phone-width column: a visually hidden `<h1>GRANT the band</h1>`, wordmark
 
 Feature week: `feature` in now.json (`{ "label", "url", "until": "YYYY-MM-DD" }`) puts one link first and biggest, right under the wordmark and above the top card: the primary gold button, full width, 72px tall, 21-24px label. It drops off on the first build after `until` (Long Island date), and `"feature": null` restores the normal order. When it points at the Meroke Lane EP, the "Listen to Meroke Lane" button leaves the list below so it never shows twice. "Get show dates" stays the list's primary. Meroke Lane week (W6): Sat 11/21 to Sat 11/28, 2026.
 
+Music video (W9): `video` in now.json (`{ "title", "subhead", "youtubeId" }`) puts a tap-to-load video (the Live clip facade, youtube-nocookie on tap, nothing from YouTube before) right under the feature button, or first when no feature week is running. Title "Peace of Mind (Official Music Video)", gold line "A thank-you to everyone who’s played with GRANT the band." Poster frame: `public/images/peace-of-mind-thumbnail.jpg` (1280x720) when it's there, else YouTube's. `youtubeId: null` until the video is live (Wed 11/25, 9 AM): previews show a labelled placeholder, production leaves the block out. Going live is one line: set `youtubeId`.
+
 ## Links
 
 - Spotify (artist, footer and socials): https://open.spotify.com/artist/7lsyuqqd27UuWS2mcYnSZe
