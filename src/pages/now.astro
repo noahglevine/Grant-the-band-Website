@@ -4,11 +4,12 @@ import Wordmark from '../components/Wordmark.astro';
 import TicketList from '../components/TicketList.astro';
 import BookingEmail from '../components/BookingEmail.astro';
 import Signup from '../components/Signup.astro';
+import ClipFacade from '../components/ClipFacade.astro';
 import now from '../data/now.json';
 import { links, shopUrl, bookingEmail } from '../data/site';
 import { upcomingShows, todayLocal } from '../lib/shows';
 import { withUtm, BIO_UTM } from '../lib/utm';
-import { showPlaceholders } from '../lib/env';
+import { showPlaceholders, publicFileExists } from '../lib/env';
 
 const next = upcomingShows()[0];
 const hasCard = Boolean(now.title && now.url);
@@ -27,6 +28,27 @@ const feature =
     ? featureData
     : null;
 const listenInList = feature?.url !== links.merokeLaneSpotify;
+
+// W9: the "Peace of Mind" music video, tap to load like the Live clips (nothing from YouTube
+// loads until the tap). It sits right under the feature button while a feature week runs,
+// first once it ends. Set `video.youtubeId` in now.json when the video is live: until then
+// previews show a labelled placeholder and production leaves the block out. The poster frame
+// is our own thumbnail once it's in public/, else YouTube's.
+type NowVideo = { title: string; subhead: string; youtubeId: string | null };
+const videoData = (now as { video?: NowVideo | null }).video ?? null;
+const videoThumb = '/images/peace-of-mind-thumbnail.jpg';
+const video =
+  videoData?.title && (videoData.youtubeId || showPlaceholders)
+    ? {
+        title: videoData.title,
+        isSong: false,
+        where: videoData.subhead,
+        youtubeId: videoData.youtubeId,
+        thumb: publicFileExists(videoThumb)
+          ? { src: videoThumb, width: 1280, height: 720, alt: '', credit: null }
+          : null,
+      }
+    : null;
 ---
 
 <Base
@@ -43,6 +65,12 @@ const listenInList = feature?.url !== links.merokeLaneSpotify;
 
     {feature && (
       <a class="btn btn--primary feature" href={withUtm(feature.url)} rel="noopener">{feature.label}</a>
+    )}
+
+    {video && (
+      <section class="video" aria-label="Music video">
+        <ClipFacade clip={video} />
+      </section>
     )}
 
     {showCard && (
